@@ -7,60 +7,60 @@ Legend: ⛰ Obstacle | 🧩 Pattern | ⚠️ Anti-pattern
 
 ## Section 1: Context Management
 ### Foundations
-- ⛰️Cannot Learn
-- ⛰️Context rot
-- 🧩 1 Context management
-- 🧩 2 Knowledge Document
-- 🧩 3 Ground rules
-- 🧩 4 Extract Knowledge
+- [⛰️Cannot Learn](patterns/obstacles/cannot-learn.md)
+- [⛰️Context rot](patterns/obstacles/context-rot.md)
+- [🧩 1 Context management](patterns/patterns/context-management.md)
+- [🧩 2 Knowledge Document](patterns/patterns/knowledge-document.md)
+- [🧩 3 Ground rules](patterns/patterns/ground-rules.md)
+- [🧩 4 Extract Knowledge](patterns/patterns/extract-knowledge.md)
 
 ### Focus
-- ⛰️ Limited Context Window
-- ⚠️ 5 Distracted Agent
-- ⛰️ Limited Focus
-- 🧩 6 Focused Agent
-- 🧩 7 References
-- 🧩 8 Knowledge Composition
+- [⛰️ Limited Context Window](patterns/obstacles/limited-context-window.md)
+- [⚠️ 5 Distracted Agent](patterns/anti-patterns/distracted-agent.md)
+- [⛰️ Limited Focus](patterns/obstacles/limited-focus.md)
+- [🧩 6 Focused Agent](patterns/patterns/focused-agent.md)
+- [🧩 7 References](patterns/patterns/references.md)
+- [🧩 8 Knowledge Composition](patterns/patterns/knowledge-composition.md)
 
 ### Noise
-- ⛰️ Excess Verbosity
-- 🧩 9 Semantic Zoom
-- 🧩 10 Noise Cancellation
+- [⛰️ Excess Verbosity](patterns/obstacles/excess-verbosity.md)
+- [🧩 9 Semantic Zoom](patterns/patterns/semantic-zoom.md)
+- [🧩 10 Noise Cancellation](patterns/patterns/noise-cancellation.md)
 
 ## Section 2: Reliability
 ### Non-Determinism
-- ⛰️ Non-Determinism
-- 🧩 11 Knowledge Checkpoint
-- 🧩 12 Parallel Implementations
-- 🧩 13 Offload Determinism
+- [⛰️ Non-Determinism](patterns/obstacles/non-determinism.md)
+- [🧩 11 Knowledge Checkpoint](patterns/patterns/knowledge-checkpoint.md)
+- [🧩 12 Parallel Implementations](patterns/patterns/parallel-implementations.md)
+- [🧩 13 Offload Determinism](patterns/patterns/offload-deterministic.md)
 
 ### Hallucinations and Complexity
-- ⛰️ Hallucinations
-- ⚠️ 14 Perfect Recall Fallacy
-- 🧩 15 Playgrounds
-- ⚠️ 16 Unvalidated Leaps
-- ⛰️ Degrades Under Complexity
-- 🧩 17 Chain of Small Steps
+- [⛰️ Hallucinations](patterns/obstacles/hallucinations.md)
+- [⚠️ 14 Perfect Recall Fallacy](patterns/anti-patterns/perfect-recall-fallacy.md)
+- [🧩 15 Playgrounds](patterns/patterns/playgrounds.md)
+- [⚠️ 16 Unvalidated Leaps](patterns/anti-patterns/unvalidated-leaps.md)
+- [⛰️ Degrades Under Complexity](patterns/obstacles/degrades-under-complexity.md)
+- [🧩 17 Chain of Small Steps](patterns/patterns/chain-of-small-steps.md)
 
 ### Forcing Compliance
 - 🧩 18 Hooks (deterministic lifecycle automation)
-- 🧩 19 Reminders (User Reminders, TODOs, Instruction Sandwich)
+- [🧩 19 Reminders](patterns/patterns/reminders.md) (User Reminders, TODOs, Instruction Sandwich)
 
 ## Section 3: Steering
-- ⛰️ Black Box AI
-- ⛰️ Compliance Bias
-- ⚠️ 20 Silent Misalignment
-- 🧩 21 Active Partner
-- 🧩 22 Check Alignment
-- 🧩 23 Context Markers
-- ⚠️ 24 Answer Injection
-- ⚠️ 25 Tell Me a Lie
-- 🧩 26 Reverse Direction
-- 🧩 27 Text Native (ASCII)
+- [⛰️ Black Box AI](patterns/obstacles/black-box-ai.md)
+- [⛰️ Compliance Bias](patterns/obstacles/compliance-bias.md)
+- [⚠️ 20 Silent Misalignment](patterns/anti-patterns/silent-misalignment.md)
+- [🧩 21 Active Partner](patterns/patterns/active-partner.md)
+- [🧩 22 Check Alignment](patterns/patterns/check-alignment.md)
+- [🧩 23 Context Markers](patterns/patterns/context-markers.md)
+- [⚠️ 24 Answer Injection](patterns/anti-patterns/answer-injection.md)
+- [⚠️ 25 Tell Me a Lie](patterns/anti-patterns/tell-me-a-lie.md)
+- [🧩 26 Reverse Direction](patterns/patterns/reverse-direction.md)
+- [🧩 27 Text Native](patterns/patterns/text-native.md) (ASCII)
 
 ## Section 4: Curiosities
-- 🧩 Polyglot AI
-- 🧩 Borrow Behaviors
-- 🧩 Softest Prototype
-- 🧩 Take All Paths
-- 🧩 Shared Canvas
+- [🧩 Polyglot AI](patterns/patterns/polyglot-ai.md)
+- [🧩 Borrow Behaviors](patterns/patterns/borrow-behaviors.md)
+- [🧩 Softest Prototype](patterns/patterns/softest-prototype.md)
+- [🧩 Take All Paths](patterns/patterns/take-all-paths.md)
+- [🧩 Shared Canvas](patterns/patterns/shared-canvas.md)
