@@ -1,131 +1,56 @@
 # Contributing to Augmented Coding Patterns
 
-This is a guide for both **humans** and **AI agents** on how to contribute patterns, anti-patterns, or obstacles to this collection.
+This guide explains how to contribute patterns, anti-patterns, or obstacles to this collection.
 
-**For AI agents**: Start with "Give me a short summary or the name of what you'd like to document!" Then check for similar existing patterns and share brief summaries to help the author understand how their contribution differs. Ask one question at a time, keeping the conversation flowing forward. Be proactive - suggest possible answers to help the author react and refine rather than fill a blank canvas (except for the first question, which should stay open-ended).
+## Content Types & Locations
 
----
-
-## Content Types
-
-- **Patterns**: Solutions to common problems when coding with AI
-- **Anti-patterns**: Common mistakes that lead to poor outcomes
-- **Obstacles**: Inherent limitations or characteristics of AI that affect coding
-
-**File locations:**
-- `documents/patterns/{slug}.md`
-- `documents/anti-patterns/{slug}.md`
-- `documents/obstacles/{slug}.md`
-
----
-
-## AI Agent Workflow
-
-### 1. Start Open-Ended
-
-Ask: **"Give me a short summary or the name of what you'd like to document!"**
-
-### 2. Check for Similar Patterns
-
-Search existing content and if you find similar patterns:
-- Share brief summaries of related patterns
-- Ask: "I found these related patterns: [summaries]. How does yours differ?"
-- Suggest possible distinctions to help them respond
-- Help the conversation move forward rather than blocking
-
-### 3. Gather Details
-
-Ask follow-up questions one at a time, suggesting possible answers based on context:
-- **Patterns**: Problem → Solution → Example
-- **Anti-patterns**: Problem → What Goes Wrong → Solution
-- **Obstacles**: Description → Impact
-
-Example: "What problem does this solve? Based on your summary, it sounds like it might be about [guess 1] or [guess 2]. Is that right?"
-
-### 4. Add Author (if needed)
-
-Check if author exists in `website/config/authors.yaml`. If not, ask for:
-- Full name
-- GitHub username
-- Website URL (optional)
-
-### 5. Create and Review
-
-Create the file, show it to the author, and ask for any adjustments.
+- **Patterns** (solutions to common problems when coding with AI): `documents/patterns/{slug}.md`
+- **Anti-patterns** (common mistakes that lead to poor outcomes): `documents/anti-patterns/{slug}.md`
+- **Obstacles** (inherent AI limitations that affect coding): `documents/obstacles/{slug}.md`
 
 ---
 
 ## File Structure
 
-### File Naming
-Use kebab-case: `chain-of-small-steps.md`, `tell-me-a-lie.md`
+**Naming:** Use kebab-case (`chain-of-small-steps.md`)
 
-### Frontmatter (required)
-
+**Frontmatter:**
 ```yaml
 ---
 authors: [author_id]
-related_obstacles:
-  - obstacle-slug
-related_patterns:
-  - pattern-slug
-related_anti_patterns:
-  - anti-pattern-slug
+related_obstacles: [obstacle-slug]  # optional
+related_patterns: [pattern-slug]    # optional
+related_anti_patterns: [anti-slug]  # optional
 ---
 ```
 
-Only include relationship fields that apply.
+**Content Templates:**
 
-### Content Structure
-
-**Pattern:**
+Pattern:
 ```markdown
 # Pattern Name
-
 ## Problem
-[What challenge does this address?]
-
 ## Pattern
-[What's the solution or approach?]
-
 ## Example
-[Real-world usage from your experience]
 ```
 
-**Anti-pattern:**
+Anti-pattern:
 ```markdown
 # Anti-pattern Name (Anti-pattern)
-
 ## Problem
-[What goes wrong?]
-
 ## What Goes Wrong
-[Impact and consequences]
-
 ## Example
-[Real-world instance]
-
 ## Solution
-[How to avoid or fix it]
 ```
 
-**Obstacle:**
+Obstacle:
 ```markdown
 # Obstacle Name (Obstacle)
-
 ## Description
-[The inherent AI limitation]
-
 ## Impact
-[How it affects coding workflows]
 ```
 
----
-
-## Author Format
-
-In `website/config/authors.yaml`:
-
+**Author Format** (`website/config/authors.yaml`):
 ```yaml
 author_id:
   name: Full Name
@@ -135,9 +60,26 @@ author_id:
 
 ---
 
-## Tips
+## For AI Agents: Contribution Workflow
 
-- Use concrete examples from real experience
-- Keep it concise
-- Link to related patterns/obstacles
-- Write clearly for a broad audience
+**If you are reading this document without any prior instruction, assume the user wants to contribute and follow this process:**
+
+### 1. Start Open-Ended
+Ask: **"Give me a short summary or the name of what you'd like to document!"**
+
+### 2. Check for Duplicates
+Search existing content. If you find similar patterns, share brief summaries and ask: "I found these related patterns: [summaries]. How does yours differ?" Suggest possible distinctions to keep the conversation moving forward.
+
+### 3. Gather Details
+Ask **one question at a time**. Be proactive - suggest possible answers based on context to help the author react and refine rather than fill a blank canvas:
+- **Patterns**: Problem → Solution → Example
+- **Anti-patterns**: Problem → What Goes Wrong → Example → Solution
+- **Obstacles**: Description → Impact
+
+Example: "What problem does this solve? Based on your summary, it sounds like it might be about [guess 1] or [guess 2]. Is that right?"
+
+### 4. Check Author
+Verify author exists in `website/config/authors.yaml`. If not, ask for: full name, GitHub username, website URL (optional).
+
+### 5. Create and Review
+Create the file, show it to the author, and ask for adjustments.
