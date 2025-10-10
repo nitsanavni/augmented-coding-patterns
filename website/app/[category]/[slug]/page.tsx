@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import { getPatternBySlug, getPatternSlugs } from "@/lib/markdown";
 import { getCategoryConfig, isValidCategory } from "@/app/lib/category-config";
 import { PatternCategory } from "@/lib/types";
+import Authors from "@/app/components/Authors";
 import RelatedLinks from "@/app/components/RelatedLinks";
 import styles from "../../pattern-detail.module.css";
 
@@ -73,6 +74,8 @@ export default async function PatternPage({ params }: PatternPageProps) {
         relatedAntiPatterns={pattern.relatedAntiPatterns}
         relatedObstacles={pattern.relatedObstacles}
       />
+
+      {pattern.authors && <Authors authors={pattern.authors} />}
     </div>
   );
 }

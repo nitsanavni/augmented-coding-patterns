@@ -94,6 +94,7 @@ export function getPatternBySlug(
       category,
       slug,
       ...(emoji && { emojiIndicator: emoji }),
+      ...(data.authors && { authors: data.authors }),
       ...(data.related_patterns && { relatedPatterns: data.related_patterns }),
       ...(data.related_anti_patterns && { relatedAntiPatterns: data.related_anti_patterns }),
       ...(data.related_obstacles && { relatedObstacles: data.related_obstacles }),

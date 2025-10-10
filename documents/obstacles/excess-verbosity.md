@@ -1,4 +1,5 @@
 ---
+authors: [lexler]
 related_patterns:
   - noise-cancellation
 ---

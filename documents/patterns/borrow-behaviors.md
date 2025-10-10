@@ -1,3 +1,7 @@
+---
+authors: [lexler]
+---
+
 # Borrow Behaviors
 
 ## Problem

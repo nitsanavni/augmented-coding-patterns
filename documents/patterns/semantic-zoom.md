@@ -1,3 +1,7 @@
+---
+authors: [lexler]
+---
+
 # Semantic Zoom
 
 ## Problem

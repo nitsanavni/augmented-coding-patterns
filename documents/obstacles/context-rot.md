@@ -1,4 +1,5 @@
 ---
+authors: [lexler]
 related_anti_patterns:
   - distracted-agent
 related_patterns:

@@ -1,4 +1,5 @@
 ---
+authors: [lexler]
 related_obstacles:
   - limited-focus
   - context-rot

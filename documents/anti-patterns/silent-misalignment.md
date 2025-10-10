@@ -1,4 +1,5 @@
 ---
+authors: [lexler]
 related_obstacles:
   - compliance-bias
   - black-box-ai

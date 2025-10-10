@@ -1,3 +1,7 @@
+---
+authors: [lexler]
+---
+
 # Text Native
 
 ## Problem

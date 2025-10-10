@@ -1,3 +1,7 @@
+---
+authors: [lexler]
+---
+
 # Polyglot AI
 
 ## Problem

@@ -160,6 +160,24 @@ AI defaults to silent compliance.`
       expect(pattern.emojiIndicator).toBe('🎯')
     })
 
+    it('should extract authors from frontmatter', () => {
+      const mockMarkdown = `---
+authors: [lexler]
+---
+# Active Partner
+
+## Problem
+AI defaults to silent compliance.`
+
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns/active-partner.md')
+      mockedFs.readFileSync.mockReturnValue(mockMarkdown)
+
+      const pattern = getPatternBySlug('patterns', 'active-partner')
+
+      expect(pattern).toBeDefined()
+      expect(pattern.authors).toEqual(['lexler'])
+    })
+
     it('should extract related_patterns from frontmatter and map to relatedPatterns', () => {
       const mockMarkdown = `---
 related_patterns:
@@ -282,6 +300,30 @@ AI defaults to silent compliance.`
       expect(pattern.relatedPatterns).toEqual(['chain-of-small-steps'])
       expect(pattern.relatedAntiPatterns).toEqual(['answer-injection'])
       expect(pattern.relatedObstacles).toEqual(['black-box-ai'])
+    })
+
+    it('should handle authors combined with relationship fields', () => {
+      const mockMarkdown = `---
+authors: [lexler, johndoe]
+related_patterns:
+  - chain-of-small-steps
+related_anti_patterns:
+  - answer-injection
+---
+# Active Partner
+
+## Problem
+AI defaults to silent compliance.`
+
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns/active-partner.md')
+      mockedFs.readFileSync.mockReturnValue(mockMarkdown)
+
+      const pattern = getPatternBySlug('patterns', 'active-partner')
+
+      expect(pattern).toBeDefined()
+      expect(pattern.authors).toEqual(['lexler', 'johndoe'])
+      expect(pattern.relatedPatterns).toEqual(['chain-of-small-steps'])
+      expect(pattern.relatedAntiPatterns).toEqual(['answer-injection'])
     })
   })
 

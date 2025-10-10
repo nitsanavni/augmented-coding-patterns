@@ -1,3 +1,7 @@
+---
+authors: [lexler]
+---
+
 # Softest Prototype
 
 ## Problem
