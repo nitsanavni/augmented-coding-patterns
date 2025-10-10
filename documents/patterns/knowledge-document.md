@@ -1,3 +1,8 @@
+---
+related_obstacles:
+  - cannot-learn
+---
+
 # Knowledge Document
 
 ## Problem

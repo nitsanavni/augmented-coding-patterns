@@ -1,3 +1,8 @@
+---
+related_obstacles:
+  - black-box-ai
+---
+
 # Unvalidated Leaps (Anti-pattern)
 
 ## Problem

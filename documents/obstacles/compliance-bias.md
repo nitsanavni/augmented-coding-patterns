@@ -1,3 +1,11 @@
+---
+related_anti_patterns:
+  - silent-misalignment
+  - tell-me-a-lie
+related_patterns:
+  - active-partner
+---
+
 # Compliance Bias (Obstacle)
 
 ## Description

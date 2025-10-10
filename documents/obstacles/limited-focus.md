@@ -1,3 +1,12 @@
+---
+related_anti_patterns:
+  - distracted-agent
+related_patterns:
+  - chain-of-small-steps
+  - focused-agent
+  - references
+---
+
 # Limited Focus (Obstacle)
 
 ## Description

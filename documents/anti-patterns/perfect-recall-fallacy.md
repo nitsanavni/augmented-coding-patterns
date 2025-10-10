@@ -1,3 +1,11 @@
+---
+related_obstacles:
+  - cannot-learn
+related_patterns:
+  - playgrounds
+  - references
+---
+
 # Perfect Recall Fallacy (Anti-pattern)
 
 ## Problem

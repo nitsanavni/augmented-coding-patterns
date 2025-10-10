@@ -1,3 +1,11 @@
+---
+related_obstacles:
+  - degrades-under-complexity
+  - limited-focus
+related_patterns:
+  - offload-deterministic
+---
+
 # Chain of Small Steps
 
 ## Problem

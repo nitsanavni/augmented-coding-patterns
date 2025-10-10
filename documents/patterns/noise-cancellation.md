@@ -1,3 +1,8 @@
+---
+related_obstacles:
+  - excess-verbosity
+---
+
 # Noise Cancellation
 
 ## Problem

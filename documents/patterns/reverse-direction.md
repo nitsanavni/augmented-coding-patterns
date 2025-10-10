@@ -1,3 +1,8 @@
+---
+related_anti_patterns:
+  - answer-injection
+---
+
 # Reverse Direction
 
 ## Problem

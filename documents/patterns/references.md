@@ -1,3 +1,13 @@
+---
+related_obstacles:
+  - limited-focus
+  - context-rot
+related_anti_patterns:
+  - distracted-agent
+related_patterns:
+  - knowledge-document
+---
+
 # References
 
 ## Child of

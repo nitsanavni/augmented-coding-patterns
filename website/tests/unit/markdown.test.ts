@@ -159,6 +159,130 @@ AI defaults to silent compliance.`
       expect(pattern.title).toBe('Active Partner')
       expect(pattern.emojiIndicator).toBe('🎯')
     })
+
+    it('should extract related_patterns from frontmatter and map to relatedPatterns', () => {
+      const mockMarkdown = `---
+related_patterns:
+  - chain-of-small-steps
+  - check-alignment
+---
+# Active Partner
+
+## Problem
+AI defaults to silent compliance.`
+
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns/active-partner.md')
+      mockedFs.readFileSync.mockReturnValue(mockMarkdown)
+
+      const pattern = getPatternBySlug('patterns', 'active-partner')
+
+      expect(pattern).toBeDefined()
+      expect(pattern.relatedPatterns).toEqual(['chain-of-small-steps', 'check-alignment'])
+    })
+
+    it('should extract related_anti_patterns from frontmatter and map to relatedAntiPatterns', () => {
+      const mockMarkdown = `---
+related_anti_patterns:
+  - answer-injection
+  - distracted-agent
+---
+# Active Partner
+
+## Problem
+AI defaults to silent compliance.`
+
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns/active-partner.md')
+      mockedFs.readFileSync.mockReturnValue(mockMarkdown)
+
+      const pattern = getPatternBySlug('patterns', 'active-partner')
+
+      expect(pattern).toBeDefined()
+      expect(pattern.relatedAntiPatterns).toEqual(['answer-injection', 'distracted-agent'])
+    })
+
+    it('should extract related_obstacles from frontmatter and map to relatedObstacles', () => {
+      const mockMarkdown = `---
+related_obstacles:
+  - black-box-ai
+  - context-rot
+---
+# Active Partner
+
+## Problem
+AI defaults to silent compliance.`
+
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns/active-partner.md')
+      mockedFs.readFileSync.mockReturnValue(mockMarkdown)
+
+      const pattern = getPatternBySlug('patterns', 'active-partner')
+
+      expect(pattern).toBeDefined()
+      expect(pattern.relatedObstacles).toEqual(['black-box-ai', 'context-rot'])
+    })
+
+    it('should work with files without frontmatter', () => {
+      const mockMarkdown = `# Active Partner
+
+## Problem
+AI defaults to silent compliance.`
+
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns/active-partner.md')
+      mockedFs.readFileSync.mockReturnValue(mockMarkdown)
+
+      const pattern = getPatternBySlug('patterns', 'active-partner')
+
+      expect(pattern).toBeDefined()
+      expect(pattern.title).toBe('Active Partner')
+      expect(pattern.relatedPatterns).toBeUndefined()
+      expect(pattern.relatedAntiPatterns).toBeUndefined()
+      expect(pattern.relatedObstacles).toBeUndefined()
+    })
+
+    it('should work with files with only some relationship fields', () => {
+      const mockMarkdown = `---
+related_patterns:
+  - chain-of-small-steps
+---
+# Active Partner
+
+## Problem
+AI defaults to silent compliance.`
+
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns/active-partner.md')
+      mockedFs.readFileSync.mockReturnValue(mockMarkdown)
+
+      const pattern = getPatternBySlug('patterns', 'active-partner')
+
+      expect(pattern).toBeDefined()
+      expect(pattern.relatedPatterns).toEqual(['chain-of-small-steps'])
+      expect(pattern.relatedAntiPatterns).toBeUndefined()
+      expect(pattern.relatedObstacles).toBeUndefined()
+    })
+
+    it('should handle all three relationship types together', () => {
+      const mockMarkdown = `---
+related_patterns:
+  - chain-of-small-steps
+related_anti_patterns:
+  - answer-injection
+related_obstacles:
+  - black-box-ai
+---
+# Active Partner
+
+## Problem
+AI defaults to silent compliance.`
+
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns/active-partner.md')
+      mockedFs.readFileSync.mockReturnValue(mockMarkdown)
+
+      const pattern = getPatternBySlug('patterns', 'active-partner')
+
+      expect(pattern).toBeDefined()
+      expect(pattern.relatedPatterns).toEqual(['chain-of-small-steps'])
+      expect(pattern.relatedAntiPatterns).toEqual(['answer-injection'])
+      expect(pattern.relatedObstacles).toEqual(['black-box-ai'])
+    })
   })
 
   describe('getAllPatterns', () => {

@@ -1,3 +1,10 @@
+---
+related_obstacles:
+  - cannot-learn
+related_patterns:
+  - knowledge-document
+---
+
 # Ground Rules
 
 ## Child of

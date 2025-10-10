@@ -1,3 +1,8 @@
+---
+related_obstacles:
+  - context-rot
+---
+
 # Reminders
 
 ## Problem

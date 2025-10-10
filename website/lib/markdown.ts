@@ -77,7 +77,7 @@ export function getPatternBySlug(
 
   try {
     const fileContents = fs.readFileSync(fullPath, 'utf-8')
-    const { content } = matter(fileContents)
+    const { content, data } = matter(fileContents)
 
     const lines = content.split('\n')
     const firstLineIndex = lines.findIndex(line => line.trim().startsWith('#'))
@@ -94,6 +94,9 @@ export function getPatternBySlug(
       category,
       slug,
       ...(emoji && { emojiIndicator: emoji }),
+      ...(data.related_patterns && { relatedPatterns: data.related_patterns }),
+      ...(data.related_anti_patterns && { relatedAntiPatterns: data.related_anti_patterns }),
+      ...(data.related_obstacles && { relatedObstacles: data.related_obstacles }),
       content: contentWithoutTitle,
       rawContent: fileContents
     }

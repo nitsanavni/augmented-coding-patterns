@@ -1,3 +1,8 @@
+---
+related_obstacles:
+  - non-determinism
+---
+
 # Parallel Implementations
 
 ## Problem

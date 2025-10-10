@@ -1,3 +1,8 @@
+---
+related_obstacles:
+  - non-determinism
+---
+
 # Knowledge Checkpoint
 
 ## Problem

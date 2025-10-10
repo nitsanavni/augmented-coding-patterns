@@ -58,4 +58,22 @@ test.describe('Smoke Tests - Critical User Journeys', () => {
     await expect(page).toHaveURL('/');
     await expect(page.locator('h1')).toContainText('Augmented Coding Patterns');
   });
+
+  test('can navigate via related links', async ({ page }) => {
+    await page.goto('/patterns/active-partner/');
+
+    const relatedSection = page.locator('aside h2').filter({ hasText: 'Related' });
+    await expect(relatedSection).toBeVisible();
+
+    const obstaclesHeading = page.locator('h3').filter({ hasText: 'Obstacles' });
+    await expect(obstaclesHeading).toBeVisible();
+
+    const complianceBiasLink = page.locator('a[href="/obstacles/compliance-bias/"]');
+    await expect(complianceBiasLink).toBeVisible();
+    await complianceBiasLink.click();
+
+    await expect(page).toHaveURL('/obstacles/compliance-bias/');
+    await expect(page.locator('h1')).toContainText('Compliance Bias');
+    await expect(page.locator('article')).toBeVisible();
+  });
 });

@@ -5,6 +5,9 @@ export interface PatternMetadata {
   category: PatternCategory
   slug: string
   emojiIndicator?: string
+  relatedPatterns?: string[]
+  relatedAntiPatterns?: string[]
+  relatedObstacles?: string[]
 }
 
 export interface PatternContent extends PatternMetadata {

@@ -1,3 +1,8 @@
+---
+related_patterns:
+  - references
+---
+
 # Knowledge Composition
 
 ## Enabled by

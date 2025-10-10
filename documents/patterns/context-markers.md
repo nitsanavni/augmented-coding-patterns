@@ -1,3 +1,8 @@
+---
+related_obstacles:
+  - black-box-ai
+---
+
 # Context Markers
 
 ## Problem
