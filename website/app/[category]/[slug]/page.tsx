@@ -38,6 +38,10 @@ export default async function PatternPage({ params }: PatternPageProps) {
   const config = getCategoryConfig(category as PatternCategory);
   const pattern = getPatternBySlug(category as PatternCategory, slug);
 
+  if (!pattern) {
+    notFound();
+  }
+
   return (
     <div className={styles.container}>
       <Link href={`/${category}`} className={styles.backLink}>

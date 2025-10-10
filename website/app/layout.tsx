@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import styles from "./layout.module.css";
+import { siteConfig } from "@/config/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Augmented Coding Patterns",
-  description: "A comprehensive collection of patterns, anti-patterns, and obstacles for effective AI-augmented software development",
+  title: siteConfig.name,
+  description: siteConfig.description,
 };
 
 export default function RootLayout({
@@ -31,7 +32,7 @@ export default function RootLayout({
           <header className={styles.header}>
             <div className={styles.headerContent}>
               <Link href="/" className={styles.logo}>
-                Augmented Coding Patterns
+                {siteConfig.name}
               </Link>
               <nav className={styles.nav}>
                 <Link href="/" className={styles.navLink}>
@@ -57,11 +58,11 @@ export default function RootLayout({
           <footer className={styles.footer}>
             <div className={styles.footerContent}>
               <p>
-                Augmented Coding Patterns - A guide to effective AI-augmented software development
+                {siteConfig.name} - A guide to effective AI-augmented software development
               </p>
               <div className={styles.footerLinks}>
                 <a
-                  href="https://github.com/ivettevaldez/augmented-coding-patterns"
+                  href={siteConfig.links.github}
                   className={styles.footerLink}
                   target="_blank"
                   rel="noopener noreferrer"

@@ -55,36 +55,51 @@ function validateSlug(slug: string): void {
 
 export function getPatternSlugs(category: PatternCategory): string[] {
   const categoryPath = getCategoryPath(category)
-  const files = fs.readdirSync(categoryPath)
 
-  return files
-    .filter(isMarkdownFile)
-    .map(filenameToSlug)
+  try {
+    const files = fs.readdirSync(categoryPath)
+    return files
+      .filter(isMarkdownFile)
+      .map(filenameToSlug)
+  } catch (error) {
+    console.error(`Failed to read patterns directory: ${categoryPath}`, error)
+    return []
+  }
 }
 
-export function getPatternBySlug(category: PatternCategory, slug: string): PatternContent {
+export function getPatternBySlug(
+  category: PatternCategory,
+  slug: string
+): PatternContent | null {
   validateSlug(slug)
   const categoryPath = getCategoryPath(category)
   const fullPath = path.join(categoryPath, `${slug}.md`)
-  const fileContents = fs.readFileSync(fullPath, 'utf-8')
 
-  const { content } = matter(fileContents)
+  try {
+    const fileContents = fs.readFileSync(fullPath, 'utf-8')
+    const { content } = matter(fileContents)
 
-  const lines = content.split('\n')
-  const firstLine = lines.find(line => line.trim().startsWith('#')) || ''
-  const { title, emoji } = extractTitleAndEmoji(firstLine)
+    const lines = content.split('\n')
+    const firstLine = lines.find(line => line.trim().startsWith('#')) || ''
+    const { title, emoji } = extractTitleAndEmoji(firstLine)
 
-  return {
-    title,
-    category,
-    slug,
-    ...(emoji && { emojiIndicator: emoji }),
-    content,
-    rawContent: fileContents
+    return {
+      title,
+      category,
+      slug,
+      ...(emoji && { emojiIndicator: emoji }),
+      content,
+      rawContent: fileContents
+    }
+  } catch (error) {
+    console.error(`Failed to read pattern file: ${fullPath}`, error)
+    return null
   }
 }
 
 export function getAllPatterns(category: PatternCategory): PatternContent[] {
   const slugs = getPatternSlugs(category)
-  return slugs.map(slug => getPatternBySlug(category, slug))
+  return slugs
+    .map(slug => getPatternBySlug(category, slug))
+    .filter((pattern): pattern is PatternContent => pattern !== null)
 }
