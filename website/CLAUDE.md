@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Next.js 15 static site that displays documentation for augmented coding patterns, anti-patterns, and obstacles. The content is authored in markdown files stored in `../patterns/` (outside the website directory) and rendered as a static documentation website deployed to GitHub Pages.
+This is a Next.js 15 static site that displays documentation for augmented coding patterns, anti-patterns, and obstacles. The content is authored in markdown files stored in `../documents/` (outside the website directory) and rendered as a static documentation website deployed to GitHub Pages.
 
 ## Development Commands
 
@@ -32,13 +32,13 @@ npx playwright test path/to/test.spec.ts
 
 ### Content Source and Processing
 
-**Markdown Content Location**: `../patterns/` (sibling to website directory)
-- Directory structure: `../patterns/{category}/{slug}.md`
+**Markdown Content Location**: `../documents/` (sibling to website directory)
+- Directory structure: `../documents/{category}/{slug}.md`
 - Three categories: `patterns/`, `anti-patterns/`, `obstacles/`
 - Each markdown file has a frontmatter section and content
 
 **Content Processing Pipeline**:
-1. `lib/markdown.ts` reads markdown files from `../patterns/`
+1. `lib/markdown.ts` reads markdown files from `../documents/`
 2. Uses `gray-matter` to parse frontmatter
 3. Extracts title and emoji from first H1 line in content
 4. **Strips the first H1** from content (displayed separately in page header to avoid duplicate H1s)
@@ -149,7 +149,7 @@ See `deployment-notes.md` for full details. Key points:
 
 ### Adding a New Pattern
 
-1. Create markdown file in `../patterns/{category}/{slug}.md`
+1. Create markdown file in `../documents/{category}/{slug}.md`
 2. Include frontmatter and first H1 with optional emoji
 3. Run build to verify static generation works
 4. Pattern automatically appears on category list page
@@ -158,7 +158,7 @@ See `deployment-notes.md` for full details. Key points:
 
 1. Update `PatternCategory` type in `lib/types.ts`
 2. Add category config to `CATEGORY_CONFIGS` in `app/lib/category-config.ts`
-3. Create directory in `../patterns/{new-category}/`
+3. Create directory in `../documents/{new-category}/`
 4. Add CSS styles for category in `pattern-detail.module.css` and `category-list.module.css`
 5. Update tests to include new category
 

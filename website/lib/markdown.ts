@@ -3,7 +3,7 @@ import path from 'path'
 import matter from 'gray-matter'
 import { PatternCategory, PatternContent } from './types'
 
-const PATTERNS_BASE_PATH = path.join(process.cwd(), '..', 'patterns')
+const PATTERNS_BASE_PATH = path.join(process.cwd(), '..', 'documents')
 
 function getCategoryPath(category: PatternCategory): string {
   return path.join(PATTERNS_BASE_PATH, category)

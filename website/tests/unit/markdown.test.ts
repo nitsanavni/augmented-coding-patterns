@@ -15,7 +15,7 @@ describe('Markdown utilities', () => {
 
   describe('getPatternSlugs', () => {
     it('should return array of slugs for patterns category', () => {
-      mockedPath.join.mockReturnValue('/fake/path/patterns/patterns')
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns')
       mockedFs.readdirSync.mockReturnValue([
         'active-partner.md',
         'chain-of-small-steps.md',
@@ -29,11 +29,11 @@ describe('Markdown utilities', () => {
         'chain-of-small-steps',
         'check-alignment',
       ])
-      expect(mockedFs.readdirSync).toHaveBeenCalledWith('/fake/path/patterns/patterns')
+      expect(mockedFs.readdirSync).toHaveBeenCalledWith('/fake/path/documents/patterns')
     })
 
     it('should return array of slugs for anti-patterns category', () => {
-      mockedPath.join.mockReturnValue('/fake/path/patterns/anti-patterns')
+      mockedPath.join.mockReturnValue('/fake/path/documents/anti-patterns')
       mockedFs.readdirSync.mockReturnValue([
         'answer-injection.md',
         'distracted-agent.md',
@@ -45,11 +45,11 @@ describe('Markdown utilities', () => {
         'answer-injection',
         'distracted-agent',
       ])
-      expect(mockedFs.readdirSync).toHaveBeenCalledWith('/fake/path/patterns/anti-patterns')
+      expect(mockedFs.readdirSync).toHaveBeenCalledWith('/fake/path/documents/anti-patterns')
     })
 
     it('should return array of slugs for obstacles category', () => {
-      mockedPath.join.mockReturnValue('/fake/path/patterns/obstacles')
+      mockedPath.join.mockReturnValue('/fake/path/documents/obstacles')
       mockedFs.readdirSync.mockReturnValue([
         'black-box-ai.md',
         'context-rot.md',
@@ -61,11 +61,11 @@ describe('Markdown utilities', () => {
         'black-box-ai',
         'context-rot',
       ])
-      expect(mockedFs.readdirSync).toHaveBeenCalledWith('/fake/path/patterns/obstacles')
+      expect(mockedFs.readdirSync).toHaveBeenCalledWith('/fake/path/documents/obstacles')
     })
 
     it('should filter out non-markdown files', () => {
-      mockedPath.join.mockReturnValue('/fake/path/patterns/patterns')
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns')
       mockedFs.readdirSync.mockReturnValue([
         'active-partner.md',
         '.DS_Store',
@@ -94,7 +94,7 @@ Explicitly grant permission and encourage AI to:
 - Push back on unclear instructions
 - Challenge assumptions that seem wrong`
 
-      mockedPath.join.mockReturnValue('/fake/path/patterns/patterns/active-partner.md')
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns/active-partner.md')
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       const pattern = getPatternBySlug('patterns', 'active-partner')
@@ -105,7 +105,7 @@ Explicitly grant permission and encourage AI to:
       expect(pattern.slug).toBe('active-partner')
       expect(pattern.content).toContain('AI defaults to silent compliance')
       expect(mockedFs.readFileSync).toHaveBeenCalledWith(
-        '/fake/path/patterns/patterns/active-partner.md',
+        '/fake/path/documents/patterns/active-partner.md',
         'utf-8'
       )
     })
@@ -116,7 +116,7 @@ Explicitly grant permission and encourage AI to:
 ## Problem
 Putting solutions in your questions, limiting AI to your preconceived approach.`
 
-      mockedPath.join.mockReturnValue('/fake/path/patterns/anti-patterns/answer-injection.md')
+      mockedPath.join.mockReturnValue('/fake/path/documents/anti-patterns/answer-injection.md')
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       const pattern = getPatternBySlug('anti-patterns', 'answer-injection')
@@ -134,7 +134,7 @@ Putting solutions in your questions, limiting AI to your preconceived approach.`
 ## Description
 AI reasoning is hidden. You only see inputs and outputs.`
 
-      mockedPath.join.mockReturnValue('/fake/path/patterns/obstacles/black-box-ai.md')
+      mockedPath.join.mockReturnValue('/fake/path/documents/obstacles/black-box-ai.md')
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       const pattern = getPatternBySlug('obstacles', 'black-box-ai')
@@ -151,7 +151,7 @@ AI reasoning is hidden. You only see inputs and outputs.`
 ## Problem
 AI defaults to silent compliance.`
 
-      mockedPath.join.mockReturnValue('/fake/path/patterns/patterns/active-partner.md')
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns/active-partner.md')
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       const pattern = getPatternBySlug('patterns', 'active-partner')
@@ -164,9 +164,9 @@ AI defaults to silent compliance.`
   describe('getAllPatterns', () => {
     it('should return all patterns for a category', () => {
       mockedPath.join
-        .mockReturnValueOnce('/fake/path/patterns/patterns')
-        .mockReturnValueOnce('/fake/path/patterns/patterns/pattern-one.md')
-        .mockReturnValueOnce('/fake/path/patterns/patterns/pattern-two.md')
+        .mockReturnValueOnce('/fake/path/documents/patterns')
+        .mockReturnValueOnce('/fake/path/documents/patterns/pattern-one.md')
+        .mockReturnValueOnce('/fake/path/documents/patterns/pattern-two.md')
 
       mockedFs.readdirSync.mockReturnValue([
         'pattern-one.md',
@@ -187,7 +187,7 @@ AI defaults to silent compliance.`
     })
 
     it('should handle empty directory', () => {
-      mockedPath.join.mockReturnValue('/fake/path/patterns/patterns')
+      mockedPath.join.mockReturnValue('/fake/path/documents/patterns')
       mockedFs.readdirSync.mockReturnValue([] as fs.Dirent[])
 
       const patterns = getAllPatterns('patterns')
@@ -197,8 +197,8 @@ AI defaults to silent compliance.`
 
     it('should skip non-markdown files', () => {
       mockedPath.join
-        .mockReturnValueOnce('/fake/path/patterns/patterns')
-        .mockReturnValueOnce('/fake/path/patterns/patterns/pattern-one.md')
+        .mockReturnValueOnce('/fake/path/documents/patterns')
+        .mockReturnValueOnce('/fake/path/documents/patterns/pattern-one.md')
 
       mockedFs.readdirSync.mockReturnValue([
         'pattern-one.md',
