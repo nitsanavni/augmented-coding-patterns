@@ -1,0 +1,219 @@
+.container {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-3xl) var(--space-xl);
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-xl);
+  transition: color var(--transition-fast);
+}
+
+.backLink:hover {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.backArrow {
+  font-size: 0.875em;
+}
+
+.header {
+  margin-bottom: var(--space-2xl);
+  padding-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.titleWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+.emoji {
+  font-size: 3rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: var(--font-size-3xl);
+  margin: 0;
+  color: var(--color-text-primary);
+  flex: 1;
+}
+
+.category {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--border-radius-sm);
+}
+
+.category.patterns {
+  background-color: var(--color-pattern-light);
+  color: var(--color-pattern);
+}
+
+.category.antiPatterns {
+  background-color: var(--color-anti-pattern-light);
+  color: var(--color-anti-pattern);
+}
+
+.category.obstacles {
+  background-color: var(--color-obstacle-light);
+  color: var(--color-obstacle);
+}
+
+.content {
+  color: var(--color-text-primary);
+}
+
+.content h1:first-child {
+  display: none;
+}
+
+.content h2 {
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.content h2:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.content h3 {
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-md);
+}
+
+.content a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color var(--transition-fast);
+}
+
+.content a:hover {
+  text-decoration-color: currentColor;
+}
+
+.content ul,
+.content ol {
+  margin-bottom: var(--space-lg);
+  padding-left: var(--space-xl);
+}
+
+.content li {
+  margin-bottom: var(--space-sm);
+}
+
+.content li p {
+  margin-bottom: var(--space-sm);
+}
+
+.content pre {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--space-lg);
+  overflow-x: auto;
+  margin: var(--space-lg) 0;
+}
+
+.content pre code {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  font-size: var(--font-size-sm);
+}
+
+.content :not(pre) > code {
+  background-color: var(--color-surface);
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--color-border);
+  font-size: 0.875em;
+}
+
+.content blockquote {
+  border-left: 4px solid var(--color-accent);
+  padding-left: var(--space-lg);
+  margin: var(--space-xl) 0;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-lg) 0;
+}
+
+.content th,
+.content td {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.content th {
+  font-weight: 600;
+  background-color: var(--color-surface);
+}
+
+.content tr:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  margin: var(--space-lg) 0;
+}
+
+.content hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-2xl) 0;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .titleWrapper {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .emoji {
+    font-size: 2.5rem;
+  }
+
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .content pre {
+    padding: var(--space-md);
+    font-size: var(--font-size-xs);
+  }
+}
