@@ -80,15 +80,21 @@ export function getPatternBySlug(
     const { content } = matter(fileContents)
 
     const lines = content.split('\n')
-    const firstLine = lines.find(line => line.trim().startsWith('#')) || ''
+    const firstLineIndex = lines.findIndex(line => line.trim().startsWith('#'))
+    const firstLine = firstLineIndex >= 0 ? lines[firstLineIndex] : ''
     const { title, emoji } = extractTitleAndEmoji(firstLine)
+
+    // Remove the first H1 from content since it's displayed in the page header
+    const contentWithoutTitle = firstLineIndex >= 0
+      ? [...lines.slice(0, firstLineIndex), ...lines.slice(firstLineIndex + 1)].join('\n')
+      : content
 
     return {
       title,
       category,
       slug,
       ...(emoji && { emojiIndicator: emoji }),
-      content,
+      content: contentWithoutTitle,
       rawContent: fileContents
     }
   } catch (error) {

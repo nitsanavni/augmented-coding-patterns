@@ -20,7 +20,7 @@ describe('Markdown utilities', () => {
         'active-partner.md',
         'chain-of-small-steps.md',
         'check-alignment.md',
-      ] as any)
+      ] as fs.Dirent[])
 
       const slugs = getPatternSlugs('patterns')
 
@@ -37,7 +37,7 @@ describe('Markdown utilities', () => {
       mockedFs.readdirSync.mockReturnValue([
         'answer-injection.md',
         'distracted-agent.md',
-      ] as any)
+      ] as fs.Dirent[])
 
       const slugs = getPatternSlugs('anti-patterns')
 
@@ -53,7 +53,7 @@ describe('Markdown utilities', () => {
       mockedFs.readdirSync.mockReturnValue([
         'black-box-ai.md',
         'context-rot.md',
-      ] as any)
+      ] as fs.Dirent[])
 
       const slugs = getPatternSlugs('obstacles')
 
@@ -71,7 +71,7 @@ describe('Markdown utilities', () => {
         '.DS_Store',
         'README.txt',
         'check-alignment.md',
-      ] as any)
+      ] as fs.Dirent[])
 
       const slugs = getPatternSlugs('patterns')
 
@@ -171,7 +171,7 @@ AI defaults to silent compliance.`
       mockedFs.readdirSync.mockReturnValue([
         'pattern-one.md',
         'pattern-two.md',
-      ] as any)
+      ] as fs.Dirent[])
 
       mockedFs.readFileSync
         .mockReturnValueOnce('# Pattern One\n\n## Problem\nFirst problem.')
@@ -188,7 +188,7 @@ AI defaults to silent compliance.`
 
     it('should handle empty directory', () => {
       mockedPath.join.mockReturnValue('/fake/path/patterns/patterns')
-      mockedFs.readdirSync.mockReturnValue([] as any)
+      mockedFs.readdirSync.mockReturnValue([] as fs.Dirent[])
 
       const patterns = getAllPatterns('patterns')
 
@@ -204,7 +204,7 @@ AI defaults to silent compliance.`
         'pattern-one.md',
         '.DS_Store',
         'README.txt',
-      ] as any)
+      ] as fs.Dirent[])
 
       mockedFs.readFileSync.mockReturnValue('# Pattern One\n\n## Problem\nFirst problem.')
 
