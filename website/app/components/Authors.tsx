@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { getAuthorByGithub, getGithubAvatarUrl } from '@/lib/authors'
+import { getAuthorById, getGithubAvatarUrl } from '@/lib/authors'
 import styles from './Authors.module.css'
 
 interface AuthorsProps {
@@ -16,8 +16,8 @@ export default function Authors({ authors }: AuthorsProps) {
     <div className={styles.container}>
       <div className={styles.label}>Documented by</div>
       <div className={styles.authorsList}>
-        {authors.map(githubUsername => {
-          const author = getAuthorByGithub(githubUsername)
+        {authors.map(authorId => {
+          const author = getAuthorById(authorId)
 
           if (!author) {
             return null
@@ -28,7 +28,7 @@ export default function Authors({ authors }: AuthorsProps) {
 
           return (
             <Link
-              key={author.github}
+              key={authorId}
               href={linkUrl}
               className={styles.authorLink}
               target="_blank"

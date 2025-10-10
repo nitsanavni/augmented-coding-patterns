@@ -1,4 +1,4 @@
-import { loadAuthors, getAuthorByGithub, getGithubAvatarUrl } from '@/lib/authors'
+import { loadAuthors, getAuthorById, getAuthorByGithub, getGithubAvatarUrl } from '@/lib/authors'
 import { getAllPatterns } from '@/lib/markdown'
 import { PatternCategory } from '@/lib/types'
 
@@ -8,15 +8,46 @@ describe('Author utilities', () => {
     it('should load and parse authors from actual YAML file', () => {
       const authors = loadAuthors()
 
-      // Test that the file was loaded successfully
       expect(authors).toBeDefined()
       expect(typeof authors).toBe('object')
 
-      // Test the actual author from the config file
-      expect(authors).toHaveProperty('lexler')
-      expect(authors.lexler).toEqual({
+      expect(authors).toHaveProperty('lada_kesseler')
+      expect(authors.lada_kesseler).toEqual({
         name: 'Lada Kesseler',
         github: 'lexler'
+      })
+    })
+  })
+
+  describe('getAuthorById', () => {
+    it('should return author data when author ID exists', () => {
+      const author = getAuthorById('lada_kesseler')
+
+      expect(author).toEqual({
+        name: 'Lada Kesseler',
+        github: 'lexler'
+      })
+    })
+
+    it('should return null when author ID does not exist', () => {
+      const author = getAuthorById('nonexistent')
+
+      expect(author).toBeNull()
+    })
+
+    it('should handle empty string author ID', () => {
+      const author = getAuthorById('')
+
+      expect(author).toBeNull()
+    })
+
+    it('should include URL when author has one', () => {
+      const author = getAuthorById('ivett_ordog')
+
+      expect(author).toEqual({
+        name: 'Ivett Ördög',
+        github: 'devill',
+        url: 'https://ivettordog.com'
       })
     })
   })

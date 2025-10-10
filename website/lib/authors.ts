@@ -6,7 +6,7 @@ import { Author } from './types'
 const AUTHORS_FILE_PATH = path.join(process.cwd(), 'config', 'authors.yaml')
 
 interface AuthorsData {
-  [github: string]: {
+  [authorId: string]: {
     name: string
     github: string
     url?: string
@@ -31,9 +31,9 @@ export function loadAuthors(): AuthorsData {
   }
 }
 
-export function getAuthorByGithub(github: string): Author | null {
+export function getAuthorById(authorId: string): Author | null {
   const authors = loadAuthors()
-  const authorData = authors[github]
+  const authorData = authors[authorId]
 
   if (!authorData) {
     return null
@@ -44,6 +44,22 @@ export function getAuthorByGithub(github: string): Author | null {
     github: authorData.github,
     ...(authorData.url && { url: authorData.url })
   }
+}
+
+export function getAuthorByGithub(github: string): Author | null {
+  const authors = loadAuthors()
+
+  for (const authorData of Object.values(authors)) {
+    if (authorData.github === github) {
+      return {
+        name: authorData.name,
+        github: authorData.github,
+        ...(authorData.url && { url: authorData.url })
+      }
+    }
+  }
+
+  return null
 }
 
 export function getGithubAvatarUrl(github: string): string {
