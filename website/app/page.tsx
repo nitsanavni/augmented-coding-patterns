@@ -18,14 +18,14 @@ export default function Home() {
       </section>
 
       <div className={styles.categories}>
-        <Link href="/patterns" className={`${styles.categoryCard} ${styles.patterns}`}>
-          <div className={styles.categoryIcon}>🧩</div>
-          <h2 className={styles.categoryTitle}>Patterns</h2>
+        <Link href="/obstacles" className={`${styles.categoryCard} ${styles.obstacles}`}>
+          <div className={styles.categoryIcon}>⛰️</div>
+          <h2 className={styles.categoryTitle}>Obstacles</h2>
           <p className={styles.categoryDescription}>
-            Proven strategies and best practices for working effectively with AI coding assistants.
-            These patterns help you maximize productivity and code quality.
+            Understand the inherent limitations and challenges of AI-augmented coding.
+            Be aware of these obstacles to set realistic expectations.
           </p>
-          <div className={styles.categoryCount}>{patternsCount} Patterns</div>
+          <div className={styles.categoryCount}>{obstaclesCount} Obstacles</div>
         </Link>
 
         <Link href="/anti-patterns" className={`${styles.categoryCard} ${styles.antiPatterns}`}>
@@ -38,14 +38,14 @@ export default function Home() {
           <div className={styles.categoryCount}>{antiPatternsCount} Anti-Patterns</div>
         </Link>
 
-        <Link href="/obstacles" className={`${styles.categoryCard} ${styles.obstacles}`}>
-          <div className={styles.categoryIcon}>⛰️</div>
-          <h2 className={styles.categoryTitle}>Obstacles</h2>
+        <Link href="/patterns" className={`${styles.categoryCard} ${styles.patterns}`}>
+          <div className={styles.categoryIcon}>🧩</div>
+          <h2 className={styles.categoryTitle}>Patterns</h2>
           <p className={styles.categoryDescription}>
-            Understand the inherent limitations and challenges of AI-augmented coding.
-            Be aware of these obstacles to set realistic expectations.
+            Proven strategies and best practices for working effectively with AI coding assistants.
+            These patterns help you maximize productivity and code quality.
           </p>
-          <div className={styles.categoryCount}>{obstaclesCount} Obstacles</div>
+          <div className={styles.categoryCount}>{patternsCount} Patterns</div>
         </Link>
       </div>
     </div>

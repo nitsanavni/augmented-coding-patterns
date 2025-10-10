@@ -37,14 +37,14 @@ export default function RootLayout({
                 <Link href="/" className={styles.navLink}>
                   Home
                 </Link>
-                <Link href="/patterns" className={styles.navLink}>
-                  Patterns
+                <Link href="/obstacles" className={styles.navLink}>
+                  Obstacles
                 </Link>
                 <Link href="/anti-patterns" className={styles.navLink}>
                   Anti-Patterns
                 </Link>
-                <Link href="/obstacles" className={styles.navLink}>
-                  Obstacles
+                <Link href="/patterns" className={styles.navLink}>
+                  Patterns
                 </Link>
               </nav>
             </div>
