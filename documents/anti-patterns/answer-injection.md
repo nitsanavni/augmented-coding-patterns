@@ -1,5 +1,5 @@
 ---
-authors: [lexler]
+authors: [lada_kesseler]
 related_patterns:
   - reverse-direction
 ---

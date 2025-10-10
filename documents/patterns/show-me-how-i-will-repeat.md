@@ -1,5 +1,5 @@
 ---
-authors: [devill]
+authors: [ivett_ordog]
 related_patterns:
   - extract-knowledge
 ---

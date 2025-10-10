@@ -1,5 +1,5 @@
 ---
-authors: [lexler]
+authors: [lada_kesseler]
 related_obstacles:
   - black-box-ai
 related_anti_patterns:

@@ -1,5 +1,5 @@
 ---
-authors: [isidore]
+authors: [llewellyn_falco]
 related_obstacles:
   - compliance-bias
 related_patterns:

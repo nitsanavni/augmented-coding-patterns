@@ -1,5 +1,5 @@
 ---
-authors: [lexler]
+authors: [lada_kesseler]
 related_anti_patterns:
   - silent-misalignment
   - tell-me-a-lie
