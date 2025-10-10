@@ -4,9 +4,21 @@ import { siteConfig } from '@/config/site'
 
 describe('RootLayout', () => {
   const mockChildren = <div>Test Content</div>
+  let consoleErrorSpy: jest.SpyInstance
 
   beforeEach(() => {
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation((message) => {
+      if (typeof message === 'string' && message.includes('cannot be a child of')) {
+        return
+      }
+      console.warn(message)
+    })
+
     render(<RootLayout>{mockChildren}</RootLayout>)
+  })
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore()
   })
 
   describe('Header', () => {
