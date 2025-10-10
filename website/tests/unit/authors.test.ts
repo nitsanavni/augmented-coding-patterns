@@ -1,4 +1,6 @@
 import { loadAuthors, getAuthorByGithub, getGithubAvatarUrl } from '@/lib/authors'
+import { getAllPatterns } from '@/lib/markdown'
+import { PatternCategory } from '@/lib/types'
 
 describe('Author utilities', () => {
 
@@ -56,6 +58,39 @@ describe('Author utilities', () => {
     it('should handle empty string', () => {
       const url = getGithubAvatarUrl('')
       expect(url).toBe('https://github.com/.png')
+    })
+  })
+
+  describe('Markdown authors validation', () => {
+    it('should validate all authors used in markdown files exist in authors.yaml', () => {
+      const authors = loadAuthors()
+      const categories: PatternCategory[] = ['patterns', 'anti-patterns', 'obstacles']
+
+      const allReferencedAuthors = new Set<string>()
+      const missingAuthors: Array<{ category: string; slug: string; author: string }> = []
+
+      for (const category of categories) {
+        const patterns = getAllPatterns(category)
+
+        for (const pattern of patterns) {
+          if (pattern.authors && Array.isArray(pattern.authors)) {
+            for (const author of pattern.authors) {
+              allReferencedAuthors.add(author)
+
+              if (!authors[author]) {
+                missingAuthors.push({
+                  category,
+                  slug: pattern.slug,
+                  author
+                })
+              }
+            }
+          }
+        }
+      }
+
+      expect(missingAuthors).toEqual([])
+      expect(allReferencedAuthors.size).toBeGreaterThan(0)
     })
   })
 })
