@@ -151,11 +151,6 @@ export default function RelationshipGraph({ graphData }: RelationshipGraphProps)
           cooldownTime={3000}
           d3AlphaDecay={0.01}
           d3VelocityDecay={0.4}
-          d3ForceConfig={{
-            charge: { strength: -200 },
-            link: { distance: 120 },
-            center: { strength: 0.5 }
-          }}
         />
       </div>
       <div className={styles.legend}>
