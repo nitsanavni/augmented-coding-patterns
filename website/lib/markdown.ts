@@ -98,37 +98,53 @@ export function getPatternBySlug(
     const relPatterns = allRels
       .map(r => {
         // If this pattern is the source, take the target; if target, take the source
-        const otherSlug = r.from === currentFullSlug ? r.to : r.from
+        const isOutgoing = r.from === currentFullSlug
+        const otherSlug = isOutgoing ? r.to : r.from
         if (!otherSlug.startsWith('patterns/')) return null
-        return { slug: otherSlug.replace('patterns/', ''), type: r.type }
+        return {
+          slug: otherSlug.replace('patterns/', ''),
+          type: r.type,
+          direction: isOutgoing ? 'outgoing' as const : 'incoming' as const
+        }
       })
-      .filter((r): r is { slug: string; type: RelationshipType } => r !== null)
+      .filter((r): r is { slug: string; type: RelationshipType; direction: 'outgoing' | 'incoming' } => r !== null)
 
     const relAntiPatterns = allRels
       .map(r => {
-        const otherSlug = r.from === currentFullSlug ? r.to : r.from
+        const isOutgoing = r.from === currentFullSlug
+        const otherSlug = isOutgoing ? r.to : r.from
         if (!otherSlug.startsWith('anti-patterns/')) return null
-        return { slug: otherSlug.replace('anti-patterns/', ''), type: r.type }
+        return {
+          slug: otherSlug.replace('anti-patterns/', ''),
+          type: r.type,
+          direction: isOutgoing ? 'outgoing' as const : 'incoming' as const
+        }
       })
-      .filter((r): r is { slug: string; type: RelationshipType } => r !== null)
+      .filter((r): r is { slug: string; type: RelationshipType; direction: 'outgoing' | 'incoming' } => r !== null)
 
     const relObstacles = allRels
       .map(r => {
-        const otherSlug = r.from === currentFullSlug ? r.to : r.from
+        const isOutgoing = r.from === currentFullSlug
+        const otherSlug = isOutgoing ? r.to : r.from
         if (!otherSlug.startsWith('obstacles/')) return null
-        return { slug: otherSlug.replace('obstacles/', ''), type: r.type }
+        return {
+          slug: otherSlug.replace('obstacles/', ''),
+          type: r.type,
+          direction: isOutgoing ? 'outgoing' as const : 'incoming' as const
+        }
       })
-      .filter((r): r is { slug: string; type: RelationshipType } => r !== null)
+      .filter((r): r is { slug: string; type: RelationshipType; direction: 'outgoing' | 'incoming' } => r !== null)
 
     // Merge centralized relationships with frontmatter (remove duplicates by slug)
-    // For frontmatter relationships without type info, default to 'related'
-    const frontmatterPatterns = (data.related_patterns || []).map((slug: string) => ({ slug, type: 'related' as const }))
-    const frontmatterAntiPatterns = (data.related_anti_patterns || []).map((slug: string) => ({ slug, type: 'related' as const }))
-    const frontmatterObstacles = (data.related_obstacles || []).map((slug: string) => ({ slug, type: 'related' as const }))
+    // For frontmatter relationships without type info, default to 'related' and 'outgoing'
+    const frontmatterPatterns = (data.related_patterns || []).map((slug: string) => ({ slug, type: 'related' as const, direction: 'outgoing' as const }))
+    const frontmatterAntiPatterns = (data.related_anti_patterns || []).map((slug: string) => ({ slug, type: 'related' as const, direction: 'outgoing' as const }))
+    const frontmatterObstacles = (data.related_obstacles || []).map((slug: string) => ({ slug, type: 'related' as const, direction: 'outgoing' as const }))
 
     // Merge and deduplicate by slug, preferring centralized type over frontmatter
-    const mergeRelatedPatterns = (centralized: Array<{slug: string, type: RelationshipType}>, frontmatter: Array<{slug: string, type: RelationshipType}>) => {
-      const slugMap = new Map<string, {slug: string, type: RelationshipType}>()
+    type RelatedItem = {slug: string, type: RelationshipType, direction: 'outgoing' | 'incoming'}
+    const mergeRelatedPatterns = (centralized: RelatedItem[], frontmatter: RelatedItem[]) => {
+      const slugMap = new Map<string, RelatedItem>()
       frontmatter.forEach(item => slugMap.set(item.slug, item))
       centralized.forEach(item => slugMap.set(item.slug, item)) // Centralized overwrites
       return Array.from(slugMap.values())

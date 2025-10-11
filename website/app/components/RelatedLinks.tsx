@@ -16,17 +16,35 @@ function slugToTitle(slug: string): string {
     .join(' ')
 }
 
-function formatRelationshipType(type: RelationshipType): string {
-  const formatMap: Record<RelationshipType, string> = {
-    'related': '',
-    'solves': 'Solves',
-    'similar': 'Similar to',
-    'enabled-by': 'Enabled by',
-    'uses': 'Uses',
-    'causes': 'Causes',
-    'alternative': 'Alternative to'
+function formatRelationshipType(type: RelationshipType, direction: 'outgoing' | 'incoming'): string {
+  // Symmetric relationships (same label regardless of direction)
+  if (type === 'similar' || type === 'alternative' || type === 'related') {
+    const formatMap: Record<string, string> = {
+      'related': '',
+      'similar': 'Similar to',
+      'alternative': 'Alternative to'
+    }
+    return formatMap[type] || type
   }
-  return formatMap[type] || type
+
+  // Asymmetric relationships (different labels based on direction)
+  if (direction === 'outgoing') {
+    const outgoingMap: Record<string, string> = {
+      'solves': 'Solves',
+      'enabled-by': 'Enabled by',
+      'uses': 'Uses',
+      'causes': 'Causes'
+    }
+    return outgoingMap[type] || type
+  } else {
+    const incomingMap: Record<string, string> = {
+      'solves': 'Solved by',
+      'enabled-by': 'Enables',
+      'uses': 'Used by',
+      'causes': 'Caused by'
+    }
+    return incomingMap[type] || type
+  }
 }
 
 interface RelationshipGroup {
@@ -78,9 +96,9 @@ export default function RelatedLinks({
       {relationshipGroups.map(({ category, patterns }) => {
         const config = getCategoryConfig(category)
 
-        // Group patterns by relationship type
+        // Group patterns by relationship type (considering direction for asymmetric types)
         const patternsByType = patterns.reduce((acc, pattern) => {
-          const typeLabel = formatRelationshipType(pattern.type)
+          const typeLabel = formatRelationshipType(pattern.type, pattern.direction)
           if (!acc[typeLabel]) {
             acc[typeLabel] = []
           }

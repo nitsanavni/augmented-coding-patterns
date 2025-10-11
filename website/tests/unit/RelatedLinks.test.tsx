@@ -4,7 +4,7 @@ import { RelatedPattern } from '@/lib/types'
 
 // Helper function to convert string slugs to RelatedPattern objects
 const toRelatedPatterns = (slugs: string[]): RelatedPattern[] =>
-  slugs.map(slug => ({ slug, type: 'related' as const }))
+  slugs.map(slug => ({ slug, type: 'related' as const, direction: 'outgoing' as const }))
 
 jest.mock('@/app/lib/category-config', () => ({
   getCategoryConfig: jest.fn((category: string) => {
@@ -220,6 +220,121 @@ describe('RelatedLinks Component', () => {
       expect(screen.getByText('Patterns')).toBeInTheDocument()
       expect(screen.getByText('Anti-Patterns')).toBeInTheDocument()
       expect(screen.getByText('Obstacles')).toBeInTheDocument()
+    })
+  })
+
+  describe('Relationship direction and label display', () => {
+    it('displays "Solves" for outgoing solves relationship', () => {
+      const patterns: RelatedPattern[] = [
+        { slug: 'black-box-ai', type: 'solves', direction: 'outgoing' }
+      ]
+      render(<RelatedLinks relatedObstacles={patterns} />)
+      expect(screen.getByRole('heading', { name: 'Solves', level: 4 })).toBeInTheDocument()
+    })
+
+    it('displays "Solved by" for incoming solves relationship', () => {
+      const patterns: RelatedPattern[] = [
+        { slug: 'active-partner', type: 'solves', direction: 'incoming' }
+      ]
+      render(<RelatedLinks relatedPatterns={patterns} />)
+      expect(screen.getByRole('heading', { name: 'Solved by', level: 4 })).toBeInTheDocument()
+    })
+
+    it('displays "Uses" for outgoing uses relationship', () => {
+      const patterns: RelatedPattern[] = [
+        { slug: 'chain-of-small-steps', type: 'uses', direction: 'outgoing' }
+      ]
+      render(<RelatedLinks relatedPatterns={patterns} />)
+      expect(screen.getByRole('heading', { name: 'Uses', level: 4 })).toBeInTheDocument()
+    })
+
+    it('displays "Used by" for incoming uses relationship', () => {
+      const patterns: RelatedPattern[] = [
+        { slug: 'active-partner', type: 'uses', direction: 'incoming' }
+      ]
+      render(<RelatedLinks relatedPatterns={patterns} />)
+      expect(screen.getByRole('heading', { name: 'Used by', level: 4 })).toBeInTheDocument()
+    })
+
+    it('displays "Enabled by" for outgoing enabled-by relationship', () => {
+      const patterns: RelatedPattern[] = [
+        { slug: 'active-partner', type: 'enabled-by', direction: 'outgoing' }
+      ]
+      render(<RelatedLinks relatedPatterns={patterns} />)
+      expect(screen.getByRole('heading', { name: 'Enabled by', level: 4 })).toBeInTheDocument()
+    })
+
+    it('displays "Enables" for incoming enabled-by relationship', () => {
+      const patterns: RelatedPattern[] = [
+        { slug: 'chain-of-small-steps', type: 'enabled-by', direction: 'incoming' }
+      ]
+      render(<RelatedLinks relatedPatterns={patterns} />)
+      expect(screen.getByRole('heading', { name: 'Enables', level: 4 })).toBeInTheDocument()
+    })
+
+    it('displays "Causes" for outgoing causes relationship', () => {
+      const patterns: RelatedPattern[] = [
+        { slug: 'context-rot', type: 'causes', direction: 'outgoing' }
+      ]
+      render(<RelatedLinks relatedAntiPatterns={patterns} />)
+      expect(screen.getByRole('heading', { name: 'Causes', level: 4 })).toBeInTheDocument()
+    })
+
+    it('displays "Caused by" for incoming causes relationship', () => {
+      const patterns: RelatedPattern[] = [
+        { slug: 'answer-injection', type: 'causes', direction: 'incoming' }
+      ]
+      render(<RelatedLinks relatedAntiPatterns={patterns} />)
+      expect(screen.getByRole('heading', { name: 'Caused by', level: 4 })).toBeInTheDocument()
+    })
+
+    it('displays same label for symmetric "similar" regardless of direction', () => {
+      const outgoing: RelatedPattern[] = [
+        { slug: 'pattern-one', type: 'similar', direction: 'outgoing' }
+      ]
+      const incoming: RelatedPattern[] = [
+        { slug: 'pattern-two', type: 'similar', direction: 'incoming' }
+      ]
+
+      const { rerender } = render(<RelatedLinks relatedPatterns={outgoing} />)
+      expect(screen.getByRole('heading', { name: 'Similar to', level: 4 })).toBeInTheDocument()
+
+      rerender(<RelatedLinks relatedPatterns={incoming} />)
+      expect(screen.getByRole('heading', { name: 'Similar to', level: 4 })).toBeInTheDocument()
+    })
+
+    it('displays same label for symmetric "alternative" regardless of direction', () => {
+      const outgoing: RelatedPattern[] = [
+        { slug: 'pattern-one', type: 'alternative', direction: 'outgoing' }
+      ]
+      const incoming: RelatedPattern[] = [
+        { slug: 'pattern-two', type: 'alternative', direction: 'incoming' }
+      ]
+
+      const { rerender } = render(<RelatedLinks relatedAntiPatterns={outgoing} />)
+      expect(screen.getByRole('heading', { name: 'Alternative to', level: 4 })).toBeInTheDocument()
+
+      rerender(<RelatedLinks relatedAntiPatterns={incoming} />)
+      expect(screen.getByRole('heading', { name: 'Alternative to', level: 4 })).toBeInTheDocument()
+    })
+
+    it('groups patterns by relationship type and direction', () => {
+      const patterns: RelatedPattern[] = [
+        { slug: 'pattern-one', type: 'related', direction: 'outgoing' },
+        { slug: 'pattern-two', type: 'solves', direction: 'outgoing' },
+        { slug: 'pattern-three', type: 'solves', direction: 'incoming' }
+      ]
+
+      render(<RelatedLinks relatedPatterns={patterns} />)
+
+      // Should have separate headings for different type+direction combinations
+      expect(screen.getByRole('heading', { name: 'Solves', level: 4 })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Solved by', level: 4 })).toBeInTheDocument()
+
+      // Should display all three patterns
+      expect(screen.getByRole('link', { name: 'Pattern One' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Pattern Two' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Pattern Three' })).toBeInTheDocument()
     })
   })
 

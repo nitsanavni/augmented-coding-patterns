@@ -201,8 +201,8 @@ AI defaults to silent compliance.`
 
       expect(pattern).toBeDefined()
       expect(pattern.relatedPatterns).toEqual([
-        { slug: 'chain-of-small-steps', type: 'related' },
-        { slug: 'check-alignment', type: 'related' }
+        { slug: 'chain-of-small-steps', type: 'related', direction: 'outgoing' },
+        { slug: 'check-alignment', type: 'related', direction: 'outgoing' }
       ])
     })
 
@@ -224,8 +224,8 @@ AI defaults to silent compliance.`
 
       expect(pattern).toBeDefined()
       expect(pattern.relatedAntiPatterns).toEqual([
-        { slug: 'answer-injection', type: 'related' },
-        { slug: 'distracted-agent', type: 'related' }
+        { slug: 'answer-injection', type: 'related', direction: 'outgoing' },
+        { slug: 'distracted-agent', type: 'related', direction: 'outgoing' }
       ])
     })
 
@@ -247,8 +247,8 @@ AI defaults to silent compliance.`
 
       expect(pattern).toBeDefined()
       expect(pattern.relatedObstacles).toEqual([
-        { slug: 'black-box-ai', type: 'related' },
-        { slug: 'context-rot', type: 'related' }
+        { slug: 'black-box-ai', type: 'related', direction: 'outgoing' },
+        { slug: 'context-rot', type: 'related', direction: 'outgoing' }
       ])
     })
 
@@ -286,7 +286,7 @@ AI defaults to silent compliance.`
       const pattern = getPatternBySlug('patterns', 'active-partner')
 
       expect(pattern).toBeDefined()
-      expect(pattern.relatedPatterns).toEqual([{ slug: 'chain-of-small-steps', type: 'related' }])
+      expect(pattern.relatedPatterns).toEqual([{ slug: 'chain-of-small-steps', type: 'related', direction: 'outgoing' }])
       expect(pattern.relatedAntiPatterns).toBeUndefined()
       expect(pattern.relatedObstacles).toBeUndefined()
     })
@@ -311,9 +311,9 @@ AI defaults to silent compliance.`
       const pattern = getPatternBySlug('patterns', 'active-partner')
 
       expect(pattern).toBeDefined()
-      expect(pattern.relatedPatterns).toEqual([{ slug: 'chain-of-small-steps', type: 'related' }])
-      expect(pattern.relatedAntiPatterns).toEqual([{ slug: 'answer-injection', type: 'related' }])
-      expect(pattern.relatedObstacles).toEqual([{ slug: 'black-box-ai', type: 'related' }])
+      expect(pattern.relatedPatterns).toEqual([{ slug: 'chain-of-small-steps', type: 'related', direction: 'outgoing' }])
+      expect(pattern.relatedAntiPatterns).toEqual([{ slug: 'answer-injection', type: 'related', direction: 'outgoing' }])
+      expect(pattern.relatedObstacles).toEqual([{ slug: 'black-box-ai', type: 'related', direction: 'outgoing' }])
     })
 
     it('should handle authors combined with relationship fields', () => {
@@ -336,8 +336,8 @@ AI defaults to silent compliance.`
 
       expect(pattern).toBeDefined()
       expect(pattern.authors).toEqual(['lexler', 'johndoe'])
-      expect(pattern.relatedPatterns).toEqual([{ slug: 'chain-of-small-steps', type: 'related' }])
-      expect(pattern.relatedAntiPatterns).toEqual([{ slug: 'answer-injection', type: 'related' }])
+      expect(pattern.relatedPatterns).toEqual([{ slug: 'chain-of-small-steps', type: 'related', direction: 'outgoing' }])
+      expect(pattern.relatedAntiPatterns).toEqual([{ slug: 'answer-injection', type: 'related', direction: 'outgoing' }])
     })
   })
 
@@ -415,10 +415,10 @@ AI defaults to silent compliance.`
 
       expect(pattern).toBeDefined()
       expect(pattern.relatedPatterns).toEqual([
-        { slug: 'chain-of-small-steps', type: 'related' }
+        { slug: 'chain-of-small-steps', type: 'related', direction: 'outgoing' }
       ])
       expect(pattern.relatedObstacles).toEqual([
-        { slug: 'black-box-ai', type: 'solves' }
+        { slug: 'black-box-ai', type: 'solves', direction: 'outgoing' }
       ])
     })
 
@@ -444,8 +444,8 @@ AI defaults to silent compliance.`
 
       expect(pattern).toBeDefined()
       expect(pattern.relatedPatterns).toHaveLength(2)
-      expect(pattern.relatedPatterns).toContainEqual({ slug: 'chain-of-small-steps', type: 'related' })
-      expect(pattern.relatedPatterns).toContainEqual({ slug: 'show-me', type: 'related' })
+      expect(pattern.relatedPatterns).toContainEqual({ slug: 'chain-of-small-steps', type: 'related', direction: 'outgoing' })
+      expect(pattern.relatedPatterns).toContainEqual({ slug: 'show-me', type: 'related', direction: 'outgoing' })
     })
 
     it('should deduplicate relationships by slug, preferring centralized type', () => {
@@ -471,7 +471,7 @@ AI defaults to silent compliance.`
       expect(pattern).toBeDefined()
       expect(pattern.relatedPatterns).toHaveLength(1)
       expect(pattern.relatedPatterns).toEqual([
-        { slug: 'chain-of-small-steps', type: 'uses' }
+        { slug: 'chain-of-small-steps', type: 'uses', direction: 'outgoing' }
       ])
     })
 
@@ -495,11 +495,11 @@ AI defaults to silent compliance.`
 
       expect(pattern).toBeDefined()
       expect(pattern.relatedPatterns).toEqual([
-        { slug: 'chain-of-small-steps', type: 'uses' },
-        { slug: 'show-me', type: 'similar' }
+        { slug: 'chain-of-small-steps', type: 'uses', direction: 'outgoing' },
+        { slug: 'show-me', type: 'similar', direction: 'outgoing' }
       ])
       expect(pattern.relatedObstacles).toEqual([
-        { slug: 'black-box-ai', type: 'solves' }
+        { slug: 'black-box-ai', type: 'solves', direction: 'outgoing' }
       ])
     })
 
@@ -523,8 +523,11 @@ AI defaults to silent compliance.`
 
       expect(pattern).toBeDefined()
       expect(pattern.relatedPatterns).toHaveLength(1)
+      expect(pattern.relatedPatterns![0]).toMatchObject({ slug: 'chain-of-small-steps', type: 'related', direction: 'outgoing' })
       expect(pattern.relatedAntiPatterns).toHaveLength(1)
+      expect(pattern.relatedAntiPatterns![0]).toMatchObject({ slug: 'answer-injection', type: 'alternative', direction: 'outgoing' })
       expect(pattern.relatedObstacles).toHaveLength(1)
+      expect(pattern.relatedObstacles![0]).toMatchObject({ slug: 'black-box-ai', type: 'solves', direction: 'outgoing' })
     })
 
     it('should handle centralized relationships when no frontmatter exists', () => {
@@ -544,7 +547,7 @@ AI defaults to silent compliance.`
       const pattern = getPatternBySlug('patterns', 'active-partner')
 
       expect(pattern).toBeDefined()
-      expect(pattern.relatedPatterns).toEqual([{ slug: 'chain-of-small-steps', type: 'related' }])
+      expect(pattern.relatedPatterns).toEqual([{ slug: 'chain-of-small-steps', type: 'related', direction: 'outgoing' }])
       expect(pattern.relatedAntiPatterns).toBeUndefined()
       expect(pattern.relatedObstacles).toBeUndefined()
     })
@@ -570,8 +573,8 @@ AI defaults to silent compliance.`
       const pattern = getPatternBySlug('patterns', 'active-partner')
 
       expect(pattern).toBeDefined()
-      expect(pattern.relatedPatterns).toEqual([{ slug: 'chain-of-small-steps', type: 'related' }])
-      expect(pattern.relatedAntiPatterns).toEqual([{ slug: 'answer-injection', type: 'related' }])
+      expect(pattern.relatedPatterns).toEqual([{ slug: 'chain-of-small-steps', type: 'related', direction: 'outgoing' }])
+      expect(pattern.relatedAntiPatterns).toEqual([{ slug: 'answer-injection', type: 'related', direction: 'outgoing' }])
     })
 
     it('should handle complex merging scenario with multiple duplicates', () => {
@@ -602,14 +605,14 @@ AI defaults to silent compliance.`
       expect(pattern.relatedPatterns).toHaveLength(4)
 
       // Centralized types should override frontmatter
-      expect(pattern.relatedPatterns).toContainEqual({ slug: 'chain-of-small-steps', type: 'uses' })
-      expect(pattern.relatedPatterns).toContainEqual({ slug: 'show-me', type: 'similar' })
+      expect(pattern.relatedPatterns).toContainEqual({ slug: 'chain-of-small-steps', type: 'uses', direction: 'outgoing' })
+      expect(pattern.relatedPatterns).toContainEqual({ slug: 'show-me', type: 'similar', direction: 'outgoing' })
 
       // Frontmatter-only should keep default 'related' type
-      expect(pattern.relatedPatterns).toContainEqual({ slug: 'check-alignment', type: 'related' })
+      expect(pattern.relatedPatterns).toContainEqual({ slug: 'check-alignment', type: 'related', direction: 'outgoing' })
 
       // Centralized-only should be included
-      expect(pattern.relatedPatterns).toContainEqual({ slug: 'happy-to-delete', type: 'related' })
+      expect(pattern.relatedPatterns).toContainEqual({ slug: 'happy-to-delete', type: 'related', direction: 'outgoing' })
     })
 
     it('should strip category prefix from centralized relationship slugs', () => {

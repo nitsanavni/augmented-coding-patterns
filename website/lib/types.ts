@@ -9,6 +9,7 @@ export interface Author {
 export interface RelatedPattern {
   slug: string
   type: RelationshipType
+  direction: 'outgoing' | 'incoming' // outgoing = we point to them, incoming = they point to us
 }
 
 export interface PatternMetadata {
