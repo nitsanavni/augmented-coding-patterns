@@ -1,13 +1,5 @@
 ---
 authors: [ivett_ordog]
-related_anti_patterns:
-  - answer-injection
-  - tell-me-a-lie
-related_patterns:
-  - parallel-implementations
-related_obstacles:
-  - limited-context-window
-  - degrades-under-complexity
 ---
 
 # Sunk Cost (Anti-pattern)

@@ -4,6 +4,15 @@ import CategoryPage from '@/app/[category]/page'
 import PatternPage from '@/app/[category]/[slug]/page'
 import { getPatternSlugs, getAllPatterns, getPatternBySlug } from '@/lib/markdown'
 
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    prefetch: jest.fn(),
+  }),
+  usePathname: () => '/',
+}))
+
 jest.mock('@/lib/markdown', () => ({
   getPatternSlugs: jest.fn(),
   getAllPatterns: jest.fn(),
@@ -100,10 +109,11 @@ describe('Home Page', () => {
     it('uses h2 for category titles', () => {
       render(<Home />)
       const h2Headings = screen.getAllByRole('heading', { level: 2 })
-      expect(h2Headings).toHaveLength(3)
-      expect(h2Headings[0]).toHaveTextContent('Obstacles')
-      expect(h2Headings[1]).toHaveTextContent('Anti-Patterns')
-      expect(h2Headings[2]).toHaveTextContent('Patterns')
+      expect(h2Headings).toHaveLength(4)
+      expect(h2Headings[0]).toHaveTextContent('Pattern Relationships')
+      expect(h2Headings[1]).toHaveTextContent('Obstacles')
+      expect(h2Headings[2]).toHaveTextContent('Anti-Patterns')
+      expect(h2Headings[3]).toHaveTextContent('Patterns')
     })
   })
 })

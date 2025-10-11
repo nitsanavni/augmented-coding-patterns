@@ -1,7 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_obstacles:
-  - excess-verbosity
 ---
 
 # Noise Cancellation

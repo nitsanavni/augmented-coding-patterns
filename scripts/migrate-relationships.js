@@ -1,5 +1,18 @@
 #!/usr/bin/env node
 
+/**
+ * HISTORICAL REFERENCE ONLY
+ *
+ * This script was used for the initial migration of relationships from markdown frontmatter
+ * to the centralized relationships.mmd file. The migration is now complete.
+ *
+ * All relationships are now maintained in documents/relationships.mmd with semantic types.
+ * Markdown files no longer contain related_patterns, related_anti_patterns, or related_obstacles
+ * in their frontmatter.
+ *
+ * This file is kept for historical reference and documentation purposes.
+ */
+
 const fs = require('fs');
 const path = require('path');
 const matter = require('../website/node_modules/gray-matter');

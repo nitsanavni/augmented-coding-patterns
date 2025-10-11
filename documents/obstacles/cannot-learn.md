@@ -1,12 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_anti_patterns:
-  - perfect-recall-fallacy
-related_patterns:
-  - knowledge-document
-  - extract-knowledge
-  - ground-rules
-  - context-management
 ---
 
 # Cannot Learn (Obstacle)

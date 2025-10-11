@@ -1,9 +1,5 @@
 ---
 authors: [ivett_ordog]
-related_anti_patterns:
-  - silent-misalignment
-related_patterns:
-  - active-partner
 ---
 
 # Obedient Contractor (Obstacle)

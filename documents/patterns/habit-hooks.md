@@ -1,7 +1,5 @@
 ---
 authors: [ivett_ordog]
-related_patterns:
-  - reminders
 ---
 
 # Habit Hooks

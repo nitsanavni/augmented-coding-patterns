@@ -1,9 +1,5 @@
 ---
 authors: [llewellyn_falco]
-related_obstacles:
-  - compliance-bias
-related_patterns:
-  - active-partner
 ---
 
 # Tell Me a Lie (Anti-pattern)

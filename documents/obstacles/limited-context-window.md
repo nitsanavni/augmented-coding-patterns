@@ -1,7 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_patterns:
-  - context-management
 ---
 
 # Limited Context Window (Obstacle)

@@ -1,10 +1,5 @@
 ---
 authors: [ivett_ordog]
-related_anti_patterns:
-  - sunk-cost
-related_patterns:
-  - parallel-implementations
-  - playgrounds
 ---
 
 # Happy to Delete

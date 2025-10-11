@@ -1,10 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_patterns:
-  - knowledge-checkpoint
-  - offload-deterministic
-  - parallel-implementations
-  - take-all-paths
 ---
 
 # Non-Determinism (Obstacle)

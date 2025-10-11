@@ -1,16 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_obstacles:
-  - cannot-learn
-  - context-rot
-  - limited-context-window
-related_patterns:
-  - ground-rules
-  - references
-  - knowledge-document
-  - extract-knowledge
-  - knowledge-checkpoint
-  - focused-agent
 ---
 
 # Context Management

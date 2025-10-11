@@ -1,9 +1,5 @@
 ---
 authors: [nitsan_avni]
-related_obstacles:
-  - compliance-bias
-related_anti_patterns:
-  - unvalidated-leaps
 ---
 
 # Solution Fixation (Obstacle)

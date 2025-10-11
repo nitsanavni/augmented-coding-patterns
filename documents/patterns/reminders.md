@@ -1,7 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_obstacles:
-  - context-rot
 ---
 
 # Reminders

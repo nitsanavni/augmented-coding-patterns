@@ -1,7 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_patterns:
-  - chain-of-small-steps
 ---
 
 # Degrades Under Complexity (Obstacle)

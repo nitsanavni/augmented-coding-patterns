@@ -1,11 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_anti_patterns:
-  - silent-misalignment
-  - unvalidated-leaps
-related_patterns:
-  - check-alignment
-  - context-markers
 ---
 
 # Black Box AI (Obstacle)

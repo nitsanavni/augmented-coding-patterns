@@ -1,7 +1,5 @@
 ---
 authors: [ivett_ordog]
-related_patterns:
-  - extract-knowledge
 ---
 
 # Show Me, I'll Repeat/Automate

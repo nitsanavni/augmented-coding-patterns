@@ -1,7 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_obstacles:
-  - black-box-ai
 ---
 
 # Context Markers

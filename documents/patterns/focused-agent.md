@@ -1,10 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_obstacles:
-  - limited-focus
-  - context-rot
-related_anti_patterns:
-  - distracted-agent
 ---
 
 # Focused Agent

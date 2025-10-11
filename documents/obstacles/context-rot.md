@@ -1,12 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_anti_patterns:
-  - distracted-agent
-related_patterns:
-  - context-management
-  - focused-agent
-  - references
-  - reminders
 ---
 
 # Context Rot (Obstacle)

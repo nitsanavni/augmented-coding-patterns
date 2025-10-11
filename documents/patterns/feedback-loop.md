@@ -1,8 +1,5 @@
 ---
 authors: [nitsan_avni]
-related_patterns:
-  - playgrounds
-  - chain-of-small-steps
 ---
 
 # Feedback Loop

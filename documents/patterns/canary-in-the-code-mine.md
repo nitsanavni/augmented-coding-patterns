@@ -1,8 +1,5 @@
 ---
 authors: [ivett_ordog]
-related_obstacles:
-  - degrades-under-complexity
-related_patterns: []
 ---
 
 # Canary in the Code Mine

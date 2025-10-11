@@ -1,7 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_patterns:
-  - reverse-direction
 ---
 
 # Answer Injection (Anti-pattern)

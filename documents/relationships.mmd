@@ -1,105 +1,79 @@
 graph LR
-  %% Relationships extracted from pattern frontmatter
+  %% Centralized relationship graph with semantic types
+  %% Types: solves, similar, enabled-by, uses, causes, alternative, related
 
-  %% From patterns
-  patterns/active-partner -->|related| anti-patterns/silent-misalignment
-  patterns/active-partner -->|related| anti-patterns/tell-me-a-lie
-  patterns/active-partner -->|related| obstacles/compliance-bias
-  patterns/canary-in-the-code-mine -->|related| obstacles/degrades-under-complexity
-  patterns/chain-of-small-steps -->|related| patterns/offload-deterministic
-  patterns/chain-of-small-steps -->|related| obstacles/degrades-under-complexity
-  patterns/chain-of-small-steps -->|related| obstacles/limited-focus
-  patterns/check-alignment -->|related| anti-patterns/silent-misalignment
-  patterns/check-alignment -->|related| obstacles/black-box-ai
-  patterns/context-management -->|related| patterns/ground-rules
-  patterns/context-management -->|related| patterns/references
-  patterns/context-management -->|related| patterns/knowledge-document
-  patterns/context-management -->|related| patterns/extract-knowledge
-  patterns/context-management -->|related| patterns/knowledge-checkpoint
-  patterns/context-management -->|related| patterns/focused-agent
-  patterns/context-management -->|related| obstacles/cannot-learn
-  patterns/context-management -->|related| obstacles/context-rot
-  patterns/context-management -->|related| obstacles/limited-context-window
-  patterns/context-markers -->|related| obstacles/black-box-ai
-  patterns/extract-knowledge -->|related| patterns/knowledge-document
-  patterns/extract-knowledge -->|related| obstacles/cannot-learn
-  patterns/feedback-loop -->|related| patterns/playgrounds
-  patterns/feedback-loop -->|related| patterns/chain-of-small-steps
-  patterns/focused-agent -->|related| anti-patterns/distracted-agent
-  patterns/focused-agent -->|related| obstacles/limited-focus
-  patterns/focused-agent -->|related| obstacles/context-rot
-  patterns/ground-rules -->|related| patterns/knowledge-document
-  patterns/ground-rules -->|related| obstacles/cannot-learn
-  patterns/happy-to-delete -->|related| patterns/parallel-implementations
-  patterns/happy-to-delete -->|related| patterns/playgrounds
-  patterns/happy-to-delete -->|related| anti-patterns/sunk-cost
-  patterns/knowledge-checkpoint -->|related| obstacles/non-determinism
-  patterns/knowledge-composition -->|related| patterns/references
-  patterns/knowledge-document -->|related| obstacles/cannot-learn
-  patterns/noise-cancellation -->|related| obstacles/excess-verbosity
-  patterns/offload-deterministic -->|related| obstacles/non-determinism
-  patterns/parallel-implementations -->|related| obstacles/non-determinism
-  patterns/playgrounds -->|related| anti-patterns/perfect-recall-fallacy
-  patterns/references -->|related| patterns/knowledge-document
-  patterns/references -->|related| anti-patterns/distracted-agent
-  patterns/references -->|related| obstacles/limited-focus
-  patterns/references -->|related| obstacles/context-rot
-  patterns/reminders -->|related| obstacles/context-rot
-  patterns/reverse-direction -->|related| anti-patterns/answer-injection
-  patterns/show-me-i-will-repeat-automate -->|related| patterns/extract-knowledge
-  patterns/take-all-paths -->|related| obstacles/non-determinism
+  %% Pattern → Anti-pattern/Obstacle relationships (solves)
+  patterns/active-partner -->|solves| anti-patterns/silent-misalignment
+  patterns/active-partner -->|solves| anti-patterns/tell-me-a-lie
+  patterns/active-partner -->|solves| obstacles/compliance-bias
+  patterns/active-partner -->|solves| obstacles/obedient-contractor
+  patterns/canary-in-the-code-mine -->|solves| obstacles/degrades-under-complexity
+  patterns/chain-of-small-steps -->|solves| obstacles/degrades-under-complexity
+  patterns/chain-of-small-steps -->|solves| obstacles/limited-focus
+  patterns/check-alignment -->|solves| anti-patterns/silent-misalignment
+  patterns/check-alignment -->|solves| obstacles/black-box-ai
+  patterns/context-management -->|solves| obstacles/cannot-learn
+  patterns/context-management -->|solves| obstacles/context-rot
+  patterns/context-management -->|solves| obstacles/limited-context-window
+  patterns/context-markers -->|solves| obstacles/black-box-ai
+  patterns/extract-knowledge -->|solves| obstacles/cannot-learn
+  patterns/focused-agent -->|solves| anti-patterns/distracted-agent
+  patterns/focused-agent -->|solves| obstacles/limited-focus
+  patterns/focused-agent -->|solves| obstacles/context-rot
+  patterns/ground-rules -->|solves| obstacles/cannot-learn
+  patterns/happy-to-delete -->|solves| anti-patterns/sunk-cost
+  patterns/knowledge-checkpoint -->|solves| obstacles/non-determinism
+  patterns/knowledge-document -->|solves| obstacles/cannot-learn
+  patterns/noise-cancellation -->|solves| obstacles/excess-verbosity
+  patterns/offload-deterministic -->|solves| obstacles/non-determinism
+  patterns/parallel-implementations -->|solves| obstacles/non-determinism
+  patterns/parallel-implementations -->|solves| anti-patterns/sunk-cost
+  patterns/playgrounds -->|solves| anti-patterns/perfect-recall-fallacy
+  patterns/references -->|solves| anti-patterns/distracted-agent
+  patterns/references -->|solves| obstacles/limited-focus
+  patterns/references -->|solves| obstacles/context-rot
+  patterns/references -->|solves| anti-patterns/perfect-recall-fallacy
+  patterns/reminders -->|solves| obstacles/context-rot
+  patterns/reverse-direction -->|solves| anti-patterns/answer-injection
+  patterns/take-all-paths -->|solves| obstacles/non-determinism
 
-  %% From anti-patterns
-  anti-patterns/answer-injection -->|related| patterns/reverse-direction
-  anti-patterns/distracted-agent -->|related| patterns/focused-agent
-  anti-patterns/distracted-agent -->|related| obstacles/limited-focus
-  anti-patterns/distracted-agent -->|related| obstacles/context-rot
-  anti-patterns/perfect-recall-fallacy -->|related| patterns/playgrounds
-  anti-patterns/perfect-recall-fallacy -->|related| patterns/references
-  anti-patterns/perfect-recall-fallacy -->|related| obstacles/cannot-learn
-  anti-patterns/silent-misalignment -->|related| patterns/active-partner
-  anti-patterns/silent-misalignment -->|related| patterns/check-alignment
-  anti-patterns/silent-misalignment -->|related| obstacles/compliance-bias
-  anti-patterns/silent-misalignment -->|related| obstacles/black-box-ai
-  anti-patterns/sunk-cost -->|related| patterns/parallel-implementations
+  %% Pattern → Pattern relationships (enabled-by, uses, similar, alternative)
+  patterns/knowledge-composition -->|enabled-by| patterns/references
+  patterns/references -->|enabled-by| patterns/knowledge-document
+  patterns/context-management -->|uses| patterns/ground-rules
+  patterns/context-management -->|uses| patterns/references
+  patterns/context-management -->|uses| patterns/knowledge-document
+  patterns/context-management -->|uses| patterns/extract-knowledge
+  patterns/context-management -->|uses| patterns/knowledge-checkpoint
+  patterns/context-management -->|uses| patterns/focused-agent
+  patterns/extract-knowledge -->|uses| patterns/knowledge-document
+  patterns/ground-rules -->|uses| patterns/knowledge-document
+  patterns/show-me-i-will-repeat-automate -->|uses| patterns/extract-knowledge
+  patterns/feedback-loop <-->|similar| patterns/playgrounds
+  patterns/feedback-loop <-->|similar| patterns/chain-of-small-steps
+  patterns/chain-of-small-steps <-->|similar| patterns/offload-deterministic
+  patterns/happy-to-delete <-->|similar| patterns/parallel-implementations
+  patterns/happy-to-delete <-->|similar| patterns/playgrounds
+
+  %% Anti-pattern → Obstacle relationships (causes)
+  anti-patterns/distracted-agent -->|causes| obstacles/limited-focus
+  anti-patterns/distracted-agent -->|causes| obstacles/context-rot
+  anti-patterns/perfect-recall-fallacy -->|causes| obstacles/cannot-learn
+  anti-patterns/silent-misalignment -->|causes| obstacles/compliance-bias
+  anti-patterns/silent-misalignment -->|causes| obstacles/black-box-ai
+  anti-patterns/tell-me-a-lie -->|causes| obstacles/compliance-bias
+  anti-patterns/unvalidated-leaps -->|causes| obstacles/black-box-ai
+  anti-patterns/sunk-cost -->|causes| obstacles/degrades-under-complexity
+
+  %% Anti-pattern → Anti-pattern relationships (related)
   anti-patterns/sunk-cost -->|related| anti-patterns/answer-injection
   anti-patterns/sunk-cost -->|related| anti-patterns/tell-me-a-lie
-  anti-patterns/sunk-cost -->|related| obstacles/limited-context-window
-  anti-patterns/sunk-cost -->|related| obstacles/degrades-under-complexity
-  anti-patterns/tell-me-a-lie -->|related| patterns/active-partner
-  anti-patterns/tell-me-a-lie -->|related| obstacles/compliance-bias
-  anti-patterns/unvalidated-leaps -->|related| obstacles/black-box-ai
 
-  %% From obstacles
-  obstacles/black-box-ai -->|related| patterns/check-alignment
-  obstacles/black-box-ai -->|related| patterns/context-markers
-  obstacles/black-box-ai -->|related| anti-patterns/silent-misalignment
-  obstacles/black-box-ai -->|related| anti-patterns/unvalidated-leaps
-  obstacles/cannot-learn -->|related| patterns/knowledge-document
-  obstacles/cannot-learn -->|related| patterns/extract-knowledge
-  obstacles/cannot-learn -->|related| patterns/ground-rules
-  obstacles/cannot-learn -->|related| patterns/context-management
-  obstacles/cannot-learn -->|related| anti-patterns/perfect-recall-fallacy
-  obstacles/compliance-bias -->|related| patterns/active-partner
-  obstacles/compliance-bias -->|related| anti-patterns/silent-misalignment
-  obstacles/compliance-bias -->|related| anti-patterns/tell-me-a-lie
-  obstacles/context-rot -->|related| patterns/context-management
-  obstacles/context-rot -->|related| patterns/focused-agent
-  obstacles/context-rot -->|related| patterns/references
-  obstacles/context-rot -->|related| patterns/reminders
-  obstacles/context-rot -->|related| anti-patterns/distracted-agent
-  obstacles/degrades-under-complexity -->|related| patterns/chain-of-small-steps
-  obstacles/excess-verbosity -->|related| patterns/noise-cancellation
-  obstacles/limited-context-window -->|related| patterns/context-management
-  obstacles/limited-focus -->|related| patterns/chain-of-small-steps
-  obstacles/limited-focus -->|related| patterns/focused-agent
-  obstacles/limited-focus -->|related| patterns/references
-  obstacles/limited-focus -->|related| anti-patterns/distracted-agent
-  obstacles/non-determinism -->|related| patterns/knowledge-checkpoint
-  obstacles/non-determinism -->|related| patterns/offload-deterministic
-  obstacles/non-determinism -->|related| patterns/parallel-implementations
-  obstacles/non-determinism -->|related| patterns/take-all-paths
-  obstacles/obedient-contractor -->|related| patterns/active-partner
-  obstacles/obedient-contractor -->|related| anti-patterns/silent-misalignment
-  obstacles/solution-fixation -->|related| anti-patterns/unvalidated-leaps
+  %% Anti-pattern → Obstacle relationships (related/causes)
+  anti-patterns/sunk-cost -->|related| obstacles/limited-context-window
+
+  %% Obstacle → Obstacle relationships (related)
   obstacles/solution-fixation -->|related| obstacles/compliance-bias
+
+  %% Obstacle → Anti-pattern relationships (related)
+  obstacles/obedient-contractor -->|related| anti-patterns/silent-misalignment

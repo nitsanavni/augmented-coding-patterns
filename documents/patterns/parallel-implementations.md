@@ -1,7 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_obstacles:
-  - non-determinism
 ---
 
 # Parallel Implementations

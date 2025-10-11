@@ -1,7 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_anti_patterns:
-  - perfect-recall-fallacy
 ---
 
 # Playgrounds

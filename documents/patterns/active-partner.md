@@ -1,10 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_obstacles:
-  - compliance-bias
-related_anti_patterns:
-  - silent-misalignment
-  - tell-me-a-lie
 ---
 
 # Active Partner

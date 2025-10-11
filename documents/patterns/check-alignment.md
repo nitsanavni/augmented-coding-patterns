@@ -1,9 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_obstacles:
-  - black-box-ai
-related_anti_patterns:
-  - silent-misalignment
 ---
 
 # Check Alignment

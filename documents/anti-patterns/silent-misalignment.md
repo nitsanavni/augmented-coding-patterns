@@ -1,11 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_obstacles:
-  - compliance-bias
-  - black-box-ai
-related_patterns:
-  - active-partner
-  - check-alignment
 ---
 
 # Silent Misalignment (Anti-pattern)

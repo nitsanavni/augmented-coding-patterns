@@ -1,7 +1,5 @@
 ---
 authors: [lada_kesseler]
-related_patterns:
-  - noise-cancellation
 ---
 
 # Excess Verbosity (Obstacle)

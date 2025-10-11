@@ -1,11 +1,14 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 import { getPatternSlugs } from "@/lib/markdown";
+import { getGraphData } from "@/lib/graph-data";
+import RelationshipGraph from "./components/RelationshipGraph";
 
 export default function Home() {
   const patternsCount = getPatternSlugs("patterns").length;
   const antiPatternsCount = getPatternSlugs("anti-patterns").length;
   const obstaclesCount = getPatternSlugs("obstacles").length;
+  const graphData = getGraphData();
 
   return (
     <div className={styles.container}>
@@ -15,6 +18,15 @@ export default function Home() {
           A comprehensive collection of patterns, anti-patterns, and obstacles for effective AI-augmented software development.
           Learn how to collaborate successfully with AI coding assistants and avoid common pitfalls.
         </p>
+      </section>
+
+      <section className={styles.graphSection}>
+        <h2 className={styles.sectionTitle}>Pattern Relationships</h2>
+        <p className={styles.sectionDescription}>
+          Explore how patterns, anti-patterns, and obstacles relate to each other.
+          Click on any node to navigate to that pattern.
+        </p>
+        <RelationshipGraph graphData={graphData} />
       </section>
 
       <div className={styles.categories}>

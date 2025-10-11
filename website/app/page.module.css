@@ -23,6 +23,27 @@
   line-height: var(--line-height-relaxed);
 }
 
+.graphSection {
+  margin: var(--space-3xl) 0;
+}
+
+.sectionTitle {
+  font-size: var(--font-size-3xl);
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.sectionDescription {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto var(--space-xl) auto;
+  line-height: var(--line-height-relaxed);
+}
+
 .categories {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
