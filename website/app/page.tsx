@@ -1,14 +1,20 @@
 import Link from "next/link";
 import styles from "./page.module.css";
-import { getPatternSlugs } from "@/lib/markdown";
+import { getPatternSlugs, getAllPatterns } from "@/lib/markdown";
 import { getGraphData } from "@/lib/graph-data";
 import RelationshipGraph from "./components/RelationshipGraph";
+import SearchBar from "./components/SearchBar";
 
 export default function Home() {
   const patternsCount = getPatternSlugs("patterns").length;
   const antiPatternsCount = getPatternSlugs("anti-patterns").length;
   const obstaclesCount = getPatternSlugs("obstacles").length;
   const graphData = getGraphData();
+
+  const patterns = getAllPatterns("patterns");
+  const antiPatterns = getAllPatterns("anti-patterns");
+  const obstacles = getAllPatterns("obstacles");
+  const allPatterns = [...patterns, ...antiPatterns, ...obstacles];
 
   return (
     <div className={styles.container}>
@@ -18,6 +24,9 @@ export default function Home() {
           A comprehensive collection of patterns, anti-patterns, and obstacles for effective AI-augmented software development.
           Learn how to collaborate successfully with AI coding assistants and avoid common pitfalls.
         </p>
+        <div className={styles.searchContainer}>
+          <SearchBar patterns={allPatterns} />
+        </div>
       </section>
 
       <div className={styles.categories}>

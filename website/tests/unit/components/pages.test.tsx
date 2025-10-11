@@ -15,7 +15,7 @@ jest.mock('next/navigation', () => ({
 
 jest.mock('@/lib/markdown', () => ({
   getPatternSlugs: jest.fn(),
-  getAllPatterns: jest.fn(),
+  getAllPatterns: jest.fn(() => []),
   getPatternBySlug: jest.fn(),
 }))
 

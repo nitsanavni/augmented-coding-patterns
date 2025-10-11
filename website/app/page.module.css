@@ -23,6 +23,14 @@
   line-height: var(--line-height-relaxed);
 }
 
+.searchContainer {
+  max-width: 600px;
+  margin-top: var(--space-3xl);
+  margin-bottom: var(--space-3xl);
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .graphSection {
   margin: var(--space-3xl) 0;
 }
