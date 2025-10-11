@@ -256,20 +256,20 @@ describe('RelatedLinks Component', () => {
       expect(screen.getByRole('heading', { name: 'Used by', level: 4 })).toBeInTheDocument()
     })
 
-    it('displays "Enabled by" for outgoing enabled-by relationship', () => {
+    it('displays "Enables" for outgoing enables relationship', () => {
       const patterns: RelatedPattern[] = [
-        { slug: 'active-partner', type: 'enabled-by', direction: 'outgoing' }
-      ]
-      render(<RelatedLinks relatedPatterns={patterns} />)
-      expect(screen.getByRole('heading', { name: 'Enabled by', level: 4 })).toBeInTheDocument()
-    })
-
-    it('displays "Enables" for incoming enabled-by relationship', () => {
-      const patterns: RelatedPattern[] = [
-        { slug: 'chain-of-small-steps', type: 'enabled-by', direction: 'incoming' }
+        { slug: 'active-partner', type: 'enables', direction: 'outgoing' }
       ]
       render(<RelatedLinks relatedPatterns={patterns} />)
       expect(screen.getByRole('heading', { name: 'Enables', level: 4 })).toBeInTheDocument()
+    })
+
+    it('displays "Enabled by" for incoming enables relationship', () => {
+      const patterns: RelatedPattern[] = [
+        { slug: 'chain-of-small-steps', type: 'enables', direction: 'incoming' }
+      ]
+      render(<RelatedLinks relatedPatterns={patterns} />)
+      expect(screen.getByRole('heading', { name: 'Enabled by', level: 4 })).toBeInTheDocument()
     })
 
     it('displays "Causes" for outgoing causes relationship', () => {

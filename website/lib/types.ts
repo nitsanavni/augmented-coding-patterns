@@ -37,7 +37,7 @@ export type RelationshipType =
   | 'related'
   | 'solves'
   | 'similar'
-  | 'enabled-by'
+  | 'enables'
   | 'uses'
   | 'causes'
   | 'alternative'

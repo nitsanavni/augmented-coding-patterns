@@ -24,7 +24,7 @@ function parseRelationshipType(typeString: string): RelationshipType {
     'related',
     'solves',
     'similar',
-    'enabled-by',
+    'enables',
     'uses',
     'causes',
     'alternative',

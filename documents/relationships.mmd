@@ -1,6 +1,6 @@
 graph LR
   %% Centralized relationship graph with semantic types
-  %% Types: solves, similar, enabled-by, uses, causes, alternative, related
+  %% Types: solves, similar, enables, uses, causes, alternative, related
 
   %% Pattern → Anti-pattern/Obstacle relationships (solves)
   patterns/active-partner -->|solves| anti-patterns/silent-misalignment
@@ -37,9 +37,9 @@ graph LR
   patterns/reverse-direction -->|solves| anti-patterns/answer-injection
   patterns/take-all-paths -->|solves| obstacles/non-determinism
 
-  %% Pattern → Pattern relationships (enabled-by, uses, similar, alternative)
-  patterns/knowledge-composition -->|enabled-by| patterns/references
-  patterns/references -->|enabled-by| patterns/knowledge-document
+  %% Pattern → Pattern relationships (enables, uses, similar, alternative)
+  patterns/references -->|enables| patterns/knowledge-composition
+  patterns/knowledge-document -->|enables| patterns/references
   patterns/context-management -->|uses| patterns/ground-rules
   patterns/context-management -->|uses| patterns/references
   patterns/context-management -->|uses| patterns/knowledge-document

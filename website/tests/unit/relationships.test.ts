@@ -164,7 +164,7 @@ patterns/active-partner -->|solves| obstacles/black-box-ai`
       'related',
       'solves',
       'similar',
-      'enabled-by',
+      'enables',
       'uses',
       'causes',
       'alternative',

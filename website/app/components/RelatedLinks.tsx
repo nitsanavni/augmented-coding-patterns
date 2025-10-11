@@ -31,7 +31,7 @@ function formatRelationshipType(type: RelationshipType, direction: 'outgoing' | 
   if (direction === 'outgoing') {
     const outgoingMap: Record<string, string> = {
       'solves': 'Solves',
-      'enabled-by': 'Enabled by',
+      'enables': 'Enables',
       'uses': 'Uses',
       'causes': 'Causes'
     }
@@ -39,7 +39,7 @@ function formatRelationshipType(type: RelationshipType, direction: 'outgoing' | 
   } else {
     const incomingMap: Record<string, string> = {
       'solves': 'Solved by',
-      'enabled-by': 'Enables',
+      'enables': 'Enabled by',
       'uses': 'Used by',
       'causes': 'Caused by'
     }
