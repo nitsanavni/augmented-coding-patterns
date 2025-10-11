@@ -20,15 +20,6 @@ export default function Home() {
         </p>
       </section>
 
-      <section className={styles.graphSection}>
-        <h2 className={styles.sectionTitle}>Pattern Relationships</h2>
-        <p className={styles.sectionDescription}>
-          Explore how patterns, anti-patterns, and obstacles relate to each other.
-          Click on any node to navigate to that pattern.
-        </p>
-        <RelationshipGraph graphData={graphData} />
-      </section>
-
       <div className={styles.categories}>
         <Link href="/obstacles" className={`${styles.categoryCard} ${styles.obstacles}`}>
           <div className={styles.categoryIcon}>⛰️</div>
@@ -60,6 +51,15 @@ export default function Home() {
           <div className={styles.categoryCount}>{patternsCount} Patterns</div>
         </Link>
       </div>
+
+      <section className={styles.graphSection}>
+        <h2 className={styles.sectionTitle}>Pattern Relationships</h2>
+        <p className={styles.sectionDescription}>
+          Explore how patterns, anti-patterns, and obstacles relate to each other.
+          Click on any node to navigate to that pattern.
+        </p>
+        <RelationshipGraph graphData={graphData} />
+      </section>
     </div>
   );
 }

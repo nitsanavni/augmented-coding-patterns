@@ -142,6 +142,19 @@ export function getRelationshipsFor(
   return graph.relationships.filter((rel) => rel.from === fullSlug)
 }
 
+export function getRelationshipsForBoth(
+  slug: string,
+  category: PatternCategory
+): Relationship[] {
+  const graph = buildRelationshipGraph()
+  const fullSlug = buildFullSlug(slug, category)
+
+  // Get relationships where this pattern is either the source OR the target
+  return graph.relationships.filter(
+    (rel) => rel.from === fullSlug || rel.to === fullSlug
+  )
+}
+
 export function getRelatedPatterns(
   slug: string,
   category: PatternCategory

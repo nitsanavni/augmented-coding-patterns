@@ -15,7 +15,7 @@ describe('Markdown utilities', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     // Default: no centralized relationships (backward compatibility mode)
-    mockedRelationships.getRelationshipsFor.mockReturnValue([])
+    mockedRelationships.getRelationshipsForBoth.mockReturnValue([])
   })
 
   describe('getPatternSlugs', () => {
@@ -406,7 +406,7 @@ AI defaults to silent compliance.`
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       // Mock centralized relationships
-      mockedRelationships.getRelationshipsFor.mockReturnValue([
+      mockedRelationships.getRelationshipsForBoth.mockReturnValue([
         { from: 'patterns/active-partner', to: 'patterns/chain-of-small-steps', type: 'related', bidirectional: false },
         { from: 'patterns/active-partner', to: 'obstacles/black-box-ai', type: 'solves', bidirectional: false },
       ])
@@ -436,7 +436,7 @@ AI defaults to silent compliance.`
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       // Mock centralized relationships
-      mockedRelationships.getRelationshipsFor.mockReturnValue([
+      mockedRelationships.getRelationshipsForBoth.mockReturnValue([
         { from: 'patterns/active-partner', to: 'patterns/chain-of-small-steps', type: 'related', bidirectional: false },
       ])
 
@@ -462,7 +462,7 @@ AI defaults to silent compliance.`
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       // Mock centralized relationships with different type
-      mockedRelationships.getRelationshipsFor.mockReturnValue([
+      mockedRelationships.getRelationshipsForBoth.mockReturnValue([
         { from: 'patterns/active-partner', to: 'patterns/chain-of-small-steps', type: 'uses', bidirectional: false },
       ])
 
@@ -485,7 +485,7 @@ AI defaults to silent compliance.`
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       // Mock centralized relationships with various types
-      mockedRelationships.getRelationshipsFor.mockReturnValue([
+      mockedRelationships.getRelationshipsForBoth.mockReturnValue([
         { from: 'patterns/active-partner', to: 'patterns/chain-of-small-steps', type: 'uses', bidirectional: false },
         { from: 'patterns/active-partner', to: 'patterns/show-me', type: 'similar', bidirectional: false },
         { from: 'patterns/active-partner', to: 'obstacles/black-box-ai', type: 'solves', bidirectional: false },
@@ -513,7 +513,7 @@ AI defaults to silent compliance.`
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       // Mock relationships to all three categories
-      mockedRelationships.getRelationshipsFor.mockReturnValue([
+      mockedRelationships.getRelationshipsForBoth.mockReturnValue([
         { from: 'patterns/active-partner', to: 'patterns/chain-of-small-steps', type: 'related', bidirectional: false },
         { from: 'patterns/active-partner', to: 'anti-patterns/answer-injection', type: 'alternative', bidirectional: false },
         { from: 'patterns/active-partner', to: 'obstacles/black-box-ai', type: 'solves', bidirectional: false },
@@ -537,7 +537,7 @@ AI defaults to silent compliance.`
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       // Mock centralized relationships
-      mockedRelationships.getRelationshipsFor.mockReturnValue([
+      mockedRelationships.getRelationshipsForBoth.mockReturnValue([
         { from: 'patterns/active-partner', to: 'patterns/chain-of-small-steps', type: 'related', bidirectional: false },
       ])
 
@@ -565,7 +565,7 @@ AI defaults to silent compliance.`
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       // No centralized relationships
-      mockedRelationships.getRelationshipsFor.mockReturnValue([])
+      mockedRelationships.getRelationshipsForBoth.mockReturnValue([])
 
       const pattern = getPatternBySlug('patterns', 'active-partner')
 
@@ -590,7 +590,7 @@ AI defaults to silent compliance.`
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       // Centralized has some duplicates with different types and some unique
-      mockedRelationships.getRelationshipsFor.mockReturnValue([
+      mockedRelationships.getRelationshipsForBoth.mockReturnValue([
         { from: 'patterns/active-partner', to: 'patterns/chain-of-small-steps', type: 'uses', bidirectional: false },
         { from: 'patterns/active-partner', to: 'patterns/show-me', type: 'similar', bidirectional: false },
         { from: 'patterns/active-partner', to: 'patterns/happy-to-delete', type: 'related', bidirectional: false },
@@ -622,7 +622,7 @@ AI defaults to silent compliance.`
       mockedFs.readFileSync.mockReturnValue(mockMarkdown)
 
       // Mock centralized relationships with full slugs including category
-      mockedRelationships.getRelationshipsFor.mockReturnValue([
+      mockedRelationships.getRelationshipsForBoth.mockReturnValue([
         { from: 'patterns/active-partner', to: 'patterns/chain-of-small-steps', type: 'related', bidirectional: false },
         { from: 'patterns/active-partner', to: 'anti-patterns/answer-injection', type: 'alternative', bidirectional: false },
         { from: 'patterns/active-partner', to: 'obstacles/black-box-ai', type: 'solves', bidirectional: false },

@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import { PatternCategory, PatternContent } from './types'
-import { getRelationshipsFor } from './relationships'
+import { PatternCategory, PatternContent, RelationshipType } from './types'
+import { getRelationshipsForBoth } from './relationships'
 
 const PATTERNS_BASE_PATH = path.join(process.cwd(), '..', 'documents')
 
@@ -90,21 +90,35 @@ export function getPatternBySlug(
       ? [...lines.slice(0, firstLineIndex), ...lines.slice(firstLineIndex + 1)].join('\n')
       : content
 
-    // Load relationships from centralized registry
-    const centralizedRels = getRelationshipsFor(slug, category)
+    // Load relationships from centralized registry (both directions)
+    const allRels = getRelationshipsForBoth(slug, category)
+    const currentFullSlug = `${category}/${slug}`
 
-    // Group by target category and create RelatedPattern objects
-    const relPatterns = centralizedRels
-      .filter(r => r.to.startsWith('patterns/'))
-      .map(r => ({ slug: r.to.replace('patterns/', ''), type: r.type }))
+    // Extract relationships and determine which end is the "other" pattern
+    const relPatterns = allRels
+      .map(r => {
+        // If this pattern is the source, take the target; if target, take the source
+        const otherSlug = r.from === currentFullSlug ? r.to : r.from
+        if (!otherSlug.startsWith('patterns/')) return null
+        return { slug: otherSlug.replace('patterns/', ''), type: r.type }
+      })
+      .filter((r): r is { slug: string; type: RelationshipType } => r !== null)
 
-    const relAntiPatterns = centralizedRels
-      .filter(r => r.to.startsWith('anti-patterns/'))
-      .map(r => ({ slug: r.to.replace('anti-patterns/', ''), type: r.type }))
+    const relAntiPatterns = allRels
+      .map(r => {
+        const otherSlug = r.from === currentFullSlug ? r.to : r.from
+        if (!otherSlug.startsWith('anti-patterns/')) return null
+        return { slug: otherSlug.replace('anti-patterns/', ''), type: r.type }
+      })
+      .filter((r): r is { slug: string; type: RelationshipType } => r !== null)
 
-    const relObstacles = centralizedRels
-      .filter(r => r.to.startsWith('obstacles/'))
-      .map(r => ({ slug: r.to.replace('obstacles/', ''), type: r.type }))
+    const relObstacles = allRels
+      .map(r => {
+        const otherSlug = r.from === currentFullSlug ? r.to : r.from
+        if (!otherSlug.startsWith('obstacles/')) return null
+        return { slug: otherSlug.replace('obstacles/', ''), type: r.type }
+      })
+      .filter((r): r is { slug: string; type: RelationshipType } => r !== null)
 
     // Merge centralized relationships with frontmatter (remove duplicates by slug)
     // For frontmatter relationships without type info, default to 'related'
@@ -113,8 +127,8 @@ export function getPatternBySlug(
     const frontmatterObstacles = (data.related_obstacles || []).map((slug: string) => ({ slug, type: 'related' as const }))
 
     // Merge and deduplicate by slug, preferring centralized type over frontmatter
-    const mergeRelatedPatterns = (centralized: Array<{slug: string, type: string}>, frontmatter: Array<{slug: string, type: string}>) => {
-      const slugMap = new Map<string, {slug: string, type: string}>()
+    const mergeRelatedPatterns = (centralized: Array<{slug: string, type: RelationshipType}>, frontmatter: Array<{slug: string, type: RelationshipType}>) => {
+      const slugMap = new Map<string, {slug: string, type: RelationshipType}>()
       frontmatter.forEach(item => slugMap.set(item.slug, item))
       centralized.forEach(item => slugMap.set(item.slug, item)) // Centralized overwrites
       return Array.from(slugMap.values())

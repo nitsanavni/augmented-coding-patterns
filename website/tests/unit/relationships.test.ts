@@ -320,6 +320,106 @@ anti-patterns/answer-injection -->|causes| obstacles/confusion`
     })
   })
 
+  describe('getRelationshipsForBoth', () => {
+    it('should return relationships where pattern is the source', () => {
+      const content = `graph TD
+patterns/active-partner -->|solves| obstacles/black-box-ai
+patterns/chain-of-small-steps -->|uses| patterns/show-me`
+
+      mockedFs.readFileSync.mockReturnValue(content)
+
+      const result = relationships.getRelationshipsForBoth('active-partner', 'patterns')
+
+      expect(result).toHaveLength(1)
+      expect(result[0]).toEqual({
+        from: 'patterns/active-partner',
+        to: 'obstacles/black-box-ai',
+        type: 'solves',
+        bidirectional: false,
+      })
+    })
+
+    it('should return relationships where pattern is the target', () => {
+      const content = `graph TD
+patterns/active-partner -->|uses| patterns/chain-of-small-steps
+patterns/show-me -->|related| patterns/active-partner`
+
+      mockedFs.readFileSync.mockReturnValue(content)
+
+      const result = relationships.getRelationshipsForBoth('active-partner', 'patterns')
+
+      expect(result).toHaveLength(2)
+      expect(result[0].from).toBe('patterns/active-partner')
+      expect(result[1].to).toBe('patterns/active-partner')
+    })
+
+    it('should return both when pattern appears in multiple relationships', () => {
+      const content = `graph TD
+patterns/active-partner -->|solves| obstacles/black-box-ai
+patterns/chain-of-small-steps -->|uses| patterns/active-partner
+patterns/active-partner -->|related| patterns/show-me`
+
+      mockedFs.readFileSync.mockReturnValue(content)
+
+      const result = relationships.getRelationshipsForBoth('active-partner', 'patterns')
+
+      expect(result).toHaveLength(3)
+      // Two where active-partner is source
+      expect(result.filter(r => r.from === 'patterns/active-partner')).toHaveLength(2)
+      // One where active-partner is target
+      expect(result.filter(r => r.to === 'patterns/active-partner')).toHaveLength(1)
+    })
+
+    it('should handle bidirectional relationships correctly', () => {
+      const content = `graph TD
+patterns/active-partner <-->|related| patterns/chain-of-small-steps`
+
+      mockedFs.readFileSync.mockReturnValue(content)
+
+      const result = relationships.getRelationshipsForBoth('active-partner', 'patterns')
+
+      // Bidirectional relationships create two entries (one in each direction)
+      expect(result).toHaveLength(2)
+      expect(result[0]).toEqual({
+        from: 'patterns/active-partner',
+        to: 'patterns/chain-of-small-steps',
+        type: 'related',
+        bidirectional: true,
+      })
+      expect(result[1]).toEqual({
+        from: 'patterns/chain-of-small-steps',
+        to: 'patterns/active-partner',
+        type: 'related',
+        bidirectional: true,
+      })
+    })
+
+    it('should return empty array for pattern with no relationships', () => {
+      const content = `graph TD
+patterns/chain-of-small-steps -->|uses| patterns/show-me`
+
+      mockedFs.readFileSync.mockReturnValue(content)
+
+      const result = relationships.getRelationshipsForBoth('active-partner', 'patterns')
+
+      expect(result).toHaveLength(0)
+    })
+
+    it('should build full slug correctly with category', () => {
+      const content = `graph TD
+patterns/active-partner -->|solves| obstacles/black-box-ai
+obstacles/context-rot -->|causes| patterns/active-partner`
+
+      mockedFs.readFileSync.mockReturnValue(content)
+
+      const result = relationships.getRelationshipsForBoth('active-partner', 'patterns')
+
+      expect(result).toHaveLength(2)
+      expect(result[0].from).toBe('patterns/active-partner')
+      expect(result[1].to).toBe('patterns/active-partner')
+    })
+  })
+
   describe('getAllRelationships', () => {
     it('should return all relationships in the graph', () => {
       const content = `graph TD
