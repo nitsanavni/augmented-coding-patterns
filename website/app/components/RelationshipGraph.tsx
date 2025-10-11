@@ -11,19 +11,29 @@ const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
 });
 
 const CATEGORY_COLORS = {
-  patterns: '#10b981',
-  'anti-patterns': '#ef4444',
-  obstacles: '#f59e0b',
+  patterns: '#0ca678',
+  'anti-patterns': '#f76707',
+  obstacles: '#e03131',
 };
 
 const RELATIONSHIP_COLORS = {
   solves: '#8b5cf6',
   similar: '#3b82f6',
-  'enabled-by': '#06b6d4',
-  uses: '#6366f1',
+  enables: '#06b6d4',
+  uses: '#f59e0b',
   causes: '#dc2626',
   alternative: '#84cc16',
   related: '#6b7280',
+};
+
+const RELATIONSHIP_LABELS: Record<string, string> = {
+  solves: 'Solves',
+  similar: 'Similar',
+  enables: 'Enables',
+  uses: 'Uses',
+  causes: 'Causes',
+  alternative: 'Alternative',
+  related: 'Related',
 };
 
 function getSlugFromFullSlug(fullSlug: string): string {
@@ -51,8 +61,8 @@ export default function RelationshipGraph({ graphData }: RelationshipGraphProps)
 
   const getNodeSize = (node: Record<string, unknown>) => {
     const typedNode = node as unknown as GraphNode;
-    const baseSize = 4;
-    const scaleFactor = 0.5;
+    const baseSize = 8;
+    const scaleFactor = 1.0;
     return baseSize + (typedNode.connections * scaleFactor);
   };
 
@@ -64,6 +74,13 @@ export default function RelationshipGraph({ graphData }: RelationshipGraphProps)
   const getLinkColor = (link: Record<string, unknown>) => {
     const typedLink = link as unknown as GraphLink;
     return RELATIONSHIP_COLORS[typedLink.type as keyof typeof RELATIONSHIP_COLORS] || '#999';
+  };
+
+  const getLinkDirectionalArrowLength = (link: Record<string, unknown>) => {
+    const typedLink = link as unknown as GraphLink;
+    // Symmetric relationships (no direction) should not have arrows
+    const symmetricTypes = ['similar', 'alternative', 'related'];
+    return symmetricTypes.includes(typedLink.type) ? 0 : 6;
   };
 
   if (graphData.nodes.length === 0) {
@@ -91,38 +108,54 @@ export default function RelationshipGraph({ graphData }: RelationshipGraphProps)
             const fontSize = 12 / globalScale;
             ctx.font = `${fontSize}px Sans-Serif`;
             const textWidth = ctx.measureText(label).width;
-            const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
 
-            const nodeSize = getNodeSize(node);
+            const horizontalPadding = fontSize * 0.6;
+            const verticalPadding = fontSize * 0.4;
+            const rectWidth = textWidth + horizontalPadding * 2;
+            const rectHeight = fontSize + verticalPadding * 2;
+            const borderRadius = fontSize * 0.3;
 
-            ctx.fillStyle = getNodeColor(node);
+            const nodeColor = getNodeColor(node);
+
+            ctx.fillStyle = nodeColor;
+            ctx.strokeStyle = nodeColor;
+            ctx.lineWidth = 2 / globalScale;
+
+            const x = typedNode.x - rectWidth / 2;
+            const y = typedNode.y - rectHeight / 2;
+
             ctx.beginPath();
-            ctx.arc(typedNode.x, typedNode.y, nodeSize, 0, 2 * Math.PI, false);
+            ctx.moveTo(x + borderRadius, y);
+            ctx.lineTo(x + rectWidth - borderRadius, y);
+            ctx.arcTo(x + rectWidth, y, x + rectWidth, y + borderRadius, borderRadius);
+            ctx.lineTo(x + rectWidth, y + rectHeight - borderRadius);
+            ctx.arcTo(x + rectWidth, y + rectHeight, x + rectWidth - borderRadius, y + rectHeight, borderRadius);
+            ctx.lineTo(x + borderRadius, y + rectHeight);
+            ctx.arcTo(x, y + rectHeight, x, y + rectHeight - borderRadius, borderRadius);
+            ctx.lineTo(x, y + borderRadius);
+            ctx.arcTo(x, y, x + borderRadius, y, borderRadius);
+            ctx.closePath();
             ctx.fill();
+            ctx.stroke();
 
-            if (globalScale > 1) {
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-              ctx.fillRect(
-                typedNode.x - bckgDimensions[0] / 2,
-                typedNode.y + nodeSize + 2,
-                bckgDimensions[0],
-                bckgDimensions[1]
-              );
-
-              ctx.fillStyle = '#333';
-              ctx.fillText(label, typedNode.x, typedNode.y + nodeSize + 2 + fontSize / 2);
-            }
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(label, typedNode.x, typedNode.y);
           }}
           linkColor={getLinkColor}
-          linkWidth={1}
-          linkDirectionalArrowLength={3}
-          linkDirectionalArrowRelPos={1}
+          linkWidth={2}
+          linkDirectionalArrowLength={getLinkDirectionalArrowLength}
+          linkDirectionalArrowRelPos={0.95}
           onNodeClick={handleNodeClick}
           cooldownTime={3000}
-          d3AlphaDecay={0.02}
-          d3VelocityDecay={0.3}
+          d3AlphaDecay={0.01}
+          d3VelocityDecay={0.4}
+          d3ForceConfig={{
+            charge: { strength: -200 },
+            link: { distance: 120 },
+            center: { strength: 0.5 }
+          }}
         />
       </div>
       <div className={styles.legend}>
@@ -149,7 +182,7 @@ export default function RelationshipGraph({ graphData }: RelationshipGraphProps)
             {Object.entries(RELATIONSHIP_COLORS).map(([type, color]) => (
               <div key={type} className={styles.legendItem}>
                 <span className={styles.legendColor} style={{ backgroundColor: color }}></span>
-                <span>{type}</span>
+                <span>{RELATIONSHIP_LABELS[type] || type}</span>
               </div>
             ))}
           </div>
