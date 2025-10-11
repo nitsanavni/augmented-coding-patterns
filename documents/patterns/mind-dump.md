@@ -20,7 +20,7 @@ Speed of voice input enables qualitative shift:
 
 AI handles the mess. You handle the thinking.
 
-**After the dump:** End with "What questions do you have?" to turn monologue into dialogue. AI surfaces gaps and clarifies understanding.
+**After the dump:** "Ask me questions" - turn monologue into dialogue. AI surfaces gaps and clarifies understanding.
 
 ## Example
 
