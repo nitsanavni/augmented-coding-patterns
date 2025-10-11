@@ -1,5 +1,5 @@
 ---
-authors: [nitsanavni]
+authors: [nitsan_avni]
 related_patterns:
   - polyglot-ai
   - reverse-direction
