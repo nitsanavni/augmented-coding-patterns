@@ -2,6 +2,8 @@
 authors: [nitsanavni]
 related_patterns:
   - polyglot-ai
+  - reverse-direction
+  - check-alignment
 ---
 
 # Mind Dump
@@ -17,6 +19,8 @@ Speed of voice input enables qualitative shift:
 - From typing bottleneck → speaking at thought speed
 
 AI handles the mess. You handle the thinking.
+
+**After the dump:** End with "What questions do you have?" to turn monologue into dialogue. AI surfaces gaps and clarifies understanding.
 
 ## Example
 
