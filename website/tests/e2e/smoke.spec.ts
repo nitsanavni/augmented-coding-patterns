@@ -84,10 +84,10 @@ test.describe('Smoke Tests - Critical User Journeys', () => {
     await expect(page).toHaveURL('/contributors/');
     await expect(page.locator('h1')).toContainText('Contributors');
 
-    const contributorCard = page.locator('[data-testid="contributor-card"]').first();
+    const contributorCard = page.locator('article').first();
     await expect(contributorCard).toBeVisible();
 
-    const contributorName = contributorCard.locator('h2, h3');
+    const contributorName = contributorCard.locator('a');
     await expect(contributorName).toBeVisible();
 
     const contributorAvatar = contributorCard.locator('img');
