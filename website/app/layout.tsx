@@ -47,6 +47,9 @@ export default function RootLayout({
                 <Link href="/patterns" className={styles.navLink}>
                   Patterns
                 </Link>
+                <Link href="/contributors" className={styles.navLink}>
+                  Contributors
+                </Link>
               </nav>
             </div>
           </header>

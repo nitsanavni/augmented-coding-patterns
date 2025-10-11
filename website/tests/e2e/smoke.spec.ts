@@ -76,4 +76,21 @@ test.describe('Smoke Tests - Critical User Journeys', () => {
     await expect(page.locator('h1')).toContainText('Compliance Bias');
     await expect(page.locator('article')).toBeVisible();
   });
+
+  test('navigate to contributors page and verify contributor cards display', async ({ page }) => {
+    await page.goto('/');
+
+    await page.locator('nav a[href="/contributors/"]').click();
+    await expect(page).toHaveURL('/contributors/');
+    await expect(page.locator('h1')).toContainText('Contributors');
+
+    const contributorCard = page.locator('[data-testid="contributor-card"]').first();
+    await expect(contributorCard).toBeVisible();
+
+    const contributorName = contributorCard.locator('h2, h3');
+    await expect(contributorName).toBeVisible();
+
+    const contributorAvatar = contributorCard.locator('img');
+    await expect(contributorAvatar).toBeVisible();
+  });
 });
