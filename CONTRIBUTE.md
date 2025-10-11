@@ -18,10 +18,13 @@ This guide explains how to contribute patterns, anti-patterns, or obstacles to t
 ```yaml
 ---
 authors: [author_id]
-related_obstacles: [obstacle-slug]  # optional
-related_patterns: [pattern-slug]    # optional
-related_anti_patterns: [anti-slug]  # optional
 ---
+```
+
+**Relationships:** Define in `documents/relationships.mmd` using Mermaid graph syntax:
+```mermaid
+patterns/your-pattern -->|solves| obstacles/some-obstacle
+patterns/your-pattern -->|uses| patterns/another-pattern
 ```
 
 **Content Templates:**
@@ -33,6 +36,8 @@ Pattern:
 ## Pattern
 ## Example
 ```
+
+**Writing Style:** Be concise. Prefer short, direct sentences over detailed explanations.
 
 Anti-pattern:
 ```markdown
@@ -78,8 +83,17 @@ Ask **one question at a time**. Be proactive - suggest possible answers based on
 
 Example: "What problem does this solve? Based on your summary, it sounds like it might be about [guess 1] or [guess 2]. Is that right?"
 
+**Keep it concise**: Use short, direct sentences. Avoid verbose explanations.
+
 ### 4. Check Author
 Verify author exists in `website/config/authors.yaml`. If not, ask for: full name, GitHub username, website URL (optional).
 
-### 5. Create and Review
+### 5. Define Relationships
+Add relationships to `documents/relationships.mmd`:
+- `solves` for patterns addressing obstacles/anti-patterns
+- `uses` for patterns building on other patterns
+- `similar` for related patterns
+- `causes` for anti-patterns/obstacles creating problems
+
+### 6. Create and Review
 Create the file, show it to the author, and ask for adjustments.

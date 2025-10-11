@@ -12,6 +12,9 @@ graph LR
   patterns/chain-of-small-steps -->|solves| obstacles/limited-focus
   patterns/check-alignment -->|solves| anti-patterns/silent-misalignment
   patterns/check-alignment -->|solves| obstacles/black-box-ai
+  patterns/chunking -->|solves| obstacles/limited-focus
+  patterns/chunking -->|solves| obstacles/limited-context-window
+  patterns/chunking -->|solves| obstacles/degrades-under-complexity
   patterns/context-management -->|solves| obstacles/cannot-learn
   patterns/context-management -->|solves| obstacles/context-rot
   patterns/context-management -->|solves| obstacles/limited-context-window
@@ -47,6 +50,8 @@ graph LR
   patterns/extract-knowledge -->|uses| patterns/knowledge-document
   patterns/ground-rules -->|uses| patterns/knowledge-document
   patterns/show-me-i-will-repeat-automate -->|uses| patterns/extract-knowledge
+  patterns/chunking -->|uses| patterns/focused-agent
+  patterns/chunking -->|uses| patterns/chain-of-small-steps
   patterns/feedback-loop <-->|similar| patterns/playgrounds
   patterns/feedback-loop <-->|similar| patterns/chain-of-small-steps
   patterns/chain-of-small-steps <-->|similar| patterns/offload-deterministic
