@@ -51,6 +51,20 @@
   line-height: 1;
 }
 
+.typeHeading {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+.typeHeading:first-child {
+  margin-top: 0;
+}
+
 .list {
   list-style: none;
   padding: 0;

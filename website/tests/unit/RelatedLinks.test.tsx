@@ -1,5 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import RelatedLinks from '@/app/components/RelatedLinks'
+import { RelatedPattern } from '@/lib/types'
+
+// Helper function to convert string slugs to RelatedPattern objects
+const toRelatedPatterns = (slugs: string[]): RelatedPattern[] =>
+  slugs.map(slug => ({ slug, type: 'related' as const }))
 
 jest.mock('@/app/lib/category-config', () => ({
   getCategoryConfig: jest.fn((category: string) => {
@@ -42,7 +47,7 @@ describe('RelatedLinks Component', () => {
   })
 
   it('renders Related heading when relationships exist', () => {
-    render(<RelatedLinks relatedPatterns={['test-pattern']} />)
+    render(<RelatedLinks relatedPatterns={toRelatedPatterns(['test-pattern'])} />)
     const heading = screen.getByRole('heading', { name: 'Related', level: 2 })
     expect(heading).toBeInTheDocument()
   })
@@ -50,7 +55,7 @@ describe('RelatedLinks Component', () => {
   it('correctly displays pattern links', () => {
     render(
       <RelatedLinks
-        relatedPatterns={['active-partner', 'chain-of-small-steps']}
+        relatedPatterns={toRelatedPatterns(['active-partner', 'chain-of-small-steps'])}
       />
     )
 
@@ -69,7 +74,7 @@ describe('RelatedLinks Component', () => {
   it('correctly displays anti-pattern links', () => {
     render(
       <RelatedLinks
-        relatedAntiPatterns={['answer-injection', 'distracted-agent']}
+        relatedAntiPatterns={toRelatedPatterns(['answer-injection', 'distracted-agent'])}
       />
     )
 
@@ -88,7 +93,7 @@ describe('RelatedLinks Component', () => {
   it('correctly displays obstacle links', () => {
     render(
       <RelatedLinks
-        relatedObstacles={['black-box-ai', 'context-rot']}
+        relatedObstacles={toRelatedPatterns(['black-box-ai', 'context-rot'])}
       />
     )
 
@@ -107,9 +112,9 @@ describe('RelatedLinks Component', () => {
   it('links have correct href format', () => {
     render(
       <RelatedLinks
-        relatedPatterns={['test-pattern']}
-        relatedAntiPatterns={['test-anti-pattern']}
-        relatedObstacles={['test-obstacle']}
+        relatedPatterns={toRelatedPatterns(['test-pattern'])}
+        relatedAntiPatterns={toRelatedPatterns(['test-anti-pattern'])}
+        relatedObstacles={toRelatedPatterns(['test-obstacle'])}
       />
     )
 
@@ -125,29 +130,29 @@ describe('RelatedLinks Component', () => {
 
   describe('Slug-to-title conversion', () => {
     it('converts single word slug correctly', () => {
-      render(<RelatedLinks relatedPatterns={['refactor']} />)
+      render(<RelatedLinks relatedPatterns={toRelatedPatterns(['refactor'])} />)
       expect(screen.getByRole('link', { name: 'Refactor' })).toBeInTheDocument()
     })
 
     it('converts multi-word slug with hyphens correctly', () => {
-      render(<RelatedLinks relatedPatterns={['active-partner']} />)
+      render(<RelatedLinks relatedPatterns={toRelatedPatterns(['active-partner'])} />)
       expect(screen.getByRole('link', { name: 'Active Partner' })).toBeInTheDocument()
     })
 
     it('converts slug with three words correctly', () => {
-      render(<RelatedLinks relatedPatterns={['chain-of-small-steps']} />)
+      render(<RelatedLinks relatedPatterns={toRelatedPatterns(['chain-of-small-steps'])} />)
       expect(screen.getByRole('link', { name: 'Chain Of Small Steps' })).toBeInTheDocument()
     })
 
     it('capitalizes each word in slug', () => {
-      render(<RelatedLinks relatedPatterns={['test-multiple-word-slug']} />)
+      render(<RelatedLinks relatedPatterns={toRelatedPatterns(['test-multiple-word-slug'])} />)
       expect(screen.getByRole('link', { name: 'Test Multiple Word Slug' })).toBeInTheDocument()
     })
   })
 
   describe('Category sections visibility', () => {
     it('only shows patterns section when only patterns provided', () => {
-      render(<RelatedLinks relatedPatterns={['test-pattern']} />)
+      render(<RelatedLinks relatedPatterns={toRelatedPatterns(['test-pattern'])} />)
 
       expect(screen.getByRole('heading', { name: /🧩 Patterns/, level: 3 })).toBeInTheDocument()
       expect(screen.queryByRole('heading', { name: /⚠️ Anti-Patterns/, level: 3 })).not.toBeInTheDocument()
@@ -155,7 +160,7 @@ describe('RelatedLinks Component', () => {
     })
 
     it('only shows anti-patterns section when only anti-patterns provided', () => {
-      render(<RelatedLinks relatedAntiPatterns={['test-anti-pattern']} />)
+      render(<RelatedLinks relatedAntiPatterns={toRelatedPatterns(['test-anti-pattern'])} />)
 
       expect(screen.queryByRole('heading', { name: /🧩 Patterns/, level: 3 })).not.toBeInTheDocument()
       expect(screen.getByRole('heading', { name: /⚠️ Anti-Patterns/, level: 3 })).toBeInTheDocument()
@@ -163,7 +168,7 @@ describe('RelatedLinks Component', () => {
     })
 
     it('only shows obstacles section when only obstacles provided', () => {
-      render(<RelatedLinks relatedObstacles={['test-obstacle']} />)
+      render(<RelatedLinks relatedObstacles={toRelatedPatterns(['test-obstacle'])} />)
 
       expect(screen.queryByRole('heading', { name: /🧩 Patterns/, level: 3 })).not.toBeInTheDocument()
       expect(screen.queryByRole('heading', { name: /⚠️ Anti-Patterns/, level: 3 })).not.toBeInTheDocument()
@@ -173,9 +178,9 @@ describe('RelatedLinks Component', () => {
     it('shows all sections when all relationship types provided', () => {
       render(
         <RelatedLinks
-          relatedPatterns={['test-pattern']}
-          relatedAntiPatterns={['test-anti-pattern']}
-          relatedObstacles={['test-obstacle']}
+          relatedPatterns={toRelatedPatterns(['test-pattern'])}
+          relatedAntiPatterns={toRelatedPatterns(['test-anti-pattern'])}
+          relatedObstacles={toRelatedPatterns(['test-obstacle'])}
         />
       )
 
@@ -189,26 +194,26 @@ describe('RelatedLinks Component', () => {
 
   describe('Category config usage', () => {
     it('displays correct icon for patterns', () => {
-      render(<RelatedLinks relatedPatterns={['test-pattern']} />)
+      render(<RelatedLinks relatedPatterns={toRelatedPatterns(['test-pattern'])} />)
       expect(screen.getByText('🧩')).toBeInTheDocument()
     })
 
     it('displays correct icon for anti-patterns', () => {
-      render(<RelatedLinks relatedAntiPatterns={['test-anti-pattern']} />)
+      render(<RelatedLinks relatedAntiPatterns={toRelatedPatterns(['test-anti-pattern'])} />)
       expect(screen.getByText('⚠️')).toBeInTheDocument()
     })
 
     it('displays correct icon for obstacles', () => {
-      render(<RelatedLinks relatedObstacles={['test-obstacle']} />)
+      render(<RelatedLinks relatedObstacles={toRelatedPatterns(['test-obstacle'])} />)
       expect(screen.getByText('⛰️')).toBeInTheDocument()
     })
 
     it('uses correct category config labels', () => {
       render(
         <RelatedLinks
-          relatedPatterns={['test-pattern']}
-          relatedAntiPatterns={['test-anti-pattern']}
-          relatedObstacles={['test-obstacle']}
+          relatedPatterns={toRelatedPatterns(['test-pattern'])}
+          relatedAntiPatterns={toRelatedPatterns(['test-anti-pattern'])}
+          relatedObstacles={toRelatedPatterns(['test-obstacle'])}
         />
       )
 
@@ -220,31 +225,31 @@ describe('RelatedLinks Component', () => {
 
   describe('Semantic HTML', () => {
     it('uses aside element for container', () => {
-      render(<RelatedLinks relatedPatterns={['test-pattern']} />)
+      render(<RelatedLinks relatedPatterns={toRelatedPatterns(['test-pattern'])} />)
       const aside = document.querySelector('aside')
       expect(aside).toBeInTheDocument()
     })
 
     it('uses h2 for Related heading', () => {
-      render(<RelatedLinks relatedPatterns={['test-pattern']} />)
+      render(<RelatedLinks relatedPatterns={toRelatedPatterns(['test-pattern'])} />)
       const h2 = screen.getByRole('heading', { name: 'Related', level: 2 })
       expect(h2).toBeInTheDocument()
     })
 
     it('uses h3 for category headings', () => {
-      render(<RelatedLinks relatedPatterns={['test-pattern']} />)
+      render(<RelatedLinks relatedPatterns={toRelatedPatterns(['test-pattern'])} />)
       const h3 = screen.getByRole('heading', { name: /Patterns/, level: 3 })
       expect(h3).toBeInTheDocument()
     })
 
     it('uses ul element for links list', () => {
-      render(<RelatedLinks relatedPatterns={['test-pattern']} />)
+      render(<RelatedLinks relatedPatterns={toRelatedPatterns(['test-pattern'])} />)
       const ul = document.querySelector('ul')
       expect(ul).toBeInTheDocument()
     })
 
     it('uses li elements for list items', () => {
-      render(<RelatedLinks relatedPatterns={['test-pattern-1', 'test-pattern-2']} />)
+      render(<RelatedLinks relatedPatterns={toRelatedPatterns(['test-pattern-1', 'test-pattern-2'])} />)
       const listItems = document.querySelectorAll('li')
       expect(listItems).toHaveLength(2)
     })

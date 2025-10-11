@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "validate": "node ../scripts/validate-relationships.js",
+    "build": "npm run validate && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "jest",

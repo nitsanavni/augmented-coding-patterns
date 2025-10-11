@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import { PatternCategory, PatternContent } from './types'
+import { getRelationshipsFor } from './relationships'
 
 const PATTERNS_BASE_PATH = path.join(process.cwd(), '..', 'documents')
 
@@ -89,15 +90,49 @@ export function getPatternBySlug(
       ? [...lines.slice(0, firstLineIndex), ...lines.slice(firstLineIndex + 1)].join('\n')
       : content
 
+    // Load relationships from centralized registry
+    const centralizedRels = getRelationshipsFor(slug, category)
+
+    // Group by target category and create RelatedPattern objects
+    const relPatterns = centralizedRels
+      .filter(r => r.to.startsWith('patterns/'))
+      .map(r => ({ slug: r.to.replace('patterns/', ''), type: r.type }))
+
+    const relAntiPatterns = centralizedRels
+      .filter(r => r.to.startsWith('anti-patterns/'))
+      .map(r => ({ slug: r.to.replace('anti-patterns/', ''), type: r.type }))
+
+    const relObstacles = centralizedRels
+      .filter(r => r.to.startsWith('obstacles/'))
+      .map(r => ({ slug: r.to.replace('obstacles/', ''), type: r.type }))
+
+    // Merge centralized relationships with frontmatter (remove duplicates by slug)
+    // For frontmatter relationships without type info, default to 'related'
+    const frontmatterPatterns = (data.related_patterns || []).map((slug: string) => ({ slug, type: 'related' as const }))
+    const frontmatterAntiPatterns = (data.related_anti_patterns || []).map((slug: string) => ({ slug, type: 'related' as const }))
+    const frontmatterObstacles = (data.related_obstacles || []).map((slug: string) => ({ slug, type: 'related' as const }))
+
+    // Merge and deduplicate by slug, preferring centralized type over frontmatter
+    const mergeRelatedPatterns = (centralized: Array<{slug: string, type: string}>, frontmatter: Array<{slug: string, type: string}>) => {
+      const slugMap = new Map<string, {slug: string, type: string}>()
+      frontmatter.forEach(item => slugMap.set(item.slug, item))
+      centralized.forEach(item => slugMap.set(item.slug, item)) // Centralized overwrites
+      return Array.from(slugMap.values())
+    }
+
+    const mergedPatterns = mergeRelatedPatterns(relPatterns, frontmatterPatterns)
+    const mergedAntiPatterns = mergeRelatedPatterns(relAntiPatterns, frontmatterAntiPatterns)
+    const mergedObstacles = mergeRelatedPatterns(relObstacles, frontmatterObstacles)
+
     return {
       title,
       category,
       slug,
       ...(emoji && { emojiIndicator: emoji }),
       ...(data.authors && { authors: data.authors }),
-      ...(data.related_patterns && { relatedPatterns: data.related_patterns }),
-      ...(data.related_anti_patterns && { relatedAntiPatterns: data.related_anti_patterns }),
-      ...(data.related_obstacles && { relatedObstacles: data.related_obstacles }),
+      ...(mergedPatterns.length > 0 && { relatedPatterns: mergedPatterns }),
+      ...(mergedAntiPatterns.length > 0 && { relatedAntiPatterns: mergedAntiPatterns }),
+      ...(mergedObstacles.length > 0 && { relatedObstacles: mergedObstacles }),
       content: contentWithoutTitle,
       rawContent: fileContents
     }

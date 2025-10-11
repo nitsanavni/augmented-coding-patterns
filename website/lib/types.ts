@@ -6,15 +6,20 @@ export interface Author {
   url?: string
 }
 
+export interface RelatedPattern {
+  slug: string
+  type: RelationshipType
+}
+
 export interface PatternMetadata {
   title: string
   category: PatternCategory
   slug: string
   emojiIndicator?: string
   authors?: string[]
-  relatedPatterns?: string[]
-  relatedAntiPatterns?: string[]
-  relatedObstacles?: string[]
+  relatedPatterns?: RelatedPattern[]
+  relatedAntiPatterns?: RelatedPattern[]
+  relatedObstacles?: RelatedPattern[]
 }
 
 export interface PatternContent extends PatternMetadata {
@@ -25,4 +30,24 @@ export interface PatternContent extends PatternMetadata {
 export interface PatternData {
   metadata: PatternMetadata
   content: string
+}
+
+export type RelationshipType =
+  | 'related'
+  | 'solves'
+  | 'similar'
+  | 'enabled-by'
+  | 'uses'
+  | 'causes'
+  | 'alternative'
+
+export interface Relationship {
+  from: string
+  to: string
+  type: RelationshipType
+  bidirectional: boolean
+}
+
+export interface RelationshipGraph {
+  relationships: Relationship[]
 }

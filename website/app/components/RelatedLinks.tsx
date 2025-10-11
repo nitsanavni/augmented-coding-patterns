@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { getCategoryConfig } from '@/app/lib/category-config'
-import { PatternCategory } from '@/lib/types'
+import { PatternCategory, RelatedPattern, RelationshipType } from '@/lib/types'
 import styles from './RelatedLinks.module.css'
 
 interface RelatedLinksProps {
-  relatedPatterns?: string[]
-  relatedAntiPatterns?: string[]
-  relatedObstacles?: string[]
+  relatedPatterns?: RelatedPattern[]
+  relatedAntiPatterns?: RelatedPattern[]
+  relatedObstacles?: RelatedPattern[]
 }
 
 function slugToTitle(slug: string): string {
@@ -16,9 +16,22 @@ function slugToTitle(slug: string): string {
     .join(' ')
 }
 
+function formatRelationshipType(type: RelationshipType): string {
+  const formatMap: Record<RelationshipType, string> = {
+    'related': '',
+    'solves': 'Solves',
+    'similar': 'Similar to',
+    'enabled-by': 'Enabled by',
+    'uses': 'Uses',
+    'causes': 'Causes',
+    'alternative': 'Alternative to'
+  }
+  return formatMap[type] || type
+}
+
 interface RelationshipGroup {
   category: PatternCategory
-  slugs: string[]
+  patterns: RelatedPattern[]
 }
 
 export default function RelatedLinks({
@@ -40,21 +53,21 @@ export default function RelatedLinks({
   if (relatedPatterns && relatedPatterns.length > 0) {
     relationshipGroups.push({
       category: 'patterns',
-      slugs: relatedPatterns
+      patterns: relatedPatterns
     })
   }
 
   if (relatedAntiPatterns && relatedAntiPatterns.length > 0) {
     relationshipGroups.push({
       category: 'anti-patterns',
-      slugs: relatedAntiPatterns
+      patterns: relatedAntiPatterns
     })
   }
 
   if (relatedObstacles && relatedObstacles.length > 0) {
     relationshipGroups.push({
       category: 'obstacles',
-      slugs: relatedObstacles
+      patterns: relatedObstacles
     })
   }
 
@@ -62,8 +75,25 @@ export default function RelatedLinks({
     <aside className={styles.container}>
       <h2 className={styles.heading}>Related</h2>
 
-      {relationshipGroups.map(({ category, slugs }) => {
+      {relationshipGroups.map(({ category, patterns }) => {
         const config = getCategoryConfig(category)
+
+        // Group patterns by relationship type
+        const patternsByType = patterns.reduce((acc, pattern) => {
+          const typeLabel = formatRelationshipType(pattern.type)
+          if (!acc[typeLabel]) {
+            acc[typeLabel] = []
+          }
+          acc[typeLabel].push(pattern)
+          return acc
+        }, {} as Record<string, RelatedPattern[]>)
+
+        // Sort type groups: empty string (related) first, then alphabetically
+        const sortedTypes = Object.keys(patternsByType).sort((a, b) => {
+          if (a === '') return -1
+          if (b === '') return 1
+          return a.localeCompare(b)
+        })
 
         return (
           <div key={category} className={styles.section}>
@@ -71,18 +101,23 @@ export default function RelatedLinks({
               <span className={styles.categoryIcon}>{config.icon}</span>
               {config.labelPlural}
             </h3>
-            <ul className={styles.list}>
-              {slugs.map(slug => (
-                <li key={slug} className={styles.listItem}>
-                  <Link
-                    href={`/${category}/${slug}/`}
-                    className={`${styles.link} ${styles[config.styleClass]}`}
-                  >
-                    {slugToTitle(slug)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {sortedTypes.map(typeLabel => (
+              <div key={typeLabel || 'related'}>
+                {typeLabel && <h4 className={styles.typeHeading}>{typeLabel}</h4>}
+                <ul className={styles.list}>
+                  {patternsByType[typeLabel].map(pattern => (
+                    <li key={pattern.slug} className={styles.listItem}>
+                      <Link
+                        href={`/${category}/${pattern.slug}/`}
+                        className={`${styles.link} ${styles[config.styleClass]}`}
+                      >
+                        {slugToTitle(pattern.slug)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         )
       })}
