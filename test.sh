@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd /Users/ladak/workspace/talk_prep/augmented-coding-patterns/website
+cd "$(dirname "$0")/website"
 npm test
