@@ -1,6 +1,19 @@
 import '@testing-library/jest-dom'
 import React from 'react'
 
+global.matchMedia = global.matchMedia || function(query: string) {
+  return {
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  }
+}
+
 jest.mock('react-markdown', () => {
   return {
     __esModule: true,

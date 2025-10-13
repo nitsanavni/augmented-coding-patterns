@@ -4,13 +4,20 @@ import { useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import type { GraphData, GraphNode, GraphLink } from '@/lib/graph-data';
+import { useTheme } from '@/app/hooks/useTheme';
 import styles from './RelationshipGraph.module.css';
 
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
   ssr: false,
 });
 
-const CATEGORY_COLORS = {
+const LIGHT_CATEGORY_COLORS = {
+  patterns: '#059669',
+  'anti-patterns': '#ea580c',
+  obstacles: '#dc2626',
+};
+
+const DARK_CATEGORY_COLORS = {
   patterns: '#0ca678',
   'anti-patterns': '#f76707',
   obstacles: '#e03131',
@@ -52,6 +59,9 @@ interface ForceGraphNode extends GraphNode {
 
 export default function RelationshipGraph({ graphData }: RelationshipGraphProps) {
   const router = useRouter();
+  const { theme } = useTheme();
+
+  const categoryColors = theme === 'light' ? LIGHT_CATEGORY_COLORS : DARK_CATEGORY_COLORS;
 
   const handleNodeClick = useCallback((node: Record<string, unknown>) => {
     const typedNode = node as unknown as GraphNode;
@@ -68,7 +78,7 @@ export default function RelationshipGraph({ graphData }: RelationshipGraphProps)
 
   const getNodeColor = (node: Record<string, unknown>) => {
     const typedNode = node as unknown as GraphNode;
-    return CATEGORY_COLORS[typedNode.category];
+    return categoryColors[typedNode.category];
   };
 
   const getLinkColor = (link: Record<string, unknown>) => {
@@ -158,15 +168,15 @@ export default function RelationshipGraph({ graphData }: RelationshipGraphProps)
           <h4>Categories</h4>
           <div className={styles.legendItems}>
             <div className={styles.legendItem}>
-              <span className={styles.legendColor} style={{ backgroundColor: CATEGORY_COLORS.patterns }}></span>
+              <span className={styles.legendColor} style={{ backgroundColor: categoryColors.patterns }}></span>
               <span>Patterns</span>
             </div>
             <div className={styles.legendItem}>
-              <span className={styles.legendColor} style={{ backgroundColor: CATEGORY_COLORS['anti-patterns'] }}></span>
+              <span className={styles.legendColor} style={{ backgroundColor: categoryColors['anti-patterns'] }}></span>
               <span>Anti-Patterns</span>
             </div>
             <div className={styles.legendItem}>
-              <span className={styles.legendColor} style={{ backgroundColor: CATEGORY_COLORS.obstacles }}></span>
+              <span className={styles.legendColor} style={{ backgroundColor: categoryColors.obstacles }}></span>
               <span>Obstacles</span>
             </div>
           </div>

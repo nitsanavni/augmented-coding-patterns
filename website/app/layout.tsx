@@ -4,6 +4,8 @@ import Link from "next/link";
 import "./globals.css";
 import styles from "./layout.module.css";
 import { siteConfig } from "@/config/site";
+import ThemeScript from "./components/ThemeScript";
+import ThemeToggle from "./components/ThemeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <ThemeScript />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <div className={styles.container}>
           <header className={styles.header}>
@@ -50,6 +55,7 @@ export default function RootLayout({
                 <Link href="/contributors" className={styles.navLink}>
                   Contributors
                 </Link>
+                <ThemeToggle />
               </nav>
             </div>
           </header>

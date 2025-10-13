@@ -64,8 +64,65 @@
   --transition-base: 200ms ease;
 }
 
+/* Light theme class overrides - explicitly set light theme */
+.light {
+  --color-background: #ffffff;
+  --color-surface: #f8f9fa;
+  --color-surface-hover: #f1f3f5;
+  --color-border: #e9ecef;
+  --color-border-dark: #dee2e6;
+
+  --color-text-primary: #212529;
+  --color-text-secondary: #495057;
+  --color-text-tertiary: #6c757d;
+
+  --color-accent: #4263eb;
+  --color-accent-hover: #3b5bdb;
+  --color-accent-light: #edf2ff;
+
+  --color-pattern: #0ca678;
+  --color-pattern-light: #e6fcf5;
+  --color-anti-pattern: #f76707;
+  --color-anti-pattern-light: #fff4e6;
+  --color-obstacle: #e03131;
+  --color-obstacle-light: #ffe3e3;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme class overrides */
+.dark {
+  --color-background: #1a1b1e;
+  --color-surface: #25262b;
+  --color-surface-hover: #2c2e33;
+  --color-border: #373a40;
+  --color-border-dark: #2c2e33;
+
+  --color-text-primary: #e9ecef;
+  --color-text-secondary: #c1c2c5;
+  --color-text-tertiary: #909296;
+
+  --color-accent: #5c7cfa;
+  --color-accent-hover: #748ffc;
+  --color-accent-light: #2e3654;
+
+  --color-pattern: #12b886;
+  --color-pattern-light: #1e3d36;
+  --color-anti-pattern: #ff8c42;
+  --color-anti-pattern-light: #3d2b1f;
+  --color-obstacle: #ff6b6b;
+  --color-obstacle-light: #3d2222;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+/* System preference fallback when no manual theme is set */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light):not(.dark) {
     --color-background: #1a1b1e;
     --color-surface: #25262b;
     --color-surface-hover: #2c2e33;
@@ -112,6 +169,7 @@ body {
   color: var(--color-text-primary);
   background-color: var(--color-background);
   min-height: 100vh;
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
 
 /* Typography */
