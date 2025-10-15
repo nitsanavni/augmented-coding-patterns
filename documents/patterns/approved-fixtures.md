@@ -8,9 +8,7 @@ authors: [ivett_ordog]
 Generating both tests and code with the AI and not checking is risky, but the AI is also prone to generating lots of tests quickly. Reviewing many AI-generated tests quickly becomes impractical, especially when assertions are complex.
 
 ## Pattern
-This pattern works best for problems that have an intuitive visual representation that is straightforward to check, but can also be used for checking call sequences. 
-
-Design tests around approval files that combine input and expected output in a domain-specific easy-to-validate format. 
+Design tests around approval files that combine input and expected output in a domain-specific easy-to-validate format.
 
 Validate the test execution logic once. After that, adding new test cases only requires reviewing fixtures.
 
@@ -21,7 +19,11 @@ Structure each approval file to contain:
 
 The test runner reads fixtures, executes code, and regenerates approval files. Validation becomes a simple diff review.
 
+This pattern works best for problems that have an intuitive visual representation that is straightforward to check, but can also be used for checking call sequences.
+
 ## Example
+
+The pattern adapts to different domains:
 
 **Testing a multi-step process with external service calls:**
 
@@ -74,9 +76,11 @@ Create fixtures like `game-of-life-glider.approved.md`:
 
 Test reads all game-of-life fixtures, computes next generation, verifies output matches. Adding new test cases is drawing ASCII patterns - trivially easy to validate correctness by eye.
 
-**Testing refactorings**
+**Testing refactorings:**
 
-Here we used two separate files. One for the input and one for the expected output. The header contains the command that generates the approved output. 
+Create fixture pairs like `inline-variable.input.ts` and `inline-variable.approved.ts`:
+
+This example uses two separate files. One for the input and one for the expected output. The header contains the command that generates the approved output.
 
 Input file:
 ```typescript
@@ -107,4 +111,4 @@ function processData(x: number, y: number): number {
 
 ## Note
 
-- This pattern has similarities to Gherkin but better adapts to the specific domain, making the extra indirection worthwhile.
+This pattern has similarities to Gherkin but better adapts to the specific domain, making the extra indirection worthwhile.
