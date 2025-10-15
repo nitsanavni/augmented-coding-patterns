@@ -29,16 +29,20 @@ Create fixtures like `checkout-with-discount.approved.md`:
 ```markdown
 ## Input
 User: premium_member
-Cart: [laptop: $1200, mouse: $50]
+Cart: [{product_id: "laptop-123", quantity: 1}, {product_id: "mouse-456", quantity: 1}]
 Discount code: SAVE20
 
 ## Service Calls
 POST /inventory/reserve
-  {"items": ["laptop-123", "mouse-456"]}
+  {"items": [{product_id: "laptop-123", quantity: 1}, {product_id: "mouse-456", quantity: 1}]}
 Response: 200 {"reservation_id": "res_789"}
 
+GET /pricing/calculate
+  {"items": [{product_id: "laptop-123", quantity: 1}, {product_id: "mouse-456", quantity: 1}], "user": "premium_member"}
+Response: 200 {"subtotal": 1250, "discount": 250, "total": 1000}
+
 POST /payment/process
-  {"amount": 1000, "discount": 250}
+  {"amount": 1000, "reservation_id": "res_789"}
 Response: 200 {"transaction_id": "txn_abc"}
 
 ## Output
@@ -49,6 +53,58 @@ Email sent: order_confirmation
 
 Single test reads all `.approved.md` files, executes flows, regenerates files with actual results. Review is scanning markdown diffs, not reading assertion code.
 
+**Testing visual algorithms:**
+
+Create fixtures like `game-of-life-glider.approved.md`:
+```markdown
+## Input
+......
+..#...
+...#..
+.###..
+......
+
+## Result
+......
+......
+.#.#..
+..##..
+..#...
+```
+
+Test reads all game-of-life fixtures, computes next generation, verifies output matches. Adding new test cases is drawing ASCII patterns - trivially easy to validate correctness by eye.
+
+**Testing refactorings**
+
+Here we used two separate files. One for the input and one for the expected output. The header contains the command that generates the approved output. 
+
+Input file:
+```typescript
+/**
+ * @description Inline variable with multiple usages
+ * @command refakts inline-variable "[{{CURRENT_FILE}} 8:18-8:21]"
+ */
+
+function processData(x: number, y: number): number {
+    const sum = x + y;
+    const result = sum * 2 + sum;
+    return result;
+}
+```
+
+Expected output file:
+```typescript
+/**
+ * @description Inline variable with multiple usages
+ * @command refakts inline-variable "[{{CURRENT_FILE}} 8:18-8:21]"
+ */
+
+function processData(x: number, y: number): number {
+  const result = (x + y) * 2 + (x + y);
+  return result;
+}
+```
+
 ## Note
 
-This pattern has similarities to Gherkin but better adopts to the specific domain, making the extra indirection worthwhile.
+- This pattern has similarities to Gherkin but better adapts to the specific domain, making the extra indirection worthwhile.
