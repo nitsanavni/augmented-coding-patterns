@@ -87,8 +87,11 @@ test.describe('Smoke Tests - Critical User Journeys', () => {
     const contributorCard = page.locator('article').first();
     await expect(contributorCard).toBeVisible();
 
-    const contributorName = contributorCard.locator('a');
+    const contributorName = contributorCard.locator('a[target="_blank"]');
     await expect(contributorName).toBeVisible();
+
+    const contributionsBadge = contributorCard.locator('a[href^="/contributors/"]');
+    await expect(contributionsBadge).toBeVisible();
 
     const contributorAvatar = contributorCard.locator('img');
     await expect(contributorAvatar).toBeVisible();
