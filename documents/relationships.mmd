@@ -43,6 +43,9 @@ graph LR
   patterns/approved-logs -->|solves| obstacles/hallucinations
   patterns/approved-logs -->|solves| obstacles/black-box-ai
   patterns/constrained-tests -->|solves| obstacles/non-determinism
+  patterns/active-partner -->|solves| obstacles/keeping-up
+  patterns/feedback-loop -->|solves| obstacles/keeping-up
+  patterns/constrained-tests -->|solves| obstacles/keeping-up
 
   %% Pattern → Pattern relationships (enables, uses, similar, alternative)
   patterns/references -->|enables| patterns/knowledge-composition
