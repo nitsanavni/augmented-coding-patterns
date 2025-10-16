@@ -264,4 +264,24 @@ describe('Contributors Page', () => {
     const articles = document.querySelectorAll('article')
     expect(articles).toHaveLength(3)
   })
+
+  it('should make total contributions badge clickable with link to contributor detail page', () => {
+    render(<ContributorsPage />)
+
+    const aliceBadge = screen.getByRole('link', { name: /5 contributions/i })
+    expect(aliceBadge).toHaveAttribute('href', '/contributors/author1/')
+
+    const bobBadge = screen.getByRole('link', { name: /3 contributions/i })
+    expect(bobBadge).toHaveAttribute('href', '/contributors/author2/')
+
+    const charlieBadge = screen.getByRole('link', { name: /1 contribution/i })
+    expect(charlieBadge).toHaveAttribute('href', '/contributors/author3/')
+  })
+
+  it('should have proper styling for clickable badge', () => {
+    render(<ContributorsPage />)
+
+    const aliceBadge = screen.getByRole('link', { name: /5 contributions/i })
+    expect(aliceBadge).toHaveClass('totalBadge')
+  })
 })

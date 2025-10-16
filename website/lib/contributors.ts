@@ -14,6 +14,20 @@ export interface ContributorStats {
   obstacles: number
 }
 
+export interface PatternSummary {
+  slug: string
+  title: string
+  category: PatternCategory
+}
+
+export interface ContributorDetail extends ContributorStats {
+  contributions: {
+    patterns: PatternSummary[]
+    antiPatterns: PatternSummary[]
+    obstacles: PatternSummary[]
+  }
+}
+
 interface AuthorCounts {
   patterns: number
   antiPatterns: number
@@ -84,4 +98,68 @@ export function getContributorStats(): ContributorStats[] {
     }
     return a.name.localeCompare(b.name)
   })
+}
+
+export function getContributorDetailById(authorId: string): ContributorDetail | null {
+  const author = getAuthorById(authorId)
+
+  if (!author) {
+    return null
+  }
+
+  const categories: PatternCategory[] = ['patterns', 'anti-patterns', 'obstacles']
+
+  const patternsList: PatternSummary[] = []
+  const antiPatternsList: PatternSummary[] = []
+  const obstaclesList: PatternSummary[] = []
+
+  categories.forEach(category => {
+    const patterns = getAllPatterns(category)
+
+    patterns.forEach(pattern => {
+      if (!pattern.authors || !pattern.authors.includes(authorId)) {
+        return
+      }
+
+      const summary: PatternSummary = {
+        slug: pattern.slug,
+        title: pattern.title,
+        category: pattern.category
+      }
+
+      if (category === 'patterns') {
+        patternsList.push(summary)
+      } else if (category === 'anti-patterns') {
+        antiPatternsList.push(summary)
+      } else if (category === 'obstacles') {
+        obstaclesList.push(summary)
+      }
+    })
+  })
+
+  const patternsCount = patternsList.length
+  const antiPatternsCount = antiPatternsList.length
+  const obstaclesCount = obstaclesList.length
+  const totalCount = patternsCount + antiPatternsCount + obstaclesCount
+
+  if (totalCount === 0) {
+    return null
+  }
+
+  return {
+    authorId,
+    name: author.name,
+    github: author.github,
+    ...(author.url && { url: author.url }),
+    avatarUrl: getGithubAvatarUrl(author.github),
+    total: totalCount,
+    patterns: patternsCount,
+    antiPatterns: antiPatternsCount,
+    obstacles: obstaclesCount,
+    contributions: {
+      patterns: patternsList,
+      antiPatterns: antiPatternsList,
+      obstacles: obstaclesList
+    }
+  }
 }

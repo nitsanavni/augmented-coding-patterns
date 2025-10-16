@@ -52,9 +52,12 @@ export default function ContributorsPage() {
               </div>
 
               <div className={styles.contributorStats}>
-                <span className={styles.totalBadge}>
+                <Link
+                  href={`/contributors/${contributor.authorId}/`}
+                  className={styles.totalBadge}
+                >
                   {contributor.total} contribution{contributor.total !== 1 ? 's' : ''}
-                </span>
+                </Link>
               </div>
 
               {breakdownItems.length > 0 && (
