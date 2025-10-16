@@ -40,6 +40,7 @@ graph LR
   patterns/reverse-direction -->|solves| anti-patterns/answer-injection
   patterns/take-all-paths -->|solves| obstacles/non-determinism
   patterns/approved-fixtures -->|solves| obstacles/hallucinations
+  patterns/approved-logs -->|solves| obstacles/hallucinations
 
   %% Pattern → Pattern relationships (enables, uses, similar, alternative)
   patterns/references -->|enables| patterns/knowledge-composition
@@ -56,12 +57,15 @@ graph LR
   patterns/show-me-i-will-repeat-automate -->|uses| patterns/extract-knowledge
   patterns/chunking -->|uses| patterns/focused-agent
   patterns/approved-fixtures -->|uses| patterns/feedback-loop
+  patterns/approved-fixtures -->|uses| patterns/constrained-tests
+  patterns/approved-logs -->|uses| patterns/constrained-tests
   patterns/feedback-loop <-->|similar| patterns/playgrounds
   patterns/feedback-loop <-->|similar| patterns/chain-of-small-steps
   patterns/chain-of-small-steps <-->|similar| patterns/offload-deterministic
   patterns/happy-to-delete <-->|similar| patterns/parallel-implementations
   patterns/happy-to-delete <-->|similar| patterns/playgrounds
   patterns/approved-fixtures <-->|similar| patterns/check-alignment
+  patterns/approved-fixtures <-->|similar| patterns/approved-logs
 
   %% Anti-pattern → Obstacle relationships (causes)
   anti-patterns/distracted-agent -->|causes| obstacles/limited-focus
