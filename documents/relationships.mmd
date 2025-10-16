@@ -46,6 +46,9 @@ graph LR
   patterns/active-partner -->|solves| obstacles/keeping-up
   patterns/feedback-loop -->|solves| obstacles/keeping-up
   patterns/constrained-tests -->|solves| obstacles/keeping-up
+  patterns/active-partner -->|solves| anti-patterns/vibe-coding
+  patterns/feedback-loop -->|solves| anti-patterns/vibe-coding
+  patterns/constrained-tests -->|solves| anti-patterns/vibe-coding
 
   %% Pattern → Pattern relationships (enables, uses, similar, alternative)
   patterns/references -->|enables| patterns/knowledge-composition
@@ -94,3 +97,4 @@ graph LR
   obstacles/obedient-contractor -->|related| anti-patterns/silent-misalignment
   obstacles/compliance-bias -->|causes| anti-patterns/silent-misalignment
   obstacles/black-box-ai -->|causes| anti-patterns/silent-misalignment
+  obstacles/keeping-up -->|causes| anti-patterns/vibe-coding
