@@ -2,10 +2,10 @@
 authors: [ivett_ordog]
 ---
 
-# Vibe Coding (Anti-pattern)
+# Flying Blind (Anti-pattern)
 
 ## Problem
-Engineers can't keep up with reviewing AI-generated code, so they give up and just let the AI loose without any oversight. "The vibes feel right, ship it!"
+Engineers can't keep up with reviewing AI-generated code, so they give up and fall back to excessive vibe coding.
 
 ## What Goes Wrong
 Without review, bugs accumulate silently. Code quality degrades. Technical debt piles up. Nobody understands the codebase anymore. When things inevitably break, debugging is nearly impossible because no one knows what the AI built or why.
