@@ -41,6 +41,8 @@ graph LR
   patterns/take-all-paths -->|solves| obstacles/non-determinism
   patterns/approved-fixtures -->|solves| obstacles/hallucinations
   patterns/approved-logs -->|solves| obstacles/hallucinations
+  patterns/approved-logs -->|solves| obstacles/black-box-ai
+  patterns/constrained-tests -->|solves| obstacles/non-determinism
 
   %% Pattern → Pattern relationships (enables, uses, similar, alternative)
   patterns/references -->|enables| patterns/knowledge-composition
