@@ -63,6 +63,13 @@
   min-width: 0;
 }
 
+.patternAuthors {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: var(--space-md);
+}
+
 .patternTitle {
   font-size: var(--font-size-xl);
   font-weight: 600;
@@ -132,5 +139,9 @@
 
   .patternTitle {
     font-size: var(--font-size-lg);
+  }
+
+  .patternAuthors {
+    margin-left: var(--space-sm);
   }
 }

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getAllPatterns } from "@/lib/markdown";
 import { getCategoryConfig, isValidCategory } from "@/app/lib/category-config";
 import { PatternCategory } from "@/lib/types";
+import CompactAuthors from "@/app/components/CompactAuthors";
 import styles from "../pattern-list.module.css";
 
 interface CategoryPageProps {
@@ -55,6 +56,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <div className={styles.patternContent}>
               <h2 className={styles.patternTitle}>{pattern.title}</h2>
             </div>
+            {pattern.authors && pattern.authors.length > 0 && (
+              <div className={styles.patternAuthors}>
+                <CompactAuthors authors={pattern.authors} />
+              </div>
+            )}
           </Link>
         ))}
       </div>

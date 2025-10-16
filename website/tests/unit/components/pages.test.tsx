@@ -224,6 +224,93 @@ describe('Category List Page', () => {
     expect(patternHeadings).toHaveLength(2)
   })
 
+  describe('Author Display', () => {
+    const mockPatternsWithAuthors = [
+      {
+        title: 'Pattern With Single Author',
+        slug: 'pattern-single-author',
+        category: 'patterns' as const,
+        content: '# Pattern With Single Author\n\nTest content',
+        emojiIndicator: '✅',
+        rawContent: '---\nauthors: [lada_kesseler]\n---\n# Pattern With Single Author\n\nTest content',
+        authors: ['lada_kesseler']
+      },
+      {
+        title: 'Pattern With Multiple Authors',
+        slug: 'pattern-multiple-authors',
+        category: 'patterns' as const,
+        content: '# Pattern With Multiple Authors\n\nMore content',
+        emojiIndicator: '🎯',
+        rawContent: '---\nauthors: [lada_kesseler, ivett_ordog]\n---\n# Pattern With Multiple Authors\n\nMore content',
+        authors: ['lada_kesseler', 'ivett_ordog']
+      },
+      {
+        title: 'Pattern Without Authors',
+        slug: 'pattern-no-authors',
+        category: 'patterns' as const,
+        content: '# Pattern Without Authors\n\nSome content',
+        emojiIndicator: '📝',
+        rawContent: '---\n---\n# Pattern Without Authors\n\nSome content'
+      }
+    ]
+
+    beforeEach(() => {
+      mockGetAllPatterns.mockReturnValue(mockPatternsWithAuthors)
+    })
+
+    it('renders author names for patterns with single author', async () => {
+      const params = Promise.resolve({ category: 'patterns' })
+      render(await CategoryPage({ params }))
+
+      expect(screen.getByText('Lada Kesseler')).toBeInTheDocument()
+    })
+
+    it('renders author names for patterns with multiple authors', async () => {
+      const params = Promise.resolve({ category: 'patterns' })
+      render(await CategoryPage({ params }))
+
+      expect(screen.getByText('Lada Kesseler, Ivett Ördög')).toBeInTheDocument()
+    })
+
+    it('renders author display on the right side of pattern card', async () => {
+      const params = Promise.resolve({ category: 'patterns' })
+      const { container } = render(await CategoryPage({ params }))
+
+      const authorDisplay = container.querySelector('.patternAuthors')
+      expect(authorDisplay).toBeInTheDocument()
+    })
+
+    it('does not render author section when pattern has no authors', async () => {
+      const params = Promise.resolve({ category: 'patterns' })
+      const { container } = render(await CategoryPage({ params }))
+
+      const patternCards = container.querySelectorAll('.patternCard')
+      const patternWithoutAuthors = Array.from(patternCards).find(card =>
+        card.textContent?.includes('Pattern Without Authors')
+      )
+
+      expect(patternWithoutAuthors).toBeInTheDocument()
+      const authorSection = patternWithoutAuthors?.querySelector('.patternAuthors')
+      expect(authorSection).toBeNull()
+    })
+
+    it('maintains proper layout with emoji, title, and authors', async () => {
+      const params = Promise.resolve({ category: 'patterns' })
+      const { container } = render(await CategoryPage({ params }))
+
+      const firstCard = container.querySelector('.patternCard')
+      expect(firstCard).toBeInTheDocument()
+
+      const emoji = firstCard?.querySelector('.patternEmoji')
+      const content = firstCard?.querySelector('.patternContent')
+      const authors = firstCard?.querySelector('.patternAuthors')
+
+      expect(emoji).toBeInTheDocument()
+      expect(content).toBeInTheDocument()
+      expect(authors).toBeInTheDocument()
+    })
+  })
+
   describe('Semantic HTML', () => {
     it('uses h1 for category title', async () => {
       const params = Promise.resolve({ category: 'patterns' })
