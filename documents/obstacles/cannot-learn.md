@@ -16,4 +16,3 @@ LLMs have two fundamental limitations that prevent further learning:
 - Knowledge vanishes when a session resets or starts fresh
 - The model cannot adapt to your codebase or preferences through experience
 - Any lasting memory must be explicitly managed through external means (files, notes, configurations, etc)
-- 

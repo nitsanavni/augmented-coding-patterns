@@ -5,12 +5,15 @@ authors: [lada_kesseler]
 # Context Rot (Obstacle)
 
 ## Description
-Context degrades as conversation grows over time. Earlier instructions lose influence. Signal gets buried under noise and repetition.
+Context degrades as the conversation grows. The model stops following earlier instructions, and performance drops unpredictably This happens long before you hit the context window limit.
+
+Context doesn't decay evenly; it fades in zones:
+- **Focus zone**: Instructions followed reliably
+- **Effective context**: Still usable but weakening. Feels productive, yet earlier guidance is starting to be ignored or de-prioritized
+- **Red zone**: Past instructions are routinely lost or contradicted.
 
 ## Impact
-LLM stops following earlier instructions. Happens long before hitting context window limit.
-
-Performance decays through three zones:
-- **Focus zone**: Everything followed reliably
-- **Effective context**: Decent but degrading
-- **Context window**: Unreliable, rotting
+- Earlier instructions lose influence as conversation progresses
+- The same question may yield very different results later in the thread
+- You can't rely on what the model will remember or follow
+- Forces frequent resets to maintain quality
