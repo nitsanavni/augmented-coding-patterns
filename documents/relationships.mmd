@@ -32,10 +32,10 @@ graph LR
   patterns/offload-deterministic -->|solves| obstacles/non-determinism
   patterns/parallel-implementations -->|solves| obstacles/non-determinism
   patterns/playgrounds -->|solves| anti-patterns/perfect-recall-fallacy
-  patterns/references -->|solves| anti-patterns/distracted-agent
-  patterns/references -->|solves| obstacles/limited-focus
-  patterns/references -->|solves| obstacles/context-rot
-  patterns/references -->|solves| anti-patterns/perfect-recall-fallacy
+  patterns/reference-docs -->|solves| anti-patterns/distracted-agent
+  patterns/reference-docs -->|solves| obstacles/limited-focus
+  patterns/reference-docs -->|solves| obstacles/context-rot
+  patterns/reference-docs -->|solves| anti-patterns/perfect-recall-fallacy
   patterns/reminders -->|solves| obstacles/context-rot
   patterns/reverse-direction -->|solves| anti-patterns/answer-injection
   patterns/take-all-paths -->|solves| obstacles/non-determinism
@@ -51,9 +51,9 @@ graph LR
   patterns/constrained-tests -->|solves| anti-patterns/flying-blind
 
   %% Pattern → Pattern relationships (enables, uses, similar, alternative)
-  patterns/references -->|enables| patterns/knowledge-composition
+  patterns/reference-docs -->|enables| patterns/knowledge-composition
   patterns/context-management -->|uses| patterns/ground-rules
-  patterns/context-management -->|uses| patterns/references
+  patterns/context-management -->|uses| patterns/reference-docs
   patterns/context-management -->|uses| patterns/knowledge-document
   patterns/context-management -->|uses| patterns/extract-knowledge
   patterns/context-management -->|uses| patterns/knowledge-checkpoint

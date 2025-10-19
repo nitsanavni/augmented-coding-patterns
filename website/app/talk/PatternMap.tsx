@@ -3,15 +3,16 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import styles from "./PatternMap.module.css";
 import PatternModal from "./PatternModal";
+import { PatternContent } from "@/lib/types";
 
 interface PatternMapProps {
-  patternDataByNumber: Record<string, any>;
-  patternDataByLabel: Record<string, any>;
+  patternDataByNumber: Record<string, PatternContent>;
+  patternDataByLabel: Record<string, PatternContent>;
 }
 
 export default function PatternMap({ patternDataByNumber, patternDataByLabel }: PatternMapProps) {
   const [svgContent, setSvgContent] = useState<string>("");
-  const [selectedPattern, setSelectedPattern] = useState<any>(null);
+  const [selectedPattern, setSelectedPattern] = useState<PatternContent | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export default function PatternMap({ patternDataByNumber, patternDataByLabel }: 
     return () => {
       container.removeEventListener('click', handleClick);
     };
-  }, [svgContent]);
+  }, [svgContent, patternDataByNumber, patternDataByLabel]);
 
   const closeModal = useCallback(() => {
     setSelectedPattern(null);

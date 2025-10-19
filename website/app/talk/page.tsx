@@ -1,6 +1,12 @@
 import PatternMap from "./PatternMap";
 import { getAllPatterns } from "@/lib/markdown";
+import { PatternContent } from "@/lib/types";
 import mapIndex from "@/public/maps/map-index.json";
+
+type PatternData = PatternContent & {
+  name: string;
+  category: string;
+};
 
 export default function TalkPage() {
   const allPatterns = [
@@ -9,8 +15,8 @@ export default function TalkPage() {
     ...getAllPatterns("obstacles")
   ];
 
-  const patternDataByNumber: Record<string, any> = {};
-  const patternDataByLabel: Record<string, any> = {};
+  const patternDataByNumber: Record<string, PatternData> = {};
+  const patternDataByLabel: Record<string, PatternContent> = {};
 
   Object.entries(mapIndex).forEach(([number, info]) => {
     const pattern = allPatterns.find(p => p.slug === info.slug);
