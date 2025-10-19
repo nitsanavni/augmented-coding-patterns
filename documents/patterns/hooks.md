@@ -2,7 +2,7 @@
 authors: [ivett_ordog]
 ---
 
-# Habit Hooks
+# Hooks
 
 ## Problem
 Enforcing high coding standards without bloating AI's context with extensive style guides is challenging. Generic reminders either get forgotten as conversations progress or consume too much context when repeated constantly. You want AI to follow your specific coding practices, but explaining them repeatedly is inefficient and unreliable.

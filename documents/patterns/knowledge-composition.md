@@ -5,7 +5,7 @@ authors: [lada_kesseler]
 # Knowledge Composition
 
 ## Enabled by
-[[references.md]]
+[[reference-docs.md]]
 
 ## Problem
 When knowledge is kept as one big blob, you're stuck at low level.

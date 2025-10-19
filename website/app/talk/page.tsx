@@ -10,6 +10,8 @@ export default function TalkPage() {
   ];
 
   const patternDataByNumber: Record<string, any> = {};
+  const patternDataByLabel: Record<string, any> = {};
+
   Object.entries(mapIndex).forEach(([number, info]) => {
     const pattern = allPatterns.find(p => p.slug === info.slug);
     if (pattern) {
@@ -20,9 +22,16 @@ export default function TalkPage() {
     }
   });
 
+  allPatterns.forEach(pattern => {
+    patternDataByLabel[pattern.title] = pattern;
+  });
+
   return (
     <div>
-      <PatternMap patternData={patternDataByNumber} />
+      <PatternMap
+        patternDataByNumber={patternDataByNumber}
+        patternDataByLabel={patternDataByLabel}
+      />
     </div>
   );
 }

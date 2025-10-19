@@ -5,12 +5,13 @@ import styles from "./PatternMap.module.css";
 import PatternModal from "./PatternModal";
 
 interface PatternMapProps {
-  patternData: Record<string, any>;
+  patternDataByNumber: Record<string, any>;
+  patternDataByLabel: Record<string, any>;
 }
 
-export default function PatternMap({ patternData }: PatternMapProps) {
+export default function PatternMap({ patternDataByNumber, patternDataByLabel }: PatternMapProps) {
   const [svgContent, setSvgContent] = useState<string>("");
-  const [selectedPattern, setSelectedPattern] = useState<string | null>(null);
+  const [selectedPattern, setSelectedPattern] = useState<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,8 +30,12 @@ export default function PatternMap({ patternData }: PatternMapProps) {
       const node = target.closest('.interactive-node');
       if (node) {
         const number = node.getAttribute('data-number');
-        if (number) {
-          setSelectedPattern(number);
+        const label = node.getAttribute('data-label');
+
+        if (number && patternDataByNumber[number]) {
+          setSelectedPattern(patternDataByNumber[number]);
+        } else if (label && patternDataByLabel[label]) {
+          setSelectedPattern(patternDataByLabel[label]);
         }
       }
     };
@@ -70,8 +75,8 @@ export default function PatternMap({ patternData }: PatternMapProps) {
         className={styles.mapContainer}
         dangerouslySetInnerHTML={{ __html: svgContent }}
       />
-      {selectedPattern && patternData[selectedPattern] && (
-        <PatternModal pattern={patternData[selectedPattern]} onClose={closeModal} />
+      {selectedPattern && (
+        <PatternModal pattern={selectedPattern} onClose={closeModal} />
       )}
     </>
   );

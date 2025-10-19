@@ -30,9 +30,9 @@
     "slug": "focused-agent"
   },
   "7": {
-    "name": "References",
+    "name": "Reference Docs",
     "category": "patterns",
-    "slug": "references"
+    "slug": "reference-docs"
   },
   "8": {
     "name": "Knowledge Composition",
@@ -85,9 +85,9 @@
     "slug": "chain-of-small-steps"
   },
   "18": {
-    "name": "Habit Hooks",
+    "name": "Hooks",
     "category": "patterns",
-    "slug": "habit-hooks"
+    "slug": "hooks"
   },
   "19": {
     "name": "Reminders",
