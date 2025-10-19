@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import styles from "./PatternMap.module.css";
 import PatternModal from "./PatternModal";
 import { PatternContent } from "@/lib/types";
+import { basePath } from "@/lib/config";
 
 interface PatternMapProps {
   patternDataByNumber: Record<string, PatternContent>;
@@ -16,7 +17,6 @@ export default function PatternMap({ patternDataByNumber, patternDataByLabel }: 
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const basePath = process.env.NODE_ENV === 'production' ? '/augmented-coding-patterns' : '';
     fetch(`${basePath}/maps/semantic_map.svg`)
       .then(res => res.text())
       .then(svg => setSvgContent(svg))
