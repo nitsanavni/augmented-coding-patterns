@@ -1,0 +1,24 @@
+.mapContainer {
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mapContainer svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mapContainer :global(.interactive-node) {
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.mapContainer :global(.interactive-node):hover {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}

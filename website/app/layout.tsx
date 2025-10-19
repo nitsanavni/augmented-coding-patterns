@@ -52,6 +52,9 @@ export default function RootLayout({
                 <Link href="/patterns" className={styles.navLink}>
                   Patterns
                 </Link>
+                <Link href="/talk" className={styles.navLink}>
+                  Talk
+                </Link>
                 <Link href="/contributors" className={styles.navLink}>
                   Contributors
                 </Link>

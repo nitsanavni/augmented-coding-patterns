@@ -313,3 +313,76 @@ img {
     --font-size-2xl: 1.25rem;
   }
 }
+
+/* Interactive Map Dark Mode Styles */
+html.dark .interactive-node text,
+html.dark .non-interactive-element text {
+  fill: #e9ecef !important;
+}
+
+html.dark path[stroke="#000000"],
+html.dark path[stroke="#000"],
+html.dark path[stroke="#1e1e1e"] {
+  stroke: #868e96 !important;
+}
+
+html.dark .interactive-node path[stroke="#000000"],
+html.dark .interactive-node path[stroke="#000"],
+html.dark .interactive-node path[stroke="#1e1e1e"],
+html.dark .non-interactive-element path[stroke="#000000"],
+html.dark .non-interactive-element path[stroke="#000"],
+html.dark .non-interactive-element path[stroke="#1e1e1e"] {
+  stroke: #e9ecef !important;
+}
+
+html.dark g[fill-opacity] {
+  fill-opacity: 1 !important;
+}
+
+html.dark g[stroke-opacity] {
+  stroke-opacity: 1 !important;
+}
+
+html.dark .interactive-node[data-color="obstacle"] path[fill="#ffc9c9"] {
+  fill: #a55858 !important;
+}
+
+html.dark .interactive-node[data-color="pattern"] path[fill="#b2f2bb"] {
+  fill: #69a376 !important;
+}
+
+html.dark .interactive-node[data-color="antipattern"] path[fill="#ffec99"] {
+  fill: #c9b458 !important;
+}
+
+html.dark .non-interactive-element[data-type="Anti-Pattern"] path[fill="#ffec99"] {
+  fill: #c9b458 !important;
+}
+
+html.dark .non-interactive-element[data-type="Obstacle"] path[fill="#ffc9c9"] {
+  fill: #a55858 !important;
+}
+
+html.dark .non-interactive-element[data-type="Pattern"] path[fill="#b2f2bb"] {
+  fill: #69a376 !important;
+}
+
+html.dark .non-interactive-element[data-type="Pit Stop"] path[fill="#a5d8ff"] {
+  fill: #214469 !important;
+}
+
+html.dark .non-interactive-element[data-type="Pit Stop"] path[stroke] {
+  stroke: #ffffff !important;
+}
+
+html.dark .non-interactive-element[data-type="Pit Stop"] text {
+  fill: #ffffff !important;
+}
+
+html.dark .interactive-node g[data-element-type="number"] text {
+  fill: #000000 !important;
+}
+
+html.dark .interactive-node:hover {
+  filter: brightness(1.15) drop-shadow(0 0 8px rgba(92, 124, 250, 0.3));
+}
