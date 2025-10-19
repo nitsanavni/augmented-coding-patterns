@@ -16,7 +16,8 @@ export default function PatternMap({ patternDataByNumber, patternDataByLabel }: 
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetch("/maps/semantic_map.svg")
+    const basePath = process.env.NODE_ENV === 'production' ? '/augmented-coding-patterns' : '';
+    fetch(`${basePath}/maps/semantic_map.svg`)
       .then(res => res.text())
       .then(svg => setSvgContent(svg))
       .catch(err => console.error("Failed to load map:", err));
