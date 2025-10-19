@@ -15,7 +15,8 @@
 
 .mapContainer :global(.interactive-node) {
   cursor: pointer;
-  transition: transform 0.2s ease, filter 0.2s ease;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  transform-origin: center;
 }
 
 .mapContainer :global(.interactive-node):hover {
