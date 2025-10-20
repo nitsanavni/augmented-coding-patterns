@@ -31,5 +31,5 @@
 - [x] Add sidebar filters skeleton (static controls, stubbed list).
 - [x] Load real catalog data and group by type.
 - [x] Implement selection flow to show chosen item details.
-- [ ] Wire filtering logic for type/author.
+- [x] Wire filtering logic for type/author.
 - [ ] UX polish: icons, responsive tweaks, empty states, keyboard focus.

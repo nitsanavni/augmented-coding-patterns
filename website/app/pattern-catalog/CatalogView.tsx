@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import styles from "./page.module.css";
@@ -19,9 +19,108 @@ interface SelectedCatalogItem {
   item: CatalogPreviewItem;
 }
 
+interface AuthorOption {
+  id: string;
+  name: string;
+}
+
+function extractAuthorOptions(groups: CatalogGroupData[]): AuthorOption[] {
+  const authorMap = new Map<string, string>();
+
+  groups.forEach((group) => {
+    group.items.forEach((item) => {
+      item.authorIds.forEach((authorId, index) => {
+        if (!authorMap.has(authorId)) {
+          const name = item.authorNames[index] ?? item.authorNames[0] ?? authorId;
+          authorMap.set(authorId, name);
+        }
+      });
+    });
+  });
+
+  return Array.from(authorMap.entries())
+    .map(([id, name]) => ({ id, name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
 export default function CatalogView({ groups }: CatalogViewProps) {
+  const [activeTypes, setActiveTypes] = useState<string[]>(() => groups.map((group) => group.category));
+  const [activeAuthorIds, setActiveAuthorIds] = useState<string[]>(() => {
+    const options = extractAuthorOptions(groups);
+    return options.map((option) => option.id);
+  });
+
   const [selected, setSelected] = useState<SelectedCatalogItem | null>(null);
   const selectedConfig = selected ? getCategoryConfig(selected.category) : null;
+
+  const typeOptions = useMemo(
+    () => groups.map(({ category, label }) => ({ category, label })),
+    [groups],
+  );
+
+  const authorOptions = useMemo(() => extractAuthorOptions(groups), [groups]);
+
+  const allAuthorsSelected = activeAuthorIds.length === authorOptions.length || authorOptions.length === 0;
+
+  const filteredGroups = useMemo(() => {
+    return groups
+      .map((group) => {
+        if (!activeTypes.includes(group.category)) {
+          return { ...group, items: [] };
+        }
+
+        const items = group.items.filter((item) => {
+          if (allAuthorsSelected) {
+            return true;
+          }
+
+          if (item.authorIds.length === 0) {
+            return false;
+          }
+
+          return item.authorIds.some((authorId) => activeAuthorIds.includes(authorId));
+        });
+
+        return { ...group, items };
+      })
+      .filter((group) => group.items.length > 0);
+  }, [groups, activeTypes, activeAuthorIds, allAuthorsSelected]);
+
+  useEffect(() => {
+    if (!selected) {
+      return;
+    }
+
+    const stillVisible = filteredGroups.some(
+      (group) =>
+        group.category === selected.category &&
+        group.items.some((item) => item.slug === selected.item.slug),
+    );
+
+    if (!stillVisible) {
+      setSelected(null);
+    }
+  }, [filteredGroups, selected]);
+
+  const toggleType = (category: string) => {
+    setActiveTypes((prev) => {
+      if (prev.includes(category)) {
+        return prev.length === 1 ? prev : prev.filter((value) => value !== category);
+      }
+
+      return [...prev, category];
+    });
+  };
+
+  const toggleAuthor = (authorId: string) => {
+    setActiveAuthorIds((prev) => {
+      if (prev.includes(authorId)) {
+        return prev.filter((value) => value !== authorId);
+      }
+
+      return [...prev, authorId];
+    });
+  };
 
   const handleSelect = (
     event: MouseEvent<HTMLAnchorElement>,
@@ -53,69 +152,75 @@ export default function CatalogView({ groups }: CatalogViewProps) {
           <h3 className={styles.subsectionTitle}>Filter catalog</h3>
           <fieldset className={styles.filterGroup}>
             <legend className={styles.filterLabel}>Type</legend>
-            <label className={styles.checkboxLabel}>
-              <input type="checkbox" name="type" value="all" disabled defaultChecked />
-              All types
-            </label>
-            <label className={styles.checkboxLabel}>
-              <input type="checkbox" name="type" value="pattern" disabled />
-              Patterns
-            </label>
-            <label className={styles.checkboxLabel}>
-              <input type="checkbox" name="type" value="anti-pattern" disabled />
-              Anti-patterns
-            </label>
-            <label className={styles.checkboxLabel}>
-              <input type="checkbox" name="type" value="obstacle" disabled />
-              Obstacles
-            </label>
+            {typeOptions.map(({ category, label }) => (
+              <label key={category} className={styles.checkboxLabel}>
+                <input
+                  type="checkbox"
+                  name={`type-${category}`}
+                  value={category}
+                  checked={activeTypes.includes(category)}
+                  onChange={() => toggleType(category)}
+                />
+                {label}
+              </label>
+            ))}
           </fieldset>
-          <fieldset className={styles.filterGroup}>
-            <legend className={styles.filterLabel}>Author</legend>
-            <label className={styles.checkboxLabel}>
-              <input type="checkbox" name="author" value="all" disabled defaultChecked />
-              All authors
-            </label>
-            <label className={styles.checkboxLabel}>
-              <input type="checkbox" name="author" value="placeholder-author" disabled />
-              Placeholder author
-            </label>
-          </fieldset>
+          {authorOptions.length > 0 && (
+            <fieldset className={styles.filterGroup}>
+              <legend className={styles.filterLabel}>Author</legend>
+              {authorOptions.map((option) => (
+                <label key={option.id} className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    name={`author-${option.id}`}
+                    value={option.id}
+                    checked={activeAuthorIds.includes(option.id)}
+                    onChange={() => toggleAuthor(option.id)}
+                  />
+                  {option.name}
+                </label>
+              ))}
+            </fieldset>
+          )}
         </div>
         <section className={styles.listSection} aria-labelledby="pattern-catalog-preview-heading">
           <h3 className={styles.subsectionTitle} id="pattern-catalog-preview-heading">
             Catalog preview
           </h3>
-          {groups.map((group) => (
-            <div key={group.category} className={styles.catalogGroup}>
-              <h4 className={styles.groupTitle}>
-                {group.label} ({group.items.length})
-              </h4>
-              <ul className={styles.catalogList} aria-label={group.label}>
-                {group.items.map((item) => (
-                  <li
-                    key={item.slug}
-                    className={`${styles.catalogListItem} ${
-                      isSelected(group.label, item) ? styles.catalogListItemActive : ""
-                    }`}
-                  >
-                    <Link
-                      href={`/${group.category}/${item.slug}`}
-                      className={styles.catalogLink}
-                      onClick={(event) => handleSelect(event, group.label, group.category, item)}
+          {filteredGroups.length === 0 ? (
+            <p className={styles.emptyState}>No entries match these filters yet.</p>
+          ) : (
+            filteredGroups.map((group) => (
+              <div key={group.category} className={styles.catalogGroup}>
+                <h4 className={styles.groupTitle}>
+                  {group.label} ({group.items.length})
+                </h4>
+                <ul className={styles.catalogList} aria-label={group.label}>
+                  {group.items.map((item) => (
+                    <li
+                      key={item.slug}
+                      className={`${styles.catalogListItem} ${
+                        isSelected(group.label, item) ? styles.catalogListItemActive : ""
+                      }`}
                     >
-                      {item.emojiIndicator && (
-                        <span aria-hidden="true" className={styles.catalogEmoji}>
-                          {item.emojiIndicator}
-                        </span>
-                      )}
-                      <span className={styles.catalogTitle}>{item.title}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+                      <Link
+                        href={`/${group.category}/${item.slug}`}
+                        className={styles.catalogLink}
+                        onClick={(event) => handleSelect(event, group.label, group.category, item)}
+                      >
+                        {item.emojiIndicator && (
+                          <span aria-hidden="true" className={styles.catalogEmoji}>
+                            {item.emojiIndicator}
+                          </span>
+                        )}
+                        <span className={styles.catalogTitle}>{item.title}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          )}
         </section>
       </aside>
       <section data-testid={PATTERN_CATALOG_TEST_IDS.detail} className={styles.detail}>

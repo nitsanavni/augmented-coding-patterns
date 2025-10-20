@@ -92,7 +92,7 @@
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--border-radius-sm);
   transition: all var(--transition-fast);
-  cursor: not-allowed;
+  cursor: pointer;
 }
 
 .checkboxLabel:hover {
@@ -101,7 +101,6 @@
 
 .checkboxLabel input {
   accent-color: var(--color-accent);
-  cursor: not-allowed;
   width: 16px;
   height: 16px;
 }
@@ -173,6 +172,12 @@
 
 .catalogLink:hover .catalogTitle {
   color: var(--color-text-primary);
+}
+
+.emptyState {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  margin: 0;
 }
 
 .catalogEmoji {

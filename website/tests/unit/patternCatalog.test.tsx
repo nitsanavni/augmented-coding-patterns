@@ -44,10 +44,10 @@ describe('PatternCatalogPage', () => {
 
     expect(filtersHeading).toBeInTheDocument()
     typeOptions.forEach((checkbox) => {
-      expect(checkbox).toBeDisabled()
+      expect(checkbox).not.toBeDisabled()
     })
     authorOptions.forEach((checkbox) => {
-      expect(checkbox).toBeDisabled()
+      expect(checkbox).not.toBeDisabled()
     })
     expect(within(patternList).getAllByRole('listitem').length).toBeGreaterThan(0)
     expect(within(antiPatternList).getAllByRole('listitem').length).toBeGreaterThan(0)
@@ -100,5 +100,83 @@ describe('PatternCatalogPage', () => {
     expect(within(detailPane).getByText(/Push back on unclear instructions/i)).toBeInTheDocument()
     expect(within(detailPane).getByText(/Documented by/i)).toHaveTextContent(/Lada Kesseler/i)
     expect(within(detailPane).queryByText(/Open full entry/i)).not.toBeInTheDocument()
+  })
+
+  it('filters catalog entries by type selections', async () => {
+    const user = userEvent.setup()
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
+    const typeGroup = screen.getByRole('group', { name: /Type/i })
+
+    const patternsCheckbox = within(typeGroup).getByLabelText(/^Patterns$/i)
+    const antiPatternsCheckbox = within(typeGroup).getByLabelText(/^Anti-patterns$/i)
+    const obstaclesCheckbox = within(typeGroup).getByLabelText(/^Obstacles$/i)
+
+    expect(patternsCheckbox).toBeChecked()
+    expect(antiPatternsCheckbox).toBeChecked()
+    expect(obstaclesCheckbox).toBeChecked()
+
+    await user.click(patternsCheckbox)
+    await user.click(antiPatternsCheckbox)
+
+    expect(within(catalogRegion).queryByRole('heading', { name: /Patterns \(\d+\)/i })).not.toBeInTheDocument()
+    expect(within(catalogRegion).queryByRole('heading', { name: /Anti-patterns \(\d+\)/i })).not.toBeInTheDocument()
+    expect(within(catalogRegion).getByRole('heading', { name: /Obstacles \(\d+\)/i })).toBeInTheDocument()
+
+    // Restore selection
+    await user.click(patternsCheckbox)
+    expect(within(catalogRegion).getByRole('heading', { name: /Patterns \(\d+\)/i })).toBeInTheDocument()
+  })
+
+  it('filters catalog entries by author selections', async () => {
+    const user = userEvent.setup()
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
+    const typeGroup = screen.getByRole('group', { name: /Type/i })
+    const authorGroup = screen.getByRole('group', { name: /Author/i })
+
+    const patternsCheckbox = within(typeGroup).getByLabelText(/^Patterns$/i)
+    const antiPatternsCheckbox = within(typeGroup).getByLabelText(/^Anti-patterns$/i)
+    const obstaclesCheckbox = within(typeGroup).getByLabelText(/^Obstacles$/i)
+
+    const authorCheckboxes = within(authorGroup).getAllByRole('checkbox')
+    const ivettCheckbox = within(authorGroup).getByLabelText(/Ivett/i)
+
+    // Focus on patterns only
+    await user.click(antiPatternsCheckbox)
+    await user.click(obstaclesCheckbox)
+
+    // Leave only Ivett selected
+    for (const checkbox of authorCheckboxes) {
+      if (checkbox !== ivettCheckbox && checkbox.checked) {
+        await user.click(checkbox)
+      }
+    }
+
+    expect(ivettCheckbox).toBeChecked()
+
+    const expectedIvettPatterns = getAllPatterns('patterns')
+      .filter((pattern) => pattern.authors?.includes('ivett_ordog'))
+      .sort((a, b) => a.title.localeCompare(b.title))
+
+    const patternHeading = within(catalogRegion).getByRole('heading', {
+      name: new RegExp(`Patterns \\(${expectedIvettPatterns.length}\\)`, 'i'),
+    })
+    expect(patternHeading).toBeInTheDocument()
+
+    const patternList = within(catalogRegion).getByRole('list', { name: /^Patterns$/i })
+    const patternLinks = within(patternList).getAllByRole('link')
+
+    expect(patternLinks).toHaveLength(expectedIvettPatterns.length)
+    patternLinks.forEach((link, index) => {
+      expect(link).toHaveTextContent(expectedIvettPatterns[index].title)
+    })
+
   })
 })
