@@ -5,18 +5,35 @@ authors: [lada_kesseler]
 # Noise Cancellation
 
 ## Problem
-AI is verbose by default, creating poor signal-to-noise ratio. Responses contain more detail than you need, and documents accumulate bloat over time (document rot) - making both hard to scan and work with.
+AI is verbose by default, creating poor signal-to-noise ratio. Responses overwhelm you with detail, and documents accumulate bloat and outdated information over time ("document rot") - making everything hard to scan and work with.
 
 ## Pattern
-Explicitly ask AI to be more succinct - strip filler, compress to essence.
+Explicitly ask AI to be more succinct - strip filler, compress to essence. Don't let bloat accumulate.
 
-**For responses:** "Much more succinct please", "give me a TLDR", "make it shorter", "give me architecture on a high level", "higher level of abstraction"
+**For responses:** 
+- "Much more succinct please" (use this liberally)
+- "shorter"
+- "Higher level of abstraction"
+- "Give me TLDR"
 
-**For documents:** Periodically compress knowledge documents - remove outdated info and noise, keep them scannable
-Over-compression might strip nuance, but Git preserves history if you need it back, and you can always zoom in for details when needed.
+**For documents:** 
+- Regularly compress knowledge documents - ask AI to remove outdated info and noise
+- Delete mercilessly - Git is your friend, you can always get it back
+- Think of files as temporary vs permanent - toss the temporary ones frequently
 
-## Example 1: Response control
-Just started learning Rust and asked about Cargo.toml purpose in Rust. AI gave overwhelming detail. Asked "much more succinct please" - got answer at the level I actually cared about.
+## Examples
 
-## Example 2: Document maintenance
-Ground rules document grew bloated with AI additions. Asked AI to make it succinct - removed dead information, kept it scannable and manageable.
+**Documentation:**
+Force AI to keep documentation extremely succinct. Helps handle document rot, keeps documentation scannable for humans and maintainable.
+
+**Debugging:**
+Higher level debugging is often possible. Ask AI to explain the problematic code block in English on a high level. The nonsense becomes obvious fast.
+
+**Learning New Tools:**
+Ask "What's Cargo.toml?" and get a wall of text about Rust's build system, dependencies, package metadata,
+workspace configuration... while you are just starting and don't need all of these details yet.
+
+Say "Much more succinct please" and get: "It's Rust's project configuration file - like package.json. Has
+metadata, dependencies, build settings."
+
+The level of detail now matches your level of curiosity.
