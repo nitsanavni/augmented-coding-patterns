@@ -4,22 +4,17 @@ authors: [lada_kesseler]
 
 # Reference Docs
 
-## Child of
-[[knowledge-document.md]]
-
 ## Problem
-Context bloat → AI loses focus, effectiveness degrades
-Too much always-loaded information drowns out what matters for the current task
+You have knowledge you need sometimes, but not always. Loading it into ground rules would bloat context and dilute focus.
 
 ## Pattern
-On-demand knowledge documents
-- Either you ask AI to pull them or AI searches and pulls when needed
-- Not always loaded
-- Granular control over what's in context
+On-demand knowledge documents. Load them only when you need them for the current task.
+
+Unlike ground rules (always loaded), you explicitly pull in references when relevant. This keeps context focused and gives you granular control over what's loaded.
 
 ## Example
-`bash.md` - load only when writing bash scripts
-`tdd.process.md` - load only when doing TDD
-`project.md` - load only when need architecture context
-
-Keep context small, maintain focus.
+- `bash-standards.md` - load only when writing bash scripts
+- `tdd.process.md` - load only when doing TDD
+- `architecture.md` - load when you need to quickly explain architecture of your project
+ 
+Build a library of these. Pull them in as needed.
