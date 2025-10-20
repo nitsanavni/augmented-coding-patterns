@@ -33,12 +33,10 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const filtersHeading = screen.getByRole('heading', { level: 3, name: /Filter catalog/i })
     const typeToggle = screen.getByRole('button', { name: /Type filter/i })
     const authorToggle = screen.getByRole('button', { name: /Author filter/i })
     const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
 
-    expect(filtersHeading).toBeInTheDocument()
     expect(typeToggle).toHaveTextContent(/All types/i)
 
     await user.click(typeToggle)
@@ -135,11 +133,9 @@ describe('PatternCatalogPage', () => {
     await user.click(antiPatternsCheckbox)
     await user.click(typeToggle)
 
-    expect(within(catalogRegion).queryByRole('heading', { name: /Patterns \(\d+\)/i })).not.toBeInTheDocument()
-    expect(within(catalogRegion).queryByRole('heading', { name: /Anti-patterns \(\d+\)/i })).not.toBeInTheDocument()
-    expect(
-      within(catalogRegion).getByRole('heading', { name: /Obstacles \(\d+\)/i })
-    ).toBeInTheDocument()
+    expect(within(catalogRegion).queryByRole('list', { name: /^Patterns$/i })).toBeNull()
+    expect(within(catalogRegion).queryByRole('list', { name: /^Anti-patterns$/i })).toBeNull()
+    expect(within(catalogRegion).getByRole('list', { name: /^Obstacles$/i })).toBeInTheDocument()
 
     await user.click(typeToggle)
     typeMenu = screen.getByRole('group', { name: /Type filter options/i })
@@ -148,7 +144,7 @@ describe('PatternCatalogPage', () => {
     await user.click(typeToggle)
 
     expect(
-      await within(catalogRegion).findByRole('heading', { name: /Patterns/i })
+      await within(catalogRegion).findByRole('list', { name: /^Patterns$/i })
     ).toBeInTheDocument()
   })
 
@@ -188,18 +184,12 @@ describe('PatternCatalogPage', () => {
       .filter((pattern) => pattern.authors?.includes(ivettCheckbox.value))
       .sort((a, b) => a.title.localeCompare(b.title))
 
-    const patternHeading = await within(catalogRegion).findByRole('heading', {
-      name: /Patterns/i,
-    })
-    expect(patternHeading).toBeInTheDocument()
-
-    const patternList = within(catalogRegion).getByRole('list', { name: /^Patterns$/i })
+    const patternList = await within(catalogRegion).findByRole('list', { name: /^Patterns$/i })
     const patternLinks = within(patternList).getAllByRole('link')
+    const renderedTitles = patternLinks.map((link) => link.textContent?.trim())
+    const expectedTitles = expectedPatterns.map((pattern) => pattern.title)
 
-    expect(patternLinks).toHaveLength(expectedPatterns.length)
-    patternLinks.forEach((link, index) => {
-      expect(link).toHaveTextContent(expectedPatterns[index].title)
-    })
+    expect(renderedTitles).toEqual(expectedTitles)
   })
 
   it('shows reset option when filters hide all entries', async () => {
@@ -228,7 +218,7 @@ describe('PatternCatalogPage', () => {
 
     expect(typeToggle).toHaveTextContent(/All types/i)
     expect(
-      (await within(catalogRegion).findAllByRole('heading', { name: /Patterns/i })).length
-    ).toBeGreaterThan(0)
+      await within(catalogRegion).findByRole('list', { name: /^Patterns$/i })
+    ).toBeInTheDocument()
   })
 })

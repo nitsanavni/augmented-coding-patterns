@@ -189,9 +189,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
   return (
     <div className={styles.layout}>
       <aside data-testid={PATTERN_CATALOG_TEST_IDS.sidebar} className={styles.sidebar}>
-        <h2 className={styles.sectionTitle}>Browse catalog</h2>
         <div className={styles.filters}>
-          <h3 className={styles.subsectionTitle}>Filter catalog</h3>
           <div className={styles.filterGroup}>
             <button
               type="button"
