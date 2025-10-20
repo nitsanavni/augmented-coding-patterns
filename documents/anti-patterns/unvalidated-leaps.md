@@ -7,18 +7,31 @@ authors: [lada_kesseler]
 ## Problem
 AI gets stuck because it's building on unverified assumptions about the code.
 - Assumes functions return X when they return Y
-- Misinterprets errors based on wrong mental model
-- Each assumption becomes foundation for the next wrong step
+- Misinterprets errors based on a wrong mental model
+- Each assumption becomes a foundation for the next wrong step
+
+This is a human problem too - when you can't run code frequently but keep writing it, you make assumption chains. AI does the same.
 
 ## What Goes Wrong
-While debugging a cleanup script, Claude kept piling on fixes — adjusting patterns, tweaking parsing, trimming whitespace — all based on one hidden assumption: that the AppleScript output it saw was the real session IDs.
-
-But that assumption was wrong. AppleScript’s log doesn’t return values; it prints descriptions. The script needed return instead. Because Claude never validated that first step, every downstream fix was wasted effort — a cascade of unvalidated leaps.
-
-Only when asked to “check each command step by step” did it isolate the AppleScript call, validate the output, and see the real problem. With the base assumption corrected, the fix was trivial. All the downstream fixes were pointless until the base assumption was checked.
+AI gets stuck spinning:
+- Checks step A, step C, step V
+- Misses the wrong assumption at step B
+- Every "fix" builds on that wrong foundation
 
 ## Solution
 - When AI gets stuck, stop it and tell it to validate each step incrementally
 - Use TDD to create automatic micro-feedback loops that catch drift early. Try Predictive TDD - AI predicts test outcomes, gets surprised when wrong (like humans do), immediately corrects its mental model
 
 The key: frequent reality checks prevent assumption chains. Code's self-verifiable nature makes this possible in ways that wouldn't work for general facts.
+
+## Example
+
+**AppleScript debugging:**
+AI kept adjusting patterns, tweaking parsing, trimming whitespace - all based on one hidden assumption: AppleScript's `log` returns the session IDs.
+
+Wrong. `log` prints descriptions, doesn't return values. Needed `return` instead. Because it never validated that first step, every downstream fix was wasted effort.
+
+Asked "check each command step by step" - it isolated the AppleScript call, validated output, saw the real problem. Fix was trivial once the base assumption was checked.
+
+**This happens with humans too:**
+Early in my career, paired with someone who wrote PL/SQL for three hours without running it once. So many unvalidated assumptions. When we finally ran it, it didn't even compile.
