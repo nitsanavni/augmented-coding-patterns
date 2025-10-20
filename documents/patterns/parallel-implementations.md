@@ -5,47 +5,32 @@ authors: [lada_kesseler]
 # Parallel Implementations
 
 ## Problem
-AI outputs are non-deterministic - repeated attempts yield different results. Without structure, failed runs waste effort and diverse outputs go unused.
+AI is non-deterministic - like rolling dice. You want a three, but probably won't get it on the first try.
 
-_(See [[../obstacles/non-determinism.md]] for details)_
+What do you do? Roll five dice.
 
 ## Pattern
-Run parallel implementations from a common checkpoint to turn non-determinism into an advantage:
+Run multiple implementations in parallel from the same checkpoint:
 
-1. Plan the feature and create checkpoint (save plan + git commit)
-2. Create parallel working directories using git worktrees
-3. Launch multiple AI implementation attempts simultaneously with the same plan
-4. Each attempt produces different implementation due to non-determinism
-5. Review all approaches
+1. Create checkpoint (save plan + git commit)
+2. Fork into parallel working directories (use git worktrees or similar)
+3. Launch multiple AI implementations simultaneously
+4. Review all results
+5. Pick the best or combine elements from multiple attempts
 
-**Two complementary modes:**
+This is trading tokens (relatively cheap) for your time (expensive).
 
-### Failure Mitigation
-When AI attempts often fail outright (broken code, hallucinations, wrong approach):
-- Launch multiple implementation attempts in parallel
-- Discard failed branches and keep the working one
-- Saves time: instead of debugging sequential failures, at least one succeeds
-- Trades tokens (cheap) for time (expensive)
-- Non-determinism as **insurance** against failure
+Two complementary modes:
+- **Failure Mitigation**: Complex feature, uncertain approach. Run 3-5 parallel attempts. Some fail, some succeed. You move forward immediately instead of debugging sequential failures.
+- **Exploration of the Solution Space**: When quality matters more than speed. Generate multiple working versions, compare approaches, combine the best ideas. Works especially well for creative work: UIs, game mechanics, designs.
 
-### Exploration of the Solution Space
-When AI attempts succeed but diverge in style, design, or approach:
-- Use parallel runs to explore the space of possibilities
-- Compare variations to sharpen your understanding of the problem or solution
-- Merge the best ideas into a richer result than any single attempt could provide
-- Works especially well for creative domains: UIs, game mechanics, designs
-- Non-determinism as **fuel** for exploration
+## Examples
 
-## Example 1: Failure Mitigation
-Implementing a complex feature with uncertain approach. Run several parallel implementations. Some fail, some succeed. You can move forward immediately instead of having to restart if you get a failure from one attempt. This is essentially a trade-off between saved time and tokens.
+**Game development (Ricochet Robot):**
+Ran three parallel implementations. First version: no walls, robot didn't move - total failure. Second: mediocre. Third: movement logic worked great, loved the button styling. Combined the working movement with the better buttons.
 
-## Example 2: Exploration
-Designing a UI from scratch:
-- Launch several parallel UI implementations with same requirements
-- One has great navigation layout
-- Another has interesting color scheme and spacing
-- Another has clever responsive breakpoints
-- Combine best elements from multiple attempts into richer final design
+**UI design:**
+Run several parallel implementations. One has great layout, another has clever responsive breakpoints, third has interesting  color scheme. Borrow the best from each, combine into richer final design.
 
-## Example 3: Game Development
-Generate multiple versions of a game mechanic. Each explores the idea differently. Combine the most engaging features into a richer final design than any single attempt.
+**Designer collaboration:**
+Designer creates mockup in Figma separately. Run parallel AI implementations. Combine designer's vision with AI's working implementations.
