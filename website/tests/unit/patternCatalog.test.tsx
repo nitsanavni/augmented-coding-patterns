@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import PatternCatalogPage from '@/app/pattern-catalog/page'
 import { PATTERN_CATALOG_TEST_IDS } from '@/app/pattern-catalog/test-ids'
 
@@ -22,5 +22,21 @@ describe('PatternCatalogPage', () => {
 
     expect(sidebar).toBeInTheDocument()
     expect(detail).toBeInTheDocument()
+  })
+
+  it('shows static filter controls and a stubbed catalog list within the sidebar', async () => {
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    const filtersHeading = screen.getByRole('heading', { level: 3, name: /Filter catalog/i })
+    const typeSelect = screen.getByRole('combobox', { name: /Type/i })
+    const authorSelect = screen.getByRole('combobox', { name: /Author/i })
+    const list = screen.getByRole('list', { name: /Catalog preview/i })
+
+    expect(filtersHeading).toBeInTheDocument()
+    expect(typeSelect).toBeDisabled()
+    expect(authorSelect).toBeDisabled()
+    expect(within(list).getAllByRole('listitem')).toHaveLength(3)
   })
 })
