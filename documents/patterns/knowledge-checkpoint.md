@@ -5,24 +5,27 @@ authors: [lada_kesseler]
 # Knowledge Checkpoint
 
 ## Problem
-AI implementation attempts are non-deterministic: they may hallucinate, fail, or veer off course. Without protection, a failed run wipes out both the implementation and the planning context, forcing you to repeat valuable planning work.
+You spend 30 minutes planning a feature with AI. Then AI implements it and fails. Now you've lost both the  implementation AND the planning context. You have to explain everything again.
 
-_(See [[../obstacles/non-determinism.md]] for details)_
+Your planning time is valuable. Implementation attempts are cheap to retry.
 
 ## Pattern
 Before attempting implementation, checkpoint the plan:
 
 1. Plan the feature (with AI)
-2. Extract planning knowledge to a document (feature_todo.md, project.md, etc.)
+2. Extract planning knowledge to a document (ask AI: "Save this to feature_todo.md". Note: forcing it to be more succinct often produces better results here)
 3. Git commit = checkpoint
-4. Attempt implementation
+4. Now attempt implementation
 5. If fails → git reset, retry without redoing planning
 
-**Value asymmetry**: Planning is expensive (human time), implementation is cheap to retry (AI attempts). Protect the expensive part.
-
+**Protect your time, not the code.** Code changes are cheap to regenerate. Your explanations and planning are expensive.
 - Protects human time investment in planning
 - Decouples deterministic planning from non-deterministic execution
 - Enables cheap retries
 
 ## Example
-You spend 30 minutes with AI outlining a feature architecture. You extract it into `project.md` and git commit. When AI's implementation fails, you reset in <1 minute and try again — your planning is preserved. You can course correct if necessary, but you'll be starting from a known good state, or the state that can be easily adjusted.
+Spend 30 minutes outlining feature architecture with AI. Extract to `project.md`, commit. AI's implementation
+fails. Reset in under a minute, try again - your planning is preserved. You can course correct, but you're
+starting from a known good state.
+
+Some models are over eager to start working and want to jump straight into implementation. You'll have to interrupt it and save it to a file first.

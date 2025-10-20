@@ -12,4 +12,3 @@ Responses can vary in quality: sometimes worse, sometimes better.
 Unlike deterministic systems where same input always produces same output:
 - Results are not guaranteed to be repeatable.
 - Reliability is unpredictable — retries may diverge significantly.
-- Makes it difficult to fully trust or lock in a single outcome without validation.
