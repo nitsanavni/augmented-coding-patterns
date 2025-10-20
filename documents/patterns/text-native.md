@@ -5,38 +5,41 @@ authors: [lada_kesseler]
 # Text Native
 
 ## Problem
-We underuse text as a thinking and planning medium. We reach for specialized tools, databases, UIs when text would be more powerful and accessible.
-
-Text is everything now. Staying in text keeps everything at your fingertips - no barriers, instant editing, AI's strongest modality.
+We habitually reach for specialized tools - databases for data, UIs for design, diagrams for architecture.
+These create barriers: tool switching, format conversion, access friction.
 
 ## Pattern
-Stay in text. Use ASCII as lightweight diagrams - like markdown is to code, ASCII is to images.
+**Text is everything now. Stay in text.**
 
-**Text is AI's native medium** - it thinks in text, responds in text. When you stay in text:
-- No tool switching, no format conversion
+Text is AI's native medium. When you stay in text:
+- Everything is at your fingertips - directly editable
+- No barriers, no tool switching
 - Instant iteration
-- Both human and AI can edit directly
-- Creates a shared whiteboard you can draw on together
+- Version-controlled by default
+- Shared workspace - both human and AI can edit
+
+**What can be text:**
+- Design mockups (ASCII)
+- Architecture diagrams (ASCII)
+- Process workflows (markdown)
+- Data specifications (markdown tables)
+- Plans and todos (markdown)
+- State descriptions (plain text)
+
+If it can be text, make it text.
 
 ## Example
 
-**Hack4Good UI Redesign:**
-Speech therapy app needed UI changes. Instead of building immediately:
+**UI redesign staying entirely in text:**
 
-1. **Paper sketches** - Designer drew new modal design
-2. **AI converts to ASCII** - Showed sketches to AI, got ASCII mockup
-3. **Human edits ASCII** - Changed button text, refined layout in text
-4. **ASCII to markdown spec** - Documented the design decisions
-5. **Spec to todo list** - Clear implementation steps
-6. **Todos to code** - Each step verifiable
+Designer draws on paper → AI converts to ASCII → edit ASCII together → describe in text → compare old vs new state (both text) → generate todos from diff → implement.
 
+Never left text. No Figma, no drawing tools, no databases. Just editable text files.
 
-**Architecture diagrams:**
-```
-User → Load Balancer → [Server Pool] → Database
-           ↓                ↓
-        Cache Layer    Message Queue
-```
+**Architecture exploration:**
+Ask AI for codebase architecture - get ASCII diagram you can edit and refine together, not a PNG you have to regenerate and open in a different tool.
 
-**Understanding new codebases:**
-"Explain architecture for this code base on a high level. Use ASCII if it's helpful"
+**Process automation:**
+Write processes in markdown. AI reads and follows them. Edit the file, AI adapts immediately.
+
+Text keeps everything lightweight, editable, and accessible.
