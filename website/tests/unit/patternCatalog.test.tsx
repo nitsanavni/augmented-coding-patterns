@@ -35,7 +35,7 @@ describe('PatternCatalogPage', () => {
 
     const typeToggle = screen.getByRole('button', { name: /Type filter/i })
     const authorToggle = screen.getByRole('button', { name: /Author filter/i })
-    const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
+    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
 
     expect(typeToggle).toHaveTextContent(/All types/i)
 
@@ -72,7 +72,7 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
+    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
 
     PATTERN_CATALOG_GROUPS.forEach(({ category, label, headingPattern }) => {
       const items = getAllPatterns(category).sort((a, b) => a.title.localeCompare(b.title))
@@ -101,7 +101,7 @@ describe('PatternCatalogPage', () => {
     const { category } = PATTERN_CATALOG_GROUPS[0]
     const items = getAllPatterns(category).sort((a, b) => a.title.localeCompare(b.title))
     const target = items[0]
-    const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
+    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
     const link = within(catalogRegion).getByRole('link', { name: target.title })
 
     await user.click(link)
@@ -121,7 +121,7 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
+    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
     const typeToggle = screen.getByRole('button', { name: /Type filter/i })
 
     await user.click(typeToggle)
@@ -154,7 +154,7 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
+    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
     const typeToggle = screen.getByRole('button', { name: /Type filter/i })
     const authorToggle = screen.getByRole('button', { name: /Author filter/i })
 
@@ -198,7 +198,7 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
+    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
     const typeToggle = screen.getByRole('button', { name: /Type filter/i })
 
     await user.click(typeToggle)

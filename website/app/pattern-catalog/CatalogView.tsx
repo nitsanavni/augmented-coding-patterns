@@ -286,10 +286,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
             </button>
           )}
         </div>
-        <section className={styles.listSection} aria-labelledby="pattern-catalog-preview-heading">
-          <h3 className={styles.subsectionTitle} id="pattern-catalog-preview-heading">
-            Catalog preview
-          </h3>
+        <section className={styles.listSection}>
           {filteredGroups.length === 0 ? (
             <p className={styles.emptyState} role="status" aria-live="polite">
               No entries match these filters yet. Try adjusting the filters above.
