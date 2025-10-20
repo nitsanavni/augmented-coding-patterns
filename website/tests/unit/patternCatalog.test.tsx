@@ -76,10 +76,11 @@ describe('PatternCatalogPage', () => {
 
     PATTERN_CATALOG_GROUPS.forEach(({ category, label, headingPattern }) => {
       const items = getAllPatterns(category).sort((a, b) => a.title.localeCompare(b.title))
-      const heading = within(catalogRegion).getByRole('heading', {
-        level: 4,
+      const heading = within(catalogRegion).getByRole('button', {
         name: headingPattern(items.length),
       })
+      expect(heading).toHaveAttribute('aria-expanded')
+
       const list = within(catalogRegion).getByRole('list', { name: new RegExp(`^${label}$`, 'i') })
       const links = within(list).getAllByRole('link')
 

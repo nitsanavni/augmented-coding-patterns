@@ -66,6 +66,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
   const hasTypeFilter = activeTypes.length !== typeOptions.length;
   const hasAuthorFilter = authorOptions.length > 0 && activeAuthorIds.length !== authorOptions.length;
   const hasActiveFilters = hasTypeFilter || hasAuthorFilter;
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>(() => ({}));
 
   const typeSummary = useMemo(() => {
     if (activeTypes.length === typeOptions.length) {
@@ -127,6 +128,16 @@ export default function CatalogView({ groups }: CatalogViewProps) {
       })
       .filter((group) => group.items.length > 0);
   }, [groups, activeTypes, activeAuthorIds, allAuthorsSelected]);
+
+  useEffect(() => {
+    setCollapsedGroups((prev) => {
+      const next: Record<string, boolean> = {};
+      filteredGroups.forEach((group) => {
+        next[group.category] = prev[group.category] ?? false;
+      });
+      return next;
+    });
+  }, [filteredGroups]);
 
   useEffect(() => {
     if (!selected) {
@@ -292,43 +303,63 @@ export default function CatalogView({ groups }: CatalogViewProps) {
               No entries match these filters yet. Try adjusting the filters above.
             </p>
           ) : (
-            filteredGroups.map((group) => (
-              <div key={group.category} className={styles.catalogGroup}>
-                <h4 className={styles.groupTitle}>
-                  <span
-                    className={`${styles.groupTitleIcon} ${styles[group.styleClass]}`}
-                    aria-hidden="true"
+            filteredGroups.map((group) => {
+              const isCollapsed = collapsedGroups[group.category] ?? false;
+              return (
+                <div key={group.category} className={styles.catalogGroup}>
+                  <button
+                    type="button"
+                    className={styles.groupToggle}
+                    onClick={() =>
+                      setCollapsedGroups((prev) => ({
+                        ...prev,
+                        [group.category]: !isCollapsed,
+                      }))
+                    }
+                    aria-expanded={!isCollapsed}
                   >
-                    {group.icon}
-                  </span>
-                  {group.label} ({group.items.length})
-                </h4>
-                <ul className={styles.catalogList} aria-label={group.label}>
-                  {group.items.map((item) => (
-                    <li
-                      key={item.slug}
-                      className={`${styles.catalogListItem} ${
-                        isSelected(group.label, item) ? styles.catalogListItemActive : ""
-                      }`}
+                    <span
+                      className={`${styles.groupTitleIcon} ${styles[group.styleClass]}`}
+                      aria-hidden="true"
                     >
-                      <Link
-                        href={`/${group.category}/${item.slug}`}
-                        className={styles.catalogLink}
-                        aria-current={isSelected(group.label, item) ? "true" : undefined}
-                        onClick={(event) => handleSelect(event, group.label, group.category, item)}
-                      >
-                        {item.emojiIndicator && (
-                          <span aria-hidden="true" className={styles.catalogEmoji}>
-                            {item.emojiIndicator}
-                          </span>
-                        )}
-                        <span className={styles.catalogTitle}>{item.title}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
+                      {group.icon}
+                    </span>
+                    <span className={styles.groupTitleText}>
+                      {group.label} ({group.items.length})
+                    </span>
+                    <span className={styles.groupToggleIndicator} aria-hidden="true">
+                      {isCollapsed ? "▸" : "▾"}
+                    </span>
+                  </button>
+                  {!isCollapsed && (
+                    <ul className={styles.catalogList} aria-label={group.label}>
+                      {group.items.map((item) => (
+                        <li
+                          key={item.slug}
+                          className={`${styles.catalogListItem} ${
+                            isSelected(group.label, item) ? styles.catalogListItemActive : ""
+                          }`}
+                        >
+                          <Link
+                            href={`/${group.category}/${item.slug}`}
+                            className={styles.catalogLink}
+                            aria-current={isSelected(group.label, item) ? "true" : undefined}
+                            onClick={(event) => handleSelect(event, group.label, group.category, item)}
+                          >
+                            {item.emojiIndicator && (
+                              <span aria-hidden="true" className={styles.catalogEmoji}>
+                                {item.emojiIndicator}
+                              </span>
+                            )}
+                            <span className={styles.catalogTitle}>{item.title}</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            })
           )}
         </section>
       </aside>

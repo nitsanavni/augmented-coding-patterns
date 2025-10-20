@@ -207,6 +207,36 @@
   align-items: center;
 }
 
+.groupToggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-2xs) var(--space-sm);
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.groupToggle:hover,
+.groupToggle:focus-visible {
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+.groupTitleText {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.groupToggleIndicator {
+  font-size: var(--font-size-base);
+}
+
 .groupTitleIcon.patterns {
   color: var(--color-pattern);
 }
