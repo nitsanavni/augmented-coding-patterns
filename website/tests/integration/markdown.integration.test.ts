@@ -47,7 +47,7 @@ describe('Markdown utilities - Integration tests', () => {
       expect(pattern.title).toBe('Answer Injection')
       expect(pattern.category).toBe('anti-patterns')
       expect(pattern.slug).toBe('answer-injection')
-      expect(pattern.content).toContain('Putting solutions in your questions')
+      expect(pattern.content).toContain('The way you ask a question can dramatically limit')
     })
 
     it('should correctly parse Black Box AI obstacle', () => {
@@ -56,7 +56,7 @@ describe('Markdown utilities - Integration tests', () => {
       expect(pattern.title).toBe('Black Box AI')
       expect(pattern.category).toBe('obstacles')
       expect(pattern.slug).toBe('black-box-ai')
-      expect(pattern.content).toContain('AI reasoning is hidden')
+      expect(pattern.content).toContain('AI\'s reasoning is hidden')
     })
   })
 
