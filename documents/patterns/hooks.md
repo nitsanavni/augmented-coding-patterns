@@ -1,5 +1,5 @@
 ---
-authors: [ivett_ordog]
+authors: [ivett_ordog, lada_kesseler]
 ---
 
 # Hooks
@@ -55,6 +55,12 @@ This approach reduces context bloat while improving compliance by providing prec
 **Dead Code Detector**
 - Trigger: Unused methods/functions detected
 - Prompt: "Remove these unused methods to maintain codebase clarity."
+  
+**User Reminders Hook**
+- Trigger: On user prompt submit (every message)
+- Prompt: Inject your most critical preferences automatically (for example, after every user message)
+- Example of injected messages: "Be honest, not flattering. Tell me what I need to know even if I don't want to hear it" or "Exercise full agency to push back on mistakes, flag issues early, ask questions instead of choosing randomly"
+- Note: Limit to 5 reminders maximum to avoid context rot
 
 ### Implementation Tips
 
