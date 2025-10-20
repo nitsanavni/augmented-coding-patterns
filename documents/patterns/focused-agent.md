@@ -5,27 +5,19 @@ authors: [lada_kesseler]
 # Focused Agent
 
 ## Problem
-LLMs have limited attention capacity. When LLM has too much context or competing instructions, its attention spreads thin and it becomes unreliable - even at following your core ground rules. This degradation happens well before hitting context window limits.
-
-The more you ask an agent to handle, the worse it performs at everything.
-
-_(See [[../obstacles/limited-focus.md]] for research and contributing factors)_
+LLMs have limited attention. The more you ask an agent to handle, the worse it performs at everything - even following explicit ground rules.
 
 ## Pattern
-Single, narrow responsibility
-- Gives AI cognitive space to do its job well
-- Can actually follow your ground rules
-- Like juggling 3 balls vs 50
+Prefer single, narrow responsibility on important tasks.
 
-**What makes this work:**
-- Eliminates competing objectives (no "be helpful" vs "be safe" vs "be thorough" conflicts)
-- No conflicting instructions to juggle (like "use JSON" in paragraph 1 but "be conversational" in paragraph 5)
-- All attention goes to one task instead of being split across multiple concerns
+This gives the AI cognitive space to:
+- Actually follow your ground rules
+- Pay attention to details that matter for that specific task
+- Perform at its best instead of spreading thin
 
 ## Example
-Little committer - dedicated agent only for writing commit messages. Caught naming convention issues and accidental node_modules commits. Main development agent (same model, same instructions, broader scope) never caught these issues.
+Dedicated committer agent - only writes commit messages. Immediately caught naming convention violations and accidental node_modules commits.
 
-The committer agent's attention wasn't diluted across code writing, debugging, architecture decisions, etc. It could focus entirely on commit quality patterns.
+Main development agent with identical ground rules and same model never caught these issues. Its attention was diluted across coding, debugging, architecture decisions The focused committer could dedicate all its attention to commit quality.
 
-## Anti-pattern
-[[../anti-patterns/distracted-agent.md]]
+Small, focused agents > large, scattered agents.
