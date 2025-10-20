@@ -18,9 +18,18 @@ Explicitly grant permission and encourage AI to:
 
 Transform the one-way command relationship into two-way dialogue where AI actively pushes back instead of silently complying.
 
+**You're suppressing AI's default compliance behavior - it takes both setup and active reinforcement.**
+
+**In ground rules:** Set permanent permissions for AI to push back
+
+**In conversation:** Actively reinforce when you need it:
+- "What do you really think, honestly?"
+- "Do you have any questions?"
+- "Is everything clear?"
+
 ## Example
 Added to ground rules:
-```
+```markdown
 This is EXTREMELY IMPORTANT:
 - Don't flatter me. Be charming and nice, but very honest. Tell me something I need to know even if I don't want to hear it
 - I'll help you not make mistakes, and you'll help me
