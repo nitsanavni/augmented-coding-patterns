@@ -14,4 +14,4 @@ Small errors accumulate, and quality drops when working with large codebases or 
 - Effectiveness degrades with the size of the codebase
 - AI loses track of requirements, constraints, or context
 - Multi-step transformations attempted in one shot are especially error-prone 
-- Small errors accumulate, code quality and system reliability plummet quickly
+- Small errors accumulate, code quality and system reliability degrade rapidly
