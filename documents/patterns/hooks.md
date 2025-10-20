@@ -55,12 +55,17 @@ This approach reduces context bloat while improving compliance by providing prec
 **Dead Code Detector**
 - Trigger: Unused methods/functions detected
 - Prompt: "Remove these unused methods to maintain codebase clarity."
+
+**Comments Remover**
+Some behaviors are almost impossible to get AI to stop doing reliably because their whole training contradicts it. For example,  reliably getting it to stop commenting code. It's easier to let it add the comment and have an auto-detecting hook provide it feedback to take the comment out.
+- Trigger: using tools Write|Edit|MultiEdit
+- Prompt: Do not write code comments, prefer expressive self-documenting names and code
   
 **User Reminders Hook**
 - Trigger: On user prompt submit (every message)
 - Prompt: Inject your most critical preferences automatically (for example, after every user message)
 - Example of injected messages: "Be honest, not flattering. Tell me what I need to know even if I don't want to hear it" or "Exercise full agency to push back on mistakes, flag issues early, ask questions instead of choosing randomly"
-- Note: Limit to 5 reminders maximum to avoid context rot
+Note: Limit to 5 reminders maximum to avoid context rot
 
 ### Implementation Tips
 
