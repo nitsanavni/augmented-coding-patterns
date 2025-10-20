@@ -5,7 +5,7 @@ authors: [lada_kesseler]
 # Extract Knowledge
 
 ## Problem
-Valuable insights, corrections, and preferences emerge during conversations, but they're ephemeral. Without capture, they disappear, forcing you to repeat yourself session after session.
+Valuable insights, corrections, and preferences emerge during conversations, but they're ephemeral. Without capture, they disappear when you start a new conversation, forcing you to repeat yourself session after session.
 
 ## Pattern
 Like extract variable for conversations: when you figure something out, explicitly ask AI to save it to a file.

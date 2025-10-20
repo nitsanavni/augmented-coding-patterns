@@ -5,11 +5,13 @@ authors: [lada_kesseler]
 # Limited Context Window (Obstacle)
 
 ## Description
-LLMs can only process a fixed maximum number of tokens (the context window) in one pass. Anything beyond that is truncated. 
-Tools work around statelessness by concatenating conversation history, but once the window is full, older messages must be dropped or compressed.
+Context has a fixed size limit. Once the limit is reached, older content has to be dropped or summarized by coding assistant to make room for new input.
+
+Everything you put in context competes for this limited space.
 
 ## Impact
-Even with workarounds for statelessness, conversations eventually lose early turns, large files can’t be ingested whole, and comprehensive documentation must be chunked and stitched together.
+- Long conversations eventually lose early messages
+- Large files can't be loaded whole
+- Everything loaded (code, docs, ground rules, conversation history) fights for the same limited space
+- Forces choices about what to keep in context and what to leave out
 
-## Details
-Conversation state is rebuilt each turn by concatenating prior messages. This concatenated text must fit within the context window. Once the limit is reached, older content is dropped or summarized to make room for new input.
