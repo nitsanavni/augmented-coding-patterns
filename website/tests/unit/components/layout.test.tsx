@@ -1,6 +1,12 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import RootLayout from '@/app/layout'
 import { siteConfig } from '@/config/site'
+
+const getNavLinkTexts = () => {
+  const nav = screen.getByRole('navigation')
+  const links = within(nav).getAllByRole('link')
+  return links.map(link => link.textContent?.trim() ?? '')
+}
 
 describe('RootLayout', () => {
   const mockChildren = <div>Test Content</div>
@@ -47,6 +53,19 @@ describe('RootLayout', () => {
       const patternsLink = screen.getByRole('link', { name: 'Patterns' })
       expect(patternsLink).toBeInTheDocument()
       expect(patternsLink).toHaveAttribute('href', '/patterns')
+    })
+
+    it('renders Pattern Catalog link between Home and Obstacles', () => {
+      const navLinks = getNavLinkTexts()
+      expect(navLinks).toEqual([
+        'Home',
+        'Pattern Catalog',
+        'Obstacles',
+        'Anti-Patterns',
+        'Patterns',
+        'Talk',
+        'Contributors',
+      ])
     })
 
     it('has proper semantic HTML structure with header element', () => {
