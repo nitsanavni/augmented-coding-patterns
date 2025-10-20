@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { MouseEvent, useEffect, useMemo, useState } from "react";
+import { KeyboardEvent, MouseEvent, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import styles from "./page.module.css";
@@ -54,13 +54,21 @@ export default function CatalogView({ groups }: CatalogViewProps) {
   const selectedConfig = selected ? getCategoryConfig(selected.category) : null;
 
   const typeOptions = useMemo(
-    () => groups.map(({ category, label }) => ({ category, label })),
+    () => groups.map(({ category, label, icon, styleClass }) => ({ category, label, icon, styleClass })),
     [groups],
   );
 
   const authorOptions = useMemo(() => extractAuthorOptions(groups), [groups]);
 
   const allAuthorsSelected = activeAuthorIds.length === authorOptions.length || authorOptions.length === 0;
+  const hasTypeFilter = activeTypes.length !== typeOptions.length;
+  const hasAuthorFilter = authorOptions.length > 0 && activeAuthorIds.length !== authorOptions.length;
+  const hasActiveFilters = hasTypeFilter || hasAuthorFilter;
+
+  const resetFilters = () => {
+    setActiveTypes(typeOptions.map(({ category }) => category));
+    setActiveAuthorIds(authorOptions.map(({ id }) => id));
+  };
 
   const filteredGroups = useMemo(() => {
     return groups
@@ -105,7 +113,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
   const toggleType = (category: string) => {
     setActiveTypes((prev) => {
       if (prev.includes(category)) {
-        return prev.length === 1 ? prev : prev.filter((value) => value !== category);
+        return prev.filter((value) => value !== category);
       }
 
       return [...prev, category];
@@ -136,6 +144,18 @@ export default function CatalogView({ groups }: CatalogViewProps) {
     setSelected({ groupLabel, category, item });
   };
 
+  const handleKeyDown = (
+    event: KeyboardEvent<HTMLAnchorElement>,
+    groupLabel: string,
+    category: SelectedCatalogItem["category"],
+    item: CatalogPreviewItem,
+  ) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setSelected({ groupLabel, category, item });
+    }
+  };
+
   const isSelected = (groupLabel: string, item: CatalogPreviewItem) => {
     return selected?.groupLabel === groupLabel && selected.item.slug === item.slug;
   };
@@ -152,16 +172,25 @@ export default function CatalogView({ groups }: CatalogViewProps) {
           <h3 className={styles.subsectionTitle}>Filter catalog</h3>
           <fieldset className={styles.filterGroup}>
             <legend className={styles.filterLabel}>Type</legend>
-            {typeOptions.map(({ category, label }) => (
+            {typeOptions.map(({ category, label, icon, styleClass }) => (
               <label key={category} className={styles.checkboxLabel}>
                 <input
                   type="checkbox"
                   name={`type-${category}`}
                   value={category}
+                  aria-label={`${label} type`}
                   checked={activeTypes.includes(category)}
                   onChange={() => toggleType(category)}
                 />
-                {label}
+                <span className={styles.filterOptionLabel}>
+                  <span
+                    className={`${styles.filterOptionIcon} ${styles[styleClass]}`}
+                    aria-hidden="true"
+                  >
+                    {icon}
+                  </span>
+                  {label}
+                </span>
               </label>
             ))}
           </fieldset>
@@ -174,6 +203,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
                     type="checkbox"
                     name={`author-${option.id}`}
                     value={option.id}
+                    aria-label={`Author ${option.name}`}
                     checked={activeAuthorIds.includes(option.id)}
                     onChange={() => toggleAuthor(option.id)}
                   />
@@ -182,17 +212,30 @@ export default function CatalogView({ groups }: CatalogViewProps) {
               ))}
             </fieldset>
           )}
+          {hasActiveFilters && (
+            <button type="button" className={styles.resetButton} onClick={resetFilters}>
+              Reset filters
+            </button>
+          )}
         </div>
         <section className={styles.listSection} aria-labelledby="pattern-catalog-preview-heading">
           <h3 className={styles.subsectionTitle} id="pattern-catalog-preview-heading">
             Catalog preview
           </h3>
           {filteredGroups.length === 0 ? (
-            <p className={styles.emptyState}>No entries match these filters yet.</p>
+            <p className={styles.emptyState} role="status" aria-live="polite">
+              No entries match these filters yet. Try adjusting the filters above.
+            </p>
           ) : (
             filteredGroups.map((group) => (
               <div key={group.category} className={styles.catalogGroup}>
                 <h4 className={styles.groupTitle}>
+                  <span
+                    className={`${styles.groupTitleIcon} ${styles[group.styleClass]}`}
+                    aria-hidden="true"
+                  >
+                    {group.icon}
+                  </span>
                   {group.label} ({group.items.length})
                 </h4>
                 <ul className={styles.catalogList} aria-label={group.label}>
@@ -206,7 +249,9 @@ export default function CatalogView({ groups }: CatalogViewProps) {
                       <Link
                         href={`/${group.category}/${item.slug}`}
                         className={styles.catalogLink}
+                        aria-current={isSelected(group.label, item) ? "true" : undefined}
                         onClick={(event) => handleSelect(event, group.label, group.category, item)}
+                        onKeyDown={(event) => handleKeyDown(event, group.label, group.category, item)}
                       >
                         {item.emojiIndicator && (
                           <span aria-hidden="true" className={styles.catalogEmoji}>

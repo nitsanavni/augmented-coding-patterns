@@ -32,4 +32,4 @@
 - [x] Load real catalog data and group by type.
 - [x] Implement selection flow to show chosen item details.
 - [x] Wire filtering logic for type/author.
-- [ ] UX polish: icons, responsive tweaks, empty states, keyboard focus.
+- [x] UX polish: icons, responsive tweaks, empty states, keyboard focus.

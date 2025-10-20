@@ -4,6 +4,7 @@ import { getAllPatterns } from "@/lib/markdown";
 import { getAuthorById } from "@/lib/authors";
 import CatalogView from "./CatalogView";
 import { CatalogGroupData, CatalogPreviewItem } from "./types";
+import { getCategoryConfig } from "@/app/lib/category-config";
 
 function extractSummary(markdown: string): string | undefined {
   const lines = markdown.split("\n");
@@ -68,6 +69,7 @@ function resolveAuthorNames(authorIds: string[] | undefined): string[] {
 
 function buildCatalogGroups(): CatalogGroupData[] {
   return PATTERN_CATALOG_GROUPS.map(({ category, label }) => {
+    const config = getCategoryConfig(category);
     const items = getAllPatterns(category)
       .sort((a, b) => a.title.localeCompare(b.title))
       .map(
@@ -86,8 +88,10 @@ function buildCatalogGroups(): CatalogGroupData[] {
     return {
       category,
       label,
+      icon: config.icon,
+      styleClass: config.styleClass,
       items,
-    };
+    } satisfies CatalogGroupData;
   });
 }
 

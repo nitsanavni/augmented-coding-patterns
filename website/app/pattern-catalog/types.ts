@@ -13,5 +13,7 @@ export interface CatalogPreviewItem {
 export interface CatalogGroupData {
   category: PatternCategory;
   label: string;
+  icon: string;
+  styleClass: string;
   items: CatalogPreviewItem[];
 }

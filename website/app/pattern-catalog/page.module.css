@@ -105,6 +105,39 @@
   height: 16px;
 }
 
+.filterOptionLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.filterOptionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: var(--font-size-lg);
+}
+
+.filterOptionIcon.patterns,
+.groupTitleIcon.patterns {
+  color: var(--color-pattern);
+  background-color: transparent;
+}
+
+.filterOptionIcon.antiPatterns,
+.groupTitleIcon.antiPatterns {
+  color: var(--color-anti-pattern);
+  background-color: transparent;
+}
+
+.filterOptionIcon.obstacles,
+.groupTitleIcon.obstacles {
+  color: var(--color-obstacle);
+  background-color: transparent;
+}
+
 .listSection {
   display: flex;
   flex-direction: column;
@@ -124,6 +157,15 @@
   font-weight: 600;
   color: var(--color-text-secondary);
   margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.groupTitleIcon {
+  font-size: var(--font-size-base);
+  display: inline-flex;
+  align-items: center;
 }
 
 .catalogList {
@@ -174,10 +216,22 @@
   color: var(--color-text-primary);
 }
 
+.catalogLink:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.catalogLink[aria-current="true"] {
+  font-weight: 600;
+}
+
 .emptyState {
   font-size: var(--font-size-sm);
   color: var(--color-text-tertiary);
   margin: 0;
+  padding: var(--space-md);
+  border-radius: var(--border-radius);
+  background-color: var(--color-surface);
 }
 
 .catalogEmoji {
@@ -187,6 +241,26 @@
 .catalogTitle {
   display: inline-block;
   font-weight: 500;
+}
+
+.resetButton {
+  align-self: flex-start;
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.resetButton:hover,
+.resetButton:focus-visible {
+  color: var(--color-text-primary);
+  border-color: var(--color-accent);
+  outline: none;
 }
 
 .detail {
