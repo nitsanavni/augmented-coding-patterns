@@ -41,6 +41,8 @@
   gap: var(--space-xl);
   position: sticky;
   top: calc(var(--space-2xl) + 60px);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
 }
 
 .sectionTitle {
