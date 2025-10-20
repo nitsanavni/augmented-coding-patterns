@@ -4,20 +4,13 @@ authors: [lada_kesseler]
 
 # Knowledge Composition
 
-## Enabled by
-[[reference-docs.md]]
-
 ## Problem
-When knowledge is kept as one big blob, you're stuck at low level.
-You either re-explain chunks manually or fail to reuse them.
-This prevents you from operating at higher level of abstraction.
+When you keep everything in one big file, you lose the ability to load just what you need. It's all or nothing - either load the whole thing and bloat your context, or skip it entirely.
 
 ## Pattern
-Extract and separate knowledge into clear, reusable documents that are cohesive.
-Like well-defined functions in code, these pieces can then be combined in new ways.
-- Each piece is focused
-- Together they can be composed to solve larger problems
-- This creates options and makes you more capable (see Kent Beck's concept of options in "Tidy First?")
+Split knowledge into focused, composable files. Like avoiding giant functions in code - each file should have a single responsibility.
+
+This lets you load only what's relevant for the current task instead of polluting context with everything.
 
 ## Example
 
