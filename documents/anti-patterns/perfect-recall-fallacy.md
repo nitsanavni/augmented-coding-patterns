@@ -20,7 +20,10 @@ There it quickly discovered what was wrong: chess.js doesn’t allow boards with
 It might have seen chess.js in training data, but it wouldn't remember the details. Letting it play with the library helps discover assumptions it makes quickly. 
 
 ## Solution
-- Ask AI to search/read library documentation
-- Give it a playground folder to experiment and discover constraints
-- Create reference docs for libraries you use
-- Extract working patterns into reference docs for next time
+Don't expect perfect recall. Give AI tools to discover:
+- Ask it to search/read library docs
+- Give it a playground folder to experiment
+- Create reference docs for libraries you use frequently
+- Extract working patterns for next time
+
+Let AI play and discover instead of expecting it to remember.
