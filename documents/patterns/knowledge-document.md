@@ -5,15 +5,15 @@ authors: [lada_kesseler]
 # Knowledge Document
 
 ## Problem
-AI cannot learn from you
-- Stateless (no memory between sessions)
-- Fixed model weights (cannot be trained)
-
-_(See [[../obstacles/cannot-learn.md]] for details)_
+To keep AI from degrading, you need to hit 'reset' often. But important knowledge vanishes when you reset.
 
 ## Pattern
-Use markdown files as AI's persistent memory
+Save important information to markdown files. Load them into context when needed.
+
+This makes resetting easier: instead of losing everything, you extract the valuable parts to files first, then load them back into a clean context.
 
 ## Example
-`~/.claude/CLAUDE.md` - AI behavior rules
-`project.md` - project context
+- `~/.claude/CLAUDE.md` - global Claude Code behavior rules
+- `project.md` - project-specific context
+- `tdd-process.md` - how you want to work
+- `approval_tests.md` - specific techniques to follow
