@@ -4,18 +4,24 @@ authors: [lada_kesseler]
 
 # Ground Rules
 
-## Child of
-[[knowledge-document.md]]
-
 ## Problem
-Need essential information in every session without re-explaining or remembering to include it
+You need essential information in every session without re-explaining or remembering to load it.
 
 ## Pattern
-Auto-loaded knowledge documents
-- Always in context
-- Hierarchical: global (user-level) → project → folder
-- Contains: behaviors, tools, context, links - whatever is essential for that scope
+Knowledge documents that auto-load when you open a session. They're always in context.
+
+Put only your most important things here - the things you always want the AI to know. Can be scoped hierarchically:
+- **User level**: Your preferred communication style, tools available in all conversations
+- **Project level**: Team standards and crucial preferences
+
+Contains: behaviors, tools, context, links - whatever is essential for each scope
 
 ## Example
-`~/.claude/CLAUDE.md` - partnership style, code preferences, available tools
-`project/CLAUDE.md` - project type (POC vs production), team standards, links to key docs
+- `~/.claude/CLAUDE.md`:
+  - "Prefer simple solutions", 
+  - "Tell me something I need to know even if I don't want to hear it", 
+  - "use ./speak.sh tool to talk to me outloud when you warn me about issues"
+- `project/CLAUDE.md` 
+  - "Use TypeScript strict mode, all functions must have explicit return types"
+  - "always run tests via ./test.sh" 
+  - links to key places in the repository
