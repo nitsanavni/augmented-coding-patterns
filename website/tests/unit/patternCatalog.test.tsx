@@ -1,4 +1,5 @@
 import { render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import PatternCatalogPage from '@/app/pattern-catalog/page'
 import { PATTERN_CATALOG_TEST_IDS } from '@/app/pattern-catalog/test-ids'
 import { PATTERN_CATALOG_GROUPS } from '@/app/pattern-catalog/constants'
@@ -73,5 +74,31 @@ describe('PatternCatalogPage', () => {
       expect(links[0]).toHaveAttribute('href', `/${category}/${items[0].slug}`)
       expect(links[0]).toHaveTextContent(items[0].title)
     })
+  })
+
+  it('shows selected item details in the detail pane when an entry is chosen', async () => {
+    const user = userEvent.setup()
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    const detailPane = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.detail)
+    expect(within(detailPane).getByText(/Pick a pattern to see its guidance/i)).toBeInTheDocument()
+
+    const { category } = PATTERN_CATALOG_GROUPS[0]
+    const items = getAllPatterns(category).sort((a, b) => a.title.localeCompare(b.title))
+    const target = items[0]
+    const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
+    const link = within(catalogRegion).getByRole('link', { name: target.title })
+
+    await user.click(link)
+
+    expect(within(detailPane).queryByText(/Pick a pattern to see its guidance/i)).not.toBeInTheDocument()
+    expect(
+      within(detailPane).getByRole('heading', { level: 2, name: target.title })
+    ).toBeInTheDocument()
+    expect(within(detailPane).getByText(/Push back on unclear instructions/i)).toBeInTheDocument()
+    expect(within(detailPane).getByText(/Documented by/i)).toHaveTextContent(/Lada Kesseler/i)
+    expect(within(detailPane).queryByText(/Open full entry/i)).not.toBeInTheDocument()
   })
 })

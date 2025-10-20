@@ -152,6 +152,17 @@
   transform: translateX(2px);
 }
 
+.catalogListItemActive {
+  border-color: var(--color-accent);
+  background-color: var(--color-surface);
+  transform: none;
+}
+
+.catalogListItemActive .catalogTitle {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
 .catalogLink {
   display: inline-flex;
   align-items: center;
@@ -182,15 +193,141 @@
   min-height: 500px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-lg);
+  overflow: hidden;
 }
 
-.detail .sectionTitle {
-  font-size: var(--font-size-2xl);
+.detailContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  flex: 1;
+  overflow-y: auto;
+  padding-right: var(--space-sm);
+}
+
+.detailTitle {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.detailBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+}
+
+.detailBody :global(h1) {
+  display: none;
+}
+
+.detailBody h2,
+.detailBody h3,
+.detailBody h4 {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+  margin-top: var(--space-xl);
+}
+
+.detailBody h2:first-of-type {
+  margin-top: 0;
+}
+
+.detailBody p {
+  margin: 0;
+  line-height: var(--line-height-relaxed);
   margin-bottom: var(--space-md);
-  border-bottom: none;
-  padding-bottom: 0;
+}
+
+.detailBody ul,
+.detailBody ol {
+  margin: var(--space-md) 0;
+  padding-left: var(--space-xl);
+}
+
+.detailBody li {
+  margin-bottom: var(--space-sm);
+}
+
+.detailBody pre {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--space-lg);
+  overflow-x: auto;
+  margin: var(--space-lg) 0;
+}
+
+.detailBody pre code {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  font-size: var(--font-size-sm);
+}
+
+.detailBody :not(pre) > code {
+  background-color: var(--color-surface);
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--color-border);
+  font-size: 0.875em;
+}
+
+.detailBody blockquote {
+  border-left: 4px solid var(--color-accent);
+  padding-left: var(--space-lg);
+  margin: var(--space-xl) 0;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.detailBody table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-lg) 0;
+}
+
+.detailBody th,
+.detailBody td {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.detailBody th {
+  font-weight: 600;
+  background-color: var(--color-surface);
+}
+
+.detailBody tr:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.detailBody img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  margin: var(--space-lg) 0;
+}
+
+.detailBody hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-2xl) 0;
+}
+
+.detailFooter {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
 }
 
 .placeholderCopy {
@@ -199,6 +336,57 @@
   margin: 0;
   font-size: var(--font-size-base);
   text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.detailHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.detailTitleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+.detailEmoji {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.detailBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  align-self: flex-start;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--border-radius-sm);
+}
+
+.detailBadgeIcon {
+  font-size: 1.1em;
+}
+
+.patterns {
+  background-color: var(--color-pattern-light);
+  color: var(--color-pattern);
+}
+
+.antiPatterns {
+  background-color: var(--color-anti-pattern-light);
+  color: var(--color-anti-pattern);
+}
+
+.obstacles {
+  background-color: var(--color-obstacle-light);
+  color: var(--color-obstacle);
 }
 
 @media (max-width: 768px) {

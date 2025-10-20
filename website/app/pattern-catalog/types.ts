@@ -1,0 +1,17 @@
+import { PatternCategory } from "@/lib/types";
+
+export interface CatalogPreviewItem {
+  slug: string;
+  title: string;
+  emojiIndicator?: string;
+  authorIds: string[];
+  authorNames: string[];
+  summary?: string;
+  content: string;
+}
+
+export interface CatalogGroupData {
+  category: PatternCategory;
+  label: string;
+  items: CatalogPreviewItem[];
+}
