@@ -27,7 +27,7 @@
 
 ## Implementation Roadmap
 
-- [ ] Lay out the shell with sidebar + detail placeholders.
+- [x] Lay out the shell with sidebar + detail placeholders.
 - [ ] Add sidebar filters skeleton (static controls, stubbed list).
 - [ ] Load real catalog data and group by type.
 - [ ] Implement selection flow to show chosen item details.

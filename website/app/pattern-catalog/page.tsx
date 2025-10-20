@@ -1,4 +1,5 @@
 import styles from "./page.module.css";
+import { PATTERN_CATALOG_TEST_IDS } from "./test-ids";
 
 export default function PatternCatalogPage() {
   return (
@@ -10,6 +11,16 @@ export default function PatternCatalogPage() {
           evolution of the knowledge base.
         </p>
       </header>
+      <div className={styles.layout}>
+        <aside data-testid={PATTERN_CATALOG_TEST_IDS.sidebar} className={styles.sidebar}>
+          <h2 className={styles.sectionTitle}>Browse catalog</h2>
+          <p className={styles.placeholderCopy}>Catalog navigation lives here soon.</p>
+        </aside>
+        <section data-testid={PATTERN_CATALOG_TEST_IDS.detail} className={styles.detail}>
+          <h2 className={styles.sectionTitle}>Pattern details</h2>
+          <p className={styles.placeholderCopy}>Pick a pattern to see its guidance.</p>
+        </section>
+      </div>
     </div>
   );
 }
