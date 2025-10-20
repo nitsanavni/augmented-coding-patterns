@@ -29,7 +29,7 @@
 
 - [x] Lay out the shell with sidebar + detail placeholders.
 - [x] Add sidebar filters skeleton (static controls, stubbed list).
-- [ ] Load real catalog data and group by type.
+- [x] Load real catalog data and group by type.
 - [ ] Implement selection flow to show chosen item details.
 - [ ] Wire filtering logic for type/author.
 - [ ] UX polish: icons, responsive tweaks, empty states, keyboard focus.

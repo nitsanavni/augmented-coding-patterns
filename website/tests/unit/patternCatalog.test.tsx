@@ -1,6 +1,8 @@
 import { render, screen, within } from '@testing-library/react'
 import PatternCatalogPage from '@/app/pattern-catalog/page'
 import { PATTERN_CATALOG_TEST_IDS } from '@/app/pattern-catalog/test-ids'
+import { PATTERN_CATALOG_GROUPS } from '@/app/pattern-catalog/constants'
+import { getAllPatterns } from '@/lib/markdown'
 
 describe('PatternCatalogPage', () => {
   it('renders title heading', async () => {
@@ -46,8 +48,30 @@ describe('PatternCatalogPage', () => {
     authorOptions.forEach((checkbox) => {
       expect(checkbox).toBeDisabled()
     })
-    expect(within(patternList).getAllByRole('listitem')).toHaveLength(1)
-    expect(within(antiPatternList).getAllByRole('listitem')).toHaveLength(1)
-    expect(within(obstacleList).getAllByRole('listitem')).toHaveLength(1)
+    expect(within(patternList).getAllByRole('listitem').length).toBeGreaterThan(0)
+    expect(within(antiPatternList).getAllByRole('listitem').length).toBeGreaterThan(0)
+    expect(within(obstacleList).getAllByRole('listitem').length).toBeGreaterThan(0)
+  })
+
+  it('loads catalog items grouped by category with item counts', async () => {
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
+
+    PATTERN_CATALOG_GROUPS.forEach(({ category, label, headingPattern }) => {
+      const items = getAllPatterns(category).sort((a, b) => a.title.localeCompare(b.title))
+      const heading = within(catalogRegion).getByRole('heading', {
+        level: 4,
+        name: headingPattern(items.length),
+      })
+      const list = within(catalogRegion).getByRole('list', { name: new RegExp(`^${label}$`, 'i') })
+      const links = within(list).getAllByRole('link')
+
+      expect(links).toHaveLength(items.length)
+      expect(links[0]).toHaveAttribute('href', `/${category}/${items[0].slug}`)
+      expect(links[0]).toHaveTextContent(items[0].title)
+    })
   })
 })

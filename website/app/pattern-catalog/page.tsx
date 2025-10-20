@@ -1,7 +1,43 @@
+import Link from "next/link";
 import styles from "./page.module.css";
 import { PATTERN_CATALOG_TEST_IDS } from "./test-ids";
+import { PATTERN_CATALOG_GROUPS } from "./constants";
+import { getAllPatterns } from "@/lib/markdown";
+import { PatternCategory } from "@/lib/types";
+
+interface CatalogListItem {
+  slug: string;
+  title: string;
+  emojiIndicator?: string;
+}
+
+interface CatalogGroup {
+  category: PatternCategory;
+  label: string;
+  items: CatalogListItem[];
+}
+
+function buildCatalogGroups(): CatalogGroup[] {
+  return PATTERN_CATALOG_GROUPS.map(({ category, label }) => {
+    const items = getAllPatterns(category)
+      .map((pattern) => ({
+        slug: pattern.slug,
+        title: pattern.title,
+        emojiIndicator: pattern.emojiIndicator,
+      }))
+      .sort((a, b) => a.title.localeCompare(b.title));
+
+    return {
+      category,
+      label,
+      items,
+    };
+  });
+}
 
 export default function PatternCatalogPage() {
+  const catalogGroups = buildCatalogGroups();
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -54,30 +90,27 @@ export default function PatternCatalogPage() {
             <h3 className={styles.subsectionTitle} id="pattern-catalog-preview-heading">
               Catalog preview
             </h3>
-            <div className={styles.stubGroup}>
-              <h4 className={styles.groupTitle} id="pattern-catalog-preview-patterns">
-                Patterns
-              </h4>
-              <ul className={styles.stubList} aria-labelledby="pattern-catalog-preview-patterns">
-                <li className={styles.stubListItem}>Sample pattern placeholder</li>
-              </ul>
-            </div>
-            <div className={styles.stubGroup}>
-              <h4 className={styles.groupTitle} id="pattern-catalog-preview-anti-patterns">
-                Anti-patterns
-              </h4>
-              <ul className={styles.stubList} aria-labelledby="pattern-catalog-preview-anti-patterns">
-                <li className={styles.stubListItem}>Sample anti-pattern placeholder</li>
-              </ul>
-            </div>
-            <div className={styles.stubGroup}>
-              <h4 className={styles.groupTitle} id="pattern-catalog-preview-obstacles">
-                Obstacles
-              </h4>
-              <ul className={styles.stubList} aria-labelledby="pattern-catalog-preview-obstacles">
-                <li className={styles.stubListItem}>Sample obstacle placeholder</li>
-              </ul>
-            </div>
+            {catalogGroups.map(({ category, label, items }) => (
+              <div key={category} className={styles.catalogGroup}>
+                <h4 className={styles.groupTitle}>
+                  {label} ({items.length})
+                </h4>
+                <ul className={styles.catalogList} aria-label={label}>
+                  {items.map((item) => (
+                    <li key={item.slug} className={styles.catalogListItem}>
+                      <Link href={`/${category}/${item.slug}`} className={styles.catalogLink}>
+                        {item.emojiIndicator && (
+                          <span aria-hidden="true" className={styles.catalogEmoji}>
+                            {item.emojiIndicator}
+                          </span>
+                        )}
+                        <span className={styles.catalogTitle}>{item.title}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </section>
         </aside>
         <section data-testid={PATTERN_CATALOG_TEST_IDS.detail} className={styles.detail}>
