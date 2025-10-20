@@ -5,43 +5,41 @@ authors: [lada_kesseler]
 # Offload Deterministic
 
 ## Problem
-AI is non-deterministic, so trying to use it for deterministic work — counting, parsing, transforming, repeating exact operations — produces unreliable outcomes. Every time you ask AI to do deterministic work, there's a chance it does it wrong.
+AI is non-deterministic. Using it for deterministic work (counting, parsing, exact operations, repeatable  tasks) produces unreliable results.
 
-_(See [[../obstacles/non-determinism.md]] for details)_
+Every time you ask AI to do something deterministic, there's a chance it does it wrong.
 
 ## Pattern
-**AI is bad at determinism. Code is good at it. Offload deterministic work to code.**
+AI is bad at determinism. Code is good at it. Use the right tool for the job.
 
-Two ways to apply this:
+**Don't ask AI to do deterministic work. Ask AI to write code that does it.**
 
-### 1. Obvious deterministic tasks - use the right tool for the job
-Skip AI entirely — just write code.
-- Counting things? Don't ask AI. Write code.
-- Parsing structured data? Don't ask AI. Write code.
-- Repeating exact operations? Don't ask AI. Write code.
+Then you run that code every time you need it - reliable and repeatable.
 
-### 2. When the "how" isn't obvious
-Use AI to explore once, then harden the solution into code:
-1. Use AI interactively to solve the problem once
-2. Once it works, write code (or have AI generate it), then test and tweak to your liking
-3. Run the code for all future executions
+**Use AI to explore. Use code to repeat.**
 
-Key insight: Use AI to explore. Use code to repeat. Each plays to its strengths.
+1. Identify the deterministic task (counting, parsing, repeating exact operation)
+2. Ask AI to write a script for it
+3. Test and tweak the script until it works how you want
+4. Run the script whenever you need it
 
-## Example 1 — Skip AI entirely
-Counting Rs in "strawberry" or counting lines in command output.
-AI is notoriously bad at counting — it's deterministic work, so use tools or code instead. 
-AI excells at using bash, so you could ask it to use bash instead: `echo "strawberry" | grep -o "r" | wc -l`. 
-For bigger tasks, have AI write a script.
+AI figures out the tricky bits (Puppeteer config, parsing logic, edge cases). You get reliable, repeatable execution.
 
-## Example 2 — Explore then write code
-Converting Mermaid diagrams to DrawIO
-- Gave AI a Mermaid diagram and example DrawIO XML. AI figured out the conversion.
-- Wrote code that does the conversion, adjusted to how I like it using colors and formatting.
-Every time I need an update, I can now get it quickly and reliably
+## Examples
 
-## Example 3 — Explore edge cases then write code
-Capturing app screenshots at iPhone dimensions
-- Asked AI how to capture at iPhone 12 dimensions (390x844). AI suggested Puppeteer. Found edge case: what if Puppeteer isn't installed? AI added Safari fallback.
-- Created `capture_screenshot.sh` with exact dimensions, fallback strategies, error handling, cleanup.
-Next time we need to update the screenshot, all of that is already figured out.
+**Counting:**
+Don't ask AI to count Rs in "strawberry" - it's bad at counting.
+Instead: Ask it to write bash - you'll get something like this that you can test and that is deterministic: `echo "strawberry" | grep -o "r" | wc -l`
+
+**Capturing screenshots:**
+Need to update app screenshot frequently. Don't ask AI each time to "take screenshot using Puppeteer" - unreliable.
+
+Instead: "Make me a shell script to capture screenshot at iPhone dimensions." AI figures out Puppeteer,
+dimensions, error handling. Script fails first try - puppeteer not installed. AI adds Safari fallback. Now
+you have `capture_screenshot.sh`. Run it anytime - reliable every time.
+
+**Converting diagrams:**
+Mermaid → DrawIO conversion needed repeatedly. Gave AI examples, it wrote conversion code. Tweaked colors and
+formatting. Now every update is quick and reliable.
+
+**Making tools makes you more capable.** AI helps you create the tools quickly. Code makes them reliable.
