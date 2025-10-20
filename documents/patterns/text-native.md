@@ -5,16 +5,18 @@ authors: [lada_kesseler]
 # Text Native
 
 ## Problem
-Text became so powerful with AI. We underuse text as a thinking and planning medium.
-We reach for specialized tools when text would be more powerful. Tool switching and format conversion slow us down.
+We underuse text as a thinking and planning medium. We reach for specialized tools, databases, UIs when text would be more powerful and accessible.
+
+Text is everything now. Staying in text keeps everything at your fingertips - no barriers, instant editing, AI's strongest modality.
 
 ## Pattern
-Staying in text can make you more powerful. Use ASCII for lightweight diagrams, architecture, UI mockups, planning.
-Text is AI's native medium - it thinks in text, responds in text.
-When you stay in text, you stay in AI's strongest modality.
+Stay in text. Use ASCII as lightweight diagrams - like markdown is to code, ASCII is to images.
 
-ASCII creates a shared workspace - both human and AI can edit.
-No tool switching, no format conversion, instant iteration. Text is fast.
+**Text is AI's native medium** - it thinks in text, responds in text. When you stay in text:
+- No tool switching, no format conversion
+- Instant iteration
+- Both human and AI can edit directly
+- Creates a shared whiteboard you can draw on together
 
 ## Example
 
@@ -28,9 +30,6 @@ Speech therapy app needed UI changes. Instead of building immediately:
 5. **Spec to todo list** - Clear implementation steps
 6. **Todos to code** - Each step verifiable
 
-Interesting aspect: Editing the ASCII mockup directly.
-AI produced it, human refined it, gave it back to AI.
-Both working in the same text medium.
 
 **Architecture diagrams:**
 ```
@@ -38,9 +37,6 @@ User → Load Balancer → [Server Pool] → Database
            ↓                ↓
         Cache Layer    Message Queue
 ```
-
-**State machines, flowcharts, UI mockups** - all in ASCII.
-Edit, version, share, transform - all without leaving text.
 
 **Understanding new codebases:**
 "Explain architecture for this code base on a high level. Use ASCII if it's helpful"
