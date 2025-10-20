@@ -4,19 +4,16 @@ authors: [lada_kesseler]
 
 # Extract Knowledge
 
-## Technique for
-[[knowledge-document.md]]
-
 ## Problem
-Valuable information - insights, corrections, preferences - emerges during conversations with AI, but it's ephemeral. Without capture, it disappears, forcing you to repeat yourself.
-
-_(See [[../obstacles/cannot-learn.md]] - AI doesn't learn, so you must preserve your thinking)_
+Valuable insights, corrections, and preferences emerge during conversations, but they're ephemeral. Without capture, they disappear, forcing you to repeat yourself session after session.
 
 ## Pattern
-As you work with AI and figure things out, explicitly ask AI to save insights to files.
-- Save as you go (don't wait until end)
-- Review and edit the saved content (AI's first pass may need refinement)
-- Creates reusable, restartable knowledge documents
+Like extract variable for conversations: when you figure something out, explicitly ask AI to save it to a file.
+- **Save as you go** - don't wait until the end of the session
+- **Review and edit** - AI's first pass may need refinement
+- **Modify existing docs** - update files when you discover improvements
 
 ## Example
-While integrating the `uv` package manager, AI repeatedly uses incorrect uv syntax. You create `uv.md` documenting the correct commands and usage, so next session AI uses uv correctly from the start.
+While integrating the `uv` package manager, AI repeatedly uses incorrect syntax. 
+You tell it correct commands via search or experimentation, then ask it to create `uv.md` documenting the correct commands. 
+Next session, you load that file when you need it, and AI uses uv correctly from the start.
