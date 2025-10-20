@@ -16,44 +16,69 @@ export default function PatternCatalogPage() {
           <h2 className={styles.sectionTitle}>Browse catalog</h2>
           <div className={styles.filters}>
             <h3 className={styles.subsectionTitle}>Filter catalog</h3>
-            <div className={styles.filterGroup}>
-              <label className={styles.filterLabel} htmlFor="pattern-catalog-type">
-                Type
+            <fieldset className={styles.filterGroup}>
+              <legend className={styles.filterLabel}>Type</legend>
+              <label className={styles.checkboxLabel}>
+                <input type="checkbox" name="type" value="all" disabled defaultChecked />
+                All types
               </label>
-              <select
-                className={styles.filterSelect}
-                id="pattern-catalog-type"
-                name="pattern-catalog-type"
-                disabled
-              >
-                <option>All types</option>
-                <option>Patterns</option>
-                <option>Anti-patterns</option>
-                <option>Obstacles</option>
-              </select>
-            </div>
-            <div className={styles.filterGroup}>
-              <label className={styles.filterLabel} htmlFor="pattern-catalog-author">
-                Author
+              <label className={styles.checkboxLabel}>
+                <input type="checkbox" name="type" value="pattern" disabled />
+                Patterns
               </label>
-              <select
-                className={styles.filterSelect}
-                id="pattern-catalog-author"
-                name="pattern-catalog-author"
-                disabled
-              >
-                <option>All authors</option>
-              </select>
+              <label className={styles.checkboxLabel}>
+                <input type="checkbox" name="type" value="anti-pattern" disabled />
+                Anti-patterns
+              </label>
+              <label className={styles.checkboxLabel}>
+                <input type="checkbox" name="type" value="obstacle" disabled />
+                Obstacles
+              </label>
+            </fieldset>
+            <fieldset className={styles.filterGroup}>
+              <legend className={styles.filterLabel}>Author</legend>
+              <label className={styles.checkboxLabel}>
+                <input type="checkbox" name="author" value="all" disabled defaultChecked />
+                All authors
+              </label>
+              <label className={styles.checkboxLabel}>
+                <input type="checkbox" name="author" value="placeholder-author" disabled />
+                Placeholder author
+              </label>
+            </fieldset>
+          </div>
+          <section
+            className={styles.listSection}
+            aria-labelledby="pattern-catalog-preview-heading"
+          >
+            <h3 className={styles.subsectionTitle} id="pattern-catalog-preview-heading">
+              Catalog preview
+            </h3>
+            <div className={styles.stubGroup}>
+              <h4 className={styles.groupTitle} id="pattern-catalog-preview-patterns">
+                Patterns
+              </h4>
+              <ul className={styles.stubList} aria-labelledby="pattern-catalog-preview-patterns">
+                <li className={styles.stubListItem}>Sample pattern placeholder</li>
+              </ul>
             </div>
-          </div>
-          <div className={styles.listSection}>
-            <h3 className={styles.subsectionTitle}>Catalog preview</h3>
-            <ul className={styles.stubList} aria-label="Catalog preview">
-              <li className={styles.stubListItem}>Sample pattern placeholder</li>
-              <li className={styles.stubListItem}>Sample anti-pattern placeholder</li>
-              <li className={styles.stubListItem}>Sample obstacle placeholder</li>
-            </ul>
-          </div>
+            <div className={styles.stubGroup}>
+              <h4 className={styles.groupTitle} id="pattern-catalog-preview-anti-patterns">
+                Anti-patterns
+              </h4>
+              <ul className={styles.stubList} aria-labelledby="pattern-catalog-preview-anti-patterns">
+                <li className={styles.stubListItem}>Sample anti-pattern placeholder</li>
+              </ul>
+            </div>
+            <div className={styles.stubGroup}>
+              <h4 className={styles.groupTitle} id="pattern-catalog-preview-obstacles">
+                Obstacles
+              </h4>
+              <ul className={styles.stubList} aria-labelledby="pattern-catalog-preview-obstacles">
+                <li className={styles.stubListItem}>Sample obstacle placeholder</li>
+              </ul>
+            </div>
+          </section>
         </aside>
         <section data-testid={PATTERN_CATALOG_TEST_IDS.detail} className={styles.detail}>
           <h2 className={styles.sectionTitle}>Pattern details</h2>
