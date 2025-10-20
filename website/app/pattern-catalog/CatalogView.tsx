@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { KeyboardEvent, MouseEvent, useEffect, useMemo, useState } from "react";
+import { MouseEvent, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import styles from "./page.module.css";
@@ -49,6 +49,8 @@ export default function CatalogView({ groups }: CatalogViewProps) {
     const options = extractAuthorOptions(groups);
     return options.map((option) => option.id);
   });
+  const [typeMenuOpen, setTypeMenuOpen] = useState(false);
+  const [authorMenuOpen, setAuthorMenuOpen] = useState(false);
 
   const [selected, setSelected] = useState<SelectedCatalogItem | null>(null);
   const selectedConfig = selected ? getCategoryConfig(selected.category) : null;
@@ -65,9 +67,41 @@ export default function CatalogView({ groups }: CatalogViewProps) {
   const hasAuthorFilter = authorOptions.length > 0 && activeAuthorIds.length !== authorOptions.length;
   const hasActiveFilters = hasTypeFilter || hasAuthorFilter;
 
+  const typeSummary = useMemo(() => {
+    if (activeTypes.length === typeOptions.length) {
+      return "All types";
+    }
+
+    if (activeTypes.length === 0) {
+      return "None";
+    }
+
+    return typeOptions
+      .filter((option) => activeTypes.includes(option.category))
+      .map((option) => option.label)
+      .join(", ");
+  }, [activeTypes, typeOptions]);
+
+  const authorSummary = useMemo(() => {
+    if (authorOptions.length === 0 || activeAuthorIds.length === authorOptions.length) {
+      return "All authors";
+    }
+
+    if (activeAuthorIds.length === 0) {
+      return "None";
+    }
+
+    return authorOptions
+      .filter((option) => activeAuthorIds.includes(option.id))
+      .map((option) => option.name)
+      .join(", ");
+  }, [activeAuthorIds, authorOptions]);
+
   const resetFilters = () => {
     setActiveTypes(typeOptions.map(({ category }) => category));
     setActiveAuthorIds(authorOptions.map(({ id }) => id));
+    setTypeMenuOpen(false);
+    setAuthorMenuOpen(false);
   };
 
   const filteredGroups = useMemo(() => {
@@ -144,18 +178,6 @@ export default function CatalogView({ groups }: CatalogViewProps) {
     setSelected({ groupLabel, category, item });
   };
 
-  const handleKeyDown = (
-    event: KeyboardEvent<HTMLAnchorElement>,
-    groupLabel: string,
-    category: SelectedCatalogItem["category"],
-    item: CatalogPreviewItem,
-  ) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      setSelected({ groupLabel, category, item });
-    }
-  };
-
   const isSelected = (groupLabel: string, item: CatalogPreviewItem) => {
     return selected?.groupLabel === groupLabel && selected.item.slug === item.slug;
   };
@@ -170,47 +192,95 @@ export default function CatalogView({ groups }: CatalogViewProps) {
         <h2 className={styles.sectionTitle}>Browse catalog</h2>
         <div className={styles.filters}>
           <h3 className={styles.subsectionTitle}>Filter catalog</h3>
-          <fieldset className={styles.filterGroup}>
-            <legend className={styles.filterLabel}>Type</legend>
-            {typeOptions.map(({ category, label, icon, styleClass }) => (
-              <label key={category} className={styles.checkboxLabel}>
-                <input
-                  type="checkbox"
-                  name={`type-${category}`}
-                  value={category}
-                  aria-label={`${label} type`}
-                  checked={activeTypes.includes(category)}
-                  onChange={() => toggleType(category)}
-                />
-                <span className={styles.filterOptionLabel}>
-                  <span
-                    className={`${styles.filterOptionIcon} ${styles[styleClass]}`}
-                    aria-hidden="true"
-                  >
-                    {icon}
-                  </span>
-                  {label}
-                </span>
-              </label>
-            ))}
-          </fieldset>
+          <div className={styles.filterGroup}>
+            <button
+              type="button"
+              className={styles.filterToggle}
+              aria-expanded={typeMenuOpen}
+              aria-controls="pattern-catalog-type-menu"
+              onClick={() => {
+                setTypeMenuOpen((prev) => {
+                  const next = !prev;
+                  if (!prev) {
+                    setAuthorMenuOpen(false);
+                  }
+                  return next;
+                });
+              }}
+            >
+              <span className={styles.filterToggleLabel}>Type filter</span>
+              <span className={styles.filterToggleSummary}>{typeSummary}</span>
+            </button>
+            {typeMenuOpen && (
+              <div
+                id="pattern-catalog-type-menu"
+                role="group"
+                aria-label="Type filter options"
+                className={styles.filterMenu}
+              >
+                {typeOptions.map(({ category, label, icon, styleClass }) => (
+                    <label key={category} className={styles.filterMenuItem}>
+                      <input
+                        type="checkbox"
+                        value={category}
+                        checked={activeTypes.includes(category)}
+                        onChange={() => toggleType(category)}
+                      />
+                    <span className={styles.filterMenuItemLabel}>
+                      <span
+                        className={`${styles.filterOptionIcon} ${styles[styleClass]}`}
+                        aria-hidden="true"
+                      >
+                        {icon}
+                      </span>
+                      {label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
           {authorOptions.length > 0 && (
-            <fieldset className={styles.filterGroup}>
-              <legend className={styles.filterLabel}>Author</legend>
-              {authorOptions.map((option) => (
-                <label key={option.id} className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    name={`author-${option.id}`}
-                    value={option.id}
-                    aria-label={`Author ${option.name}`}
-                    checked={activeAuthorIds.includes(option.id)}
-                    onChange={() => toggleAuthor(option.id)}
-                  />
-                  {option.name}
-                </label>
-              ))}
-            </fieldset>
+            <div className={styles.filterGroup}>
+              <button
+                type="button"
+                className={styles.filterToggle}
+                aria-expanded={authorMenuOpen}
+                aria-controls="pattern-catalog-author-menu"
+                onClick={() => {
+                  setAuthorMenuOpen((prev) => {
+                    const next = !prev;
+                    if (!prev) {
+                      setTypeMenuOpen(false);
+                    }
+                    return next;
+                  });
+                }}
+              >
+                <span className={styles.filterToggleLabel}>Author filter</span>
+                <span className={styles.filterToggleSummary}>{authorSummary}</span>
+              </button>
+              {authorMenuOpen && (
+                <div
+                  id="pattern-catalog-author-menu"
+                  role="group"
+                  aria-label="Author filter options"
+                  className={styles.filterMenu}
+                >
+                  {authorOptions.map((option) => (
+                    <label key={option.id} className={styles.filterMenuItem}>
+                      <input
+                        type="checkbox"
+                        value={option.id}
+                        checked={activeAuthorIds.includes(option.id)}
+                        onChange={() => toggleAuthor(option.id)}
+                      />
+                      <span className={styles.filterMenuItemLabel}>{option.name}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
           {hasActiveFilters && (
             <button type="button" className={styles.resetButton} onClick={resetFilters}>
@@ -251,7 +321,6 @@ export default function CatalogView({ groups }: CatalogViewProps) {
                         className={styles.catalogLink}
                         aria-current={isSelected(group.label, item) ? "true" : undefined}
                         onClick={(event) => handleSelect(event, group.label, group.category, item)}
-                        onKeyDown={(event) => handleKeyDown(event, group.label, group.category, item)}
                       >
                         {item.emojiIndicator && (
                           <span aria-hidden="true" className={styles.catalogEmoji}>

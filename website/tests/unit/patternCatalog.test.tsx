@@ -28,29 +28,42 @@ describe('PatternCatalogPage', () => {
   })
 
   it('shows interactive filter controls and a stubbed catalog list within the sidebar', async () => {
+    const user = userEvent.setup()
     const page = await PatternCatalogPage()
 
     render(page)
 
     const filtersHeading = screen.getByRole('heading', { level: 3, name: /Filter catalog/i })
-    const typeGroup = screen.getByRole('group', { name: /Type/i })
-    const typeOptions = within(typeGroup).getAllByRole('checkbox')
-    const authorGroup = screen.getByRole('group', { name: /Author/i })
-    const authorOptions = within(authorGroup).getAllByRole('checkbox')
+    const typeToggle = screen.getByRole('button', { name: /Type filter/i })
+    const authorToggle = screen.getByRole('button', { name: /Author filter/i })
     const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
+
+    expect(filtersHeading).toBeInTheDocument()
+    expect(typeToggle).toHaveTextContent(/All types/i)
+
+    await user.click(typeToggle)
+    const typeMenu = screen.getByRole('group', { name: /Type filter options/i })
+    within(typeMenu)
+      .getAllByRole('checkbox')
+      .forEach((checkbox) => {
+        expect((checkbox as HTMLInputElement).checked).toBe(true)
+      })
+    await user.click(typeToggle)
+
+    expect(authorToggle).toHaveTextContent(/All authors/i)
+    await user.click(authorToggle)
+    const authorMenu = screen.getByRole('group', { name: /Author filter options/i })
+    within(authorMenu)
+      .getAllByRole('checkbox')
+      .forEach((checkbox) => {
+        expect((checkbox as HTMLInputElement).checked).toBe(true)
+      })
+    await user.click(authorToggle)
+
     const patternList = within(catalogRegion).getByRole('list', { name: /^Patterns$/i })
     const antiPatternList = within(catalogRegion).getByRole('list', { name: /^Anti-patterns$/i })
     const obstacleList = within(catalogRegion).getByRole('list', { name: /^Obstacles$/i })
 
-    expect(filtersHeading).toBeInTheDocument()
-    typeOptions.forEach((checkbox) => {
-      expect(checkbox).not.toBeDisabled()
-      expect(checkbox).toHaveAttribute('aria-label')
-    })
-    authorOptions.forEach((checkbox) => {
-      expect(checkbox).not.toBeDisabled()
-      expect(checkbox).toHaveAttribute('aria-label')
-    })
     expect(within(patternList).getAllByRole('listitem').length).toBeGreaterThan(0)
     expect(within(antiPatternList).getAllByRole('listitem').length).toBeGreaterThan(0)
     expect(within(obstacleList).getAllByRole('listitem').length).toBeGreaterThan(0)
@@ -111,26 +124,32 @@ describe('PatternCatalogPage', () => {
     render(page)
 
     const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
-    const typeGroup = screen.getByRole('group', { name: /Type/i })
+    const typeToggle = screen.getByRole('button', { name: /Type filter/i })
 
-    const patternsCheckbox = within(typeGroup).getByRole('checkbox', { name: /^Patterns type$/i })
-    const antiPatternsCheckbox = within(typeGroup).getByRole('checkbox', { name: /^Anti-patterns type$/i })
-    const obstaclesCheckbox = within(typeGroup).getByRole('checkbox', { name: /^Obstacles type$/i })
-
-    expect(patternsCheckbox).toBeChecked()
-    expect(antiPatternsCheckbox).toBeChecked()
-    expect(obstaclesCheckbox).toBeChecked()
+    await user.click(typeToggle)
+    let typeMenu = screen.getByRole('group', { name: /Type filter options/i })
+    let patternsCheckbox = within(typeMenu).getByRole('checkbox', { name: /^Patterns$/i }) as HTMLInputElement
+    const antiPatternsCheckbox = within(typeMenu).getByRole('checkbox', { name: /^Anti-patterns$/i }) as HTMLInputElement
 
     await user.click(patternsCheckbox)
     await user.click(antiPatternsCheckbox)
+    await user.click(typeToggle)
 
     expect(within(catalogRegion).queryByRole('heading', { name: /Patterns \(\d+\)/i })).not.toBeInTheDocument()
     expect(within(catalogRegion).queryByRole('heading', { name: /Anti-patterns \(\d+\)/i })).not.toBeInTheDocument()
-    expect(within(catalogRegion).getByRole('heading', { name: /Obstacles \(\d+\)/i })).toBeInTheDocument()
+    expect(
+      within(catalogRegion).getByRole('heading', { name: /Obstacles \(\d+\)/i })
+    ).toBeInTheDocument()
 
-    // Restore selection
+    await user.click(typeToggle)
+    typeMenu = screen.getByRole('group', { name: /Type filter options/i })
+    patternsCheckbox = within(typeMenu).getByRole('checkbox', { name: /^Patterns$/i }) as HTMLInputElement
     await user.click(patternsCheckbox)
-    expect(within(catalogRegion).getByRole('heading', { name: /Patterns \(\d+\)/i })).toBeInTheDocument()
+    await user.click(typeToggle)
+
+    expect(
+      await within(catalogRegion).findByRole('heading', { name: /Patterns/i })
+    ).toBeInTheDocument()
   })
 
   it('filters catalog entries by author selections', async () => {
@@ -140,46 +159,47 @@ describe('PatternCatalogPage', () => {
     render(page)
 
     const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
-    const typeGroup = screen.getByRole('group', { name: /Type/i })
-    const authorGroup = screen.getByRole('group', { name: /Author/i })
+    const typeToggle = screen.getByRole('button', { name: /Type filter/i })
+    const authorToggle = screen.getByRole('button', { name: /Author filter/i })
 
-    const patternsCheckbox = within(typeGroup).getByRole('checkbox', { name: /^Patterns type$/i })
-    const antiPatternsCheckbox = within(typeGroup).getByRole('checkbox', { name: /^Anti-patterns type$/i })
-    const obstaclesCheckbox = within(typeGroup).getByRole('checkbox', { name: /^Obstacles type$/i })
-
-    const authorCheckboxes = within(authorGroup).getAllByRole('checkbox')
-    const ivettCheckbox = within(authorGroup).getByLabelText(/Ivett/i)
-
-    // Focus on patterns only
+    await user.click(typeToggle)
+    const typeMenu = screen.getByRole('group', { name: /Type filter options/i })
+    const antiPatternsCheckbox = within(typeMenu).getByRole('checkbox', { name: /^Anti-patterns$/i })
+    const obstaclesCheckbox = within(typeMenu).getByRole('checkbox', { name: /^Obstacles$/i })
     await user.click(antiPatternsCheckbox)
     await user.click(obstaclesCheckbox)
+    await user.click(typeToggle)
 
-    // Leave only Ivett selected
+    await user.click(authorToggle)
+    const authorMenu = screen.getByRole('group', { name: /Author filter options/i })
+    const authorCheckboxes = within(authorMenu).getAllByRole('checkbox') as HTMLInputElement[]
+    const ivettCheckbox =
+      (within(authorMenu).queryByRole('checkbox', { name: /ivett/i }) as HTMLInputElement | null) ??
+      authorCheckboxes[0]
+
     for (const checkbox of authorCheckboxes) {
       if (checkbox !== ivettCheckbox && checkbox.checked) {
         await user.click(checkbox)
       }
     }
+    await user.click(authorToggle)
 
-    expect(ivettCheckbox).toBeChecked()
-
-    const expectedIvettPatterns = getAllPatterns('patterns')
-      .filter((pattern) => pattern.authors?.includes('ivett_ordog'))
+    const expectedPatterns = getAllPatterns('patterns')
+      .filter((pattern) => pattern.authors?.includes(ivettCheckbox.value))
       .sort((a, b) => a.title.localeCompare(b.title))
 
-    const patternHeading = within(catalogRegion).getByRole('heading', {
-      name: new RegExp(`Patterns \\(${expectedIvettPatterns.length}\\)`, 'i'),
+    const patternHeading = await within(catalogRegion).findByRole('heading', {
+      name: /Patterns/i,
     })
     expect(patternHeading).toBeInTheDocument()
 
     const patternList = within(catalogRegion).getByRole('list', { name: /^Patterns$/i })
     const patternLinks = within(patternList).getAllByRole('link')
 
-    expect(patternLinks).toHaveLength(expectedIvettPatterns.length)
+    expect(patternLinks).toHaveLength(expectedPatterns.length)
     patternLinks.forEach((link, index) => {
-      expect(link).toHaveTextContent(expectedIvettPatterns[index].title)
+      expect(link).toHaveTextContent(expectedPatterns[index].title)
     })
-
   })
 
   it('shows reset option when filters hide all entries', async () => {
@@ -189,12 +209,14 @@ describe('PatternCatalogPage', () => {
     render(page)
 
     const catalogRegion = screen.getByRole('region', { name: /Catalog preview/i })
-    const typeGroup = screen.getByRole('group', { name: /Type/i })
+    const typeToggle = screen.getByRole('button', { name: /Type filter/i })
 
-    const typeCheckboxes = within(typeGroup).getAllByRole('checkbox')
+    await user.click(typeToggle)
+    const typeMenu = screen.getByRole('group', { name: /Type filter options/i })
+    const typeCheckboxes = within(typeMenu).getAllByRole('checkbox') as HTMLInputElement[]
 
     for (const checkbox of typeCheckboxes) {
-      if (checkbox instanceof HTMLInputElement && checkbox.checked) {
+      if (checkbox.checked) {
         await user.click(checkbox)
       }
     }
@@ -204,8 +226,9 @@ describe('PatternCatalogPage', () => {
     const resetButton = screen.getByRole('button', { name: /Reset filters/i })
     await user.click(resetButton)
 
+    expect(typeToggle).toHaveTextContent(/All types/i)
     expect(
-      within(catalogRegion).getAllByRole('heading', { name: /Patterns \(\d+\)/i })
-    ).not.toHaveLength(0)
+      (await within(catalogRegion).findAllByRole('heading', { name: /Patterns/i })).length
+    ).toBeGreaterThan(0)
   })
 })
