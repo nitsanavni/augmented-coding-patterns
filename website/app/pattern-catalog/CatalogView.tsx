@@ -115,6 +115,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
           emojiIndicator: item.emojiIndicator,
           authors: item.authorIds,
           content: item.content,
+          rawContent: item.content,
         }))
       ),
     [groups]
@@ -128,15 +129,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
   const authorOptions = useMemo(() => extractAuthorOptions(groups), [groups]);
 
   const allAuthorsSelected = activeAuthorIds.length === authorOptions.length || authorOptions.length === 0;
-  const hasTypeFilter = activeTypes.length !== typeOptions.length;
-  const hasAuthorFilter = authorOptions.length > 0 && activeAuthorIds.length !== authorOptions.length;
-  const hasActiveFilters = hasTypeFilter || hasAuthorFilter;
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>(() => ({}));
-
-  const resetFilters = () => {
-    setActiveTypes(typeOptions.map(({ category }) => category));
-    setActiveAuthorIds(authorOptions.map(({ id }) => id));
-  };
 
   const filteredGroups = useMemo(() => {
     return groups

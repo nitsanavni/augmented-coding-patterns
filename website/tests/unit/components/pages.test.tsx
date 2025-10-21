@@ -45,7 +45,7 @@ describe('Home Page', () => {
 
   it('renders the hero description', () => {
     render(<Home />)
-    const description = screen.getByText(/A comprehensive collection of patterns/i)
+    const description = screen.getByText(/A collection of emerging patterns/i)
     expect(description).toBeInTheDocument()
   })
 
