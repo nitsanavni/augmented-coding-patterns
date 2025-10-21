@@ -6,6 +6,15 @@ import { PATTERN_CATALOG_GROUPS } from '@/app/pattern-catalog/constants'
 import { getAllPatterns } from '@/lib/markdown'
 import { useRouter } from 'next/navigation'
 
+async function selectSearchResult(user: ReturnType<typeof userEvent.setup>, optionTitle: string) {
+  const searchbox = screen.getByRole('search', { name: /Search patterns/i })
+  await user.clear(searchbox)
+  await user.type(searchbox, optionTitle)
+
+  const resultLink = await screen.findByRole('link', { name: new RegExp(optionTitle, 'i') })
+  await user.click(resultLink)
+}
+
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }))
@@ -202,5 +211,24 @@ describe('PatternCatalogPage', () => {
 
     expect(screen.getByText(/No entries match these filters/i)).toBeInTheDocument()
     expect(within(catalogRegion).queryByRole('list')).not.toBeInTheDocument()
+  })
+
+  it('re-activates a category filter when selecting a search result within that category', async () => {
+    const user = userEvent.setup()
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
+    const obstaclesToggle = screen.getByRole('button', { name: /^Obstacles$/i })
+
+    await user.click(obstaclesToggle)
+
+    const obstacles = getAllPatterns('obstacles').sort((a, b) => a.title.localeCompare(b.title))
+    const target = obstacles[0]
+
+    await selectSearchResult(user, target.title)
+
+    expect(within(catalogRegion).getByRole('list', { name: /^Obstacles$/i })).toBeInTheDocument()
   })
 })

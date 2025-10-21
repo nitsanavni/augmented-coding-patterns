@@ -75,6 +75,32 @@ export default function CatalogView({ groups }: CatalogViewProps) {
     const group = groups.find((g) => g.category === pattern.category);
     const item = group?.items.find((i) => i.slug === pattern.slug);
     if (group && item) {
+      setActiveTypes((prev) => {
+        if (prev.includes(group.category)) {
+          return prev;
+        }
+
+        const next = new Set(prev);
+        next.add(group.category);
+        const orderedCategories = typeOptions.map(({ category }) => category);
+        const nextList = orderedCategories.filter((category) => next.has(category));
+        return nextList.length === prev.length && prev.every((category, index) => category === nextList[index])
+          ? prev
+          : nextList;
+      });
+
+      if (authorOptions.length > 0 && item.authorIds.length > 0) {
+        setActiveAuthorIds((prev) => {
+          const next = new Set(prev);
+          item.authorIds.forEach((authorId) => next.add(authorId));
+          const orderedAuthorIds = authorOptions.map(({ id }) => id).filter((id) => next.has(id));
+          if (orderedAuthorIds.length === prev.length && prev.every((id, index) => id === orderedAuthorIds[index])) {
+            return prev;
+          }
+          return orderedAuthorIds;
+        });
+      }
+
       setSelected({ groupLabel: group.label, category: group.category, item });
     }
   };
