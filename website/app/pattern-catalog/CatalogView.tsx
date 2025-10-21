@@ -212,6 +212,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
       <aside data-testid={PATTERN_CATALOG_TEST_IDS.sidebar} className={styles.sidebar}>
         <div className={styles.filters}>
           <div className={styles.filterGroup}>
+            <h3 className={styles.filterGroupLabel}>Type</h3>
             <div className={styles.typeButtonGroup} role="group" aria-label="Type filter">
               <button
                 type="button"

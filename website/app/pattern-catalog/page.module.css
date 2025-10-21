@@ -85,6 +85,14 @@
   margin-bottom: var(--space-xs);
 }
 
+.filterGroupLabel {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-sm);
+  letter-spacing: 0.05em;
+}
+
 .typeButtonGroup {
   display: flex;
   gap: var(--space-sm);
