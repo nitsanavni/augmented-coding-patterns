@@ -133,7 +133,6 @@
   transition: opacity var(--transition-fast), transform var(--transition-fast);
   z-index: 1000;
   font-weight: 400;
-  border: 1px solid var(--color-border);
   box-shadow: var(--shadow-sm);
 }
 
@@ -196,7 +195,7 @@
   padding: 0;
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .authorButton::after {
@@ -216,7 +215,6 @@
   transition: opacity var(--transition-fast), transform var(--transition-fast);
   z-index: 1000;
   font-weight: 400;
-  border: 1px solid var(--color-border);
   box-shadow: var(--shadow-sm);
 }
 
@@ -261,6 +259,7 @@
 .authorAvatar {
   border-radius: var(--border-radius-sm);
   object-fit: cover;
+  display: block;
 }
 
 .filterToggle {
