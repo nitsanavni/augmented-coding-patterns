@@ -21,7 +21,7 @@ export default function Home() {
       <section className={styles.hero}>
         <h1>Augmented Coding Patterns</h1>
         <p>
-          A comprehensive collection of patterns, anti-patterns, and obstacles for effective AI-augmented software development.
+          A collection of emerging patterns, anti-patterns and obstacles for effective AI-augmented software development.
           Learn how to collaborate successfully with AI coding assistants and avoid common pitfalls.
         </p>
         <div className={styles.searchContainer}>
