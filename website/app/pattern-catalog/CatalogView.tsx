@@ -219,7 +219,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
                 className={`${styles.typeButton} ${allTypesSelected ? styles.typeButtonActive : ""}`}
                 onClick={toggleAllTypes}
                 aria-pressed={allTypesSelected}
-                title="All types"
+                title="Show All"
               >
                 ∞
               </button>
