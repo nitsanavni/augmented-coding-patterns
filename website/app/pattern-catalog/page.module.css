@@ -87,8 +87,8 @@
 
 .filterGroupLabel {
   font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--color-text-secondary);
+  font-weight: 700;
+  color: var(--color-text-primary);
   margin: 0 0 var(--space-sm);
   letter-spacing: 0.05em;
 }
@@ -116,6 +116,30 @@
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
+.typeButton::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background-color: var(--color-text-primary);
+  color: var(--color-background);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  z-index: 1000;
+  font-weight: 500;
+}
+
+.typeButton:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+}
+
 .typeButton:hover {
   border-color: var(--color-border-dark);
   transform: translateY(-2px);
@@ -124,6 +148,10 @@
 
 .typeButton:active {
   transform: translateY(0);
+}
+
+.typeButton:active::after {
+  opacity: 0;
 }
 
 .typeButton:focus-visible {
