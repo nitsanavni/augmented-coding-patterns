@@ -9,6 +9,7 @@ import styles from './SearchBar.module.css'
 
 interface SearchBarProps {
   patterns: PatternContent[]
+  onSelect?: (pattern: PatternContent) => void
 }
 
 interface GroupedResults {
@@ -17,7 +18,7 @@ interface GroupedResults {
   patterns: PatternContent[]
 }
 
-export default function SearchBar({ patterns }: SearchBarProps) {
+export default function SearchBar({ patterns, onSelect }: SearchBarProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(-1)
@@ -107,11 +108,18 @@ export default function SearchBar({ patterns }: SearchBarProps) {
         event.preventDefault()
         if (selectedIndex >= 0 && selectedIndex < totalResults) {
           const selectedResult = flattenedResults[selectedIndex]
-          const url = `/${selectedResult.category}/${selectedResult.pattern.slug}/`
-          router.push(url)
-          setSearchQuery('')
-          setIsOpen(false)
-          inputRef.current?.blur()
+          if (onSelect) {
+            onSelect(selectedResult.pattern)
+            setSearchQuery('')
+            setIsOpen(false)
+            inputRef.current?.blur()
+          } else {
+            const url = `/${selectedResult.category}/${selectedResult.pattern.slug}/`
+            router.push(url)
+            setSearchQuery('')
+            setIsOpen(false)
+            inputRef.current?.blur()
+          }
         }
         break
       case 'Escape':
@@ -175,6 +183,16 @@ export default function SearchBar({ patterns }: SearchBarProps) {
                         const absoluteIndex = startIndex + index
                         const isSelected = absoluteIndex === selectedIndex
 
+                        const handleClick = (e: React.MouseEvent) => {
+                          if (onSelect) {
+                            e.preventDefault()
+                            onSelect(pattern)
+                            handleResultClick()
+                          } else {
+                            handleResultClick()
+                          }
+                        }
+
                         return (
                           <Link
                             key={pattern.slug}
@@ -182,7 +200,7 @@ export default function SearchBar({ patterns }: SearchBarProps) {
                             className={`${styles.resultItem} ${
                               isSelected ? styles.resultItemSelected : ''
                             }`}
-                            onClick={handleResultClick}
+                            onClick={handleClick}
                           >
                             <span className={styles.resultCategoryIcon}>
                               {categoryConfig.icon}

@@ -5,7 +5,6 @@ import { getAuthorById } from "@/lib/authors";
 import CatalogView from "./CatalogView";
 import { CatalogGroupData, CatalogPreviewItem } from "./types";
 import { getCategoryConfig } from "@/app/lib/category-config";
-import SearchBar from "@/app/components/SearchBar";
 
 function extractSummary(markdown: string): string | undefined {
   const lines = markdown.split("\n");
@@ -105,25 +104,9 @@ function buildCatalogGroups(): CatalogGroupData[] {
 export default function PatternCatalogPage() {
   const catalogGroups = buildCatalogGroups();
 
-  const allPatterns = catalogGroups.flatMap((group) =>
-    group.items.map((item) => ({
-      slug: item.slug,
-      title: item.title,
-      category: group.category,
-      emojiIndicator: item.emojiIndicator,
-      authors: item.authorIds,
-      content: item.content,
-    }))
-  );
-
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>Pattern Catalog</h1>
-        <div className={styles.searchContainer}>
-          <SearchBar patterns={allPatterns} />
-        </div>
-      </header>
+      <h1 className={styles.title}>Pattern Catalog</h1>
       <CatalogView groups={catalogGroups} />
     </div>
   );

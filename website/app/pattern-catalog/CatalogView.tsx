@@ -9,6 +9,8 @@ import styles from "./page.module.css";
 import { CatalogGroupData, CatalogPreviewItem } from "./types";
 import { PATTERN_CATALOG_TEST_IDS } from "./test-ids";
 import { getCategoryConfig } from "@/app/lib/category-config";
+import SearchBar from "@/app/components/SearchBar";
+import { PatternContent } from "@/lib/types";
 
 interface CatalogViewProps {
   groups: CatalogGroupData[];
@@ -66,6 +68,29 @@ export default function CatalogView({ groups }: CatalogViewProps) {
 
   const [selected, setSelected] = useState<SelectedCatalogItem | null>(null);
   const selectedConfig = selected ? getCategoryConfig(selected.category) : null;
+
+  const handleSearchSelect = (pattern: PatternContent) => {
+    const group = groups.find((g) => g.category === pattern.category);
+    const item = group?.items.find((i) => i.slug === pattern.slug);
+    if (group && item) {
+      setSelected({ groupLabel: group.label, category: group.category, item });
+    }
+  };
+
+  const allPatterns = useMemo(
+    () =>
+      groups.flatMap((group) =>
+        group.items.map((item) => ({
+          slug: item.slug,
+          title: item.title,
+          category: group.category,
+          emojiIndicator: item.emojiIndicator,
+          authors: item.authorIds,
+          content: item.content,
+        }))
+      ),
+    [groups]
+  );
 
   const typeOptions = useMemo(
     () => groups.map(({ category, label, icon, styleClass }) => ({ category, label, icon, styleClass })),
@@ -186,6 +211,12 @@ export default function CatalogView({ groups }: CatalogViewProps) {
       setActiveTypes(typeOptions.map(({ category }) => category));
     }
   };
+
+  const searchBar = (
+    <div className={styles.searchContainer}>
+      <SearchBar patterns={allPatterns} onSelect={handleSearchSelect} />
+    </div>
+  );
 
   const filterControls = (
     <div className={styles.filters}>
@@ -336,6 +367,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
         </section>
       </aside>
       <section data-testid={PATTERN_CATALOG_TEST_IDS.detail} className={styles.detail}>
+        {searchBar}
         {filterControls}
         {selected && selectedConfig ? (
           <article className={styles.detailContent} aria-live="polite">
