@@ -55,11 +55,11 @@ describe('RootLayout', () => {
       expect(patternsLink).toHaveAttribute('href', '/patterns')
     })
 
-    it('renders Pattern Catalog link between Home and Obstacles', () => {
+    it('renders Complete Catalog link between Home and Obstacles', () => {
       const navLinks = getNavLinkTexts()
       expect(navLinks).toEqual([
         'Home',
-        'Pattern Catalog',
+        'Complete Catalog',
         'Obstacles',
         'Anti-Patterns',
         'Patterns',

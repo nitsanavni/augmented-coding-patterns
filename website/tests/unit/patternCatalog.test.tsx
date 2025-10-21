@@ -27,7 +27,7 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const heading = screen.getByRole('heading', { level: 1, name: /Pattern Catalog/i })
+    const heading = screen.getByRole('heading', { level: 1, name: /Complete Catalog/i })
     expect(heading).toBeInTheDocument()
   })
 
