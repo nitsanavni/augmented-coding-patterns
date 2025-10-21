@@ -419,14 +419,17 @@
 
 .groupTitleIcon.patterns {
   color: var(--color-pattern);
+  background-color: transparent;
 }
 
 .groupTitleIcon.antiPatterns {
   color: var(--color-anti-pattern);
+  background-color: transparent;
 }
 
 .groupTitleIcon.obstacles {
   color: var(--color-obstacle);
+  background-color: transparent;
 }
 
 .catalogList {
