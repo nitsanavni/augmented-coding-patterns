@@ -4,8 +4,24 @@ import PatternCatalogPage from '@/app/pattern-catalog/page'
 import { PATTERN_CATALOG_TEST_IDS } from '@/app/pattern-catalog/test-ids'
 import { PATTERN_CATALOG_GROUPS } from '@/app/pattern-catalog/constants'
 import { getAllPatterns } from '@/lib/markdown'
+import { useRouter } from 'next/navigation'
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}))
 
 describe('PatternCatalogPage', () => {
+  const mockRouter = {
+    push: jest.fn(),
+    replace: jest.fn(),
+    prefetch: jest.fn(),
+  }
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+  })
+
   it('renders title heading', async () => {
     const page = await PatternCatalogPage()
 
