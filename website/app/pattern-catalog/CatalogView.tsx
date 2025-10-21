@@ -69,6 +69,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
   const [selected, setSelected] = useState<SelectedCatalogItem | null>(null);
   const selectedConfig = selected ? getCategoryConfig(selected.category) : null;
   const selectedItemRefs = useRef<Map<string, HTMLLIElement>>(new Map());
+  const sidebarRef = useRef<HTMLElement>(null);
 
   const handleSearchSelect = (pattern: PatternContent) => {
     const group = groups.find((g) => g.category === pattern.category);
@@ -163,11 +164,29 @@ export default function CatalogView({ groups }: CatalogViewProps) {
 
   useEffect(() => {
     if (selected) {
-      const itemKey = `${selected.category}-${selected.item.slug}`;
-      const itemElement = selectedItemRefs.current.get(itemKey);
-      if (itemElement && typeof itemElement.scrollIntoView === 'function') {
-        itemElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
+      setCollapsedGroups((prev) => ({
+        ...prev,
+        [selected.category]: false,
+      }));
+
+      setTimeout(() => {
+        const itemKey = `${selected.category}-${selected.item.slug}`;
+        const itemElement = selectedItemRefs.current.get(itemKey);
+
+        if (itemElement) {
+          let offsetTop = 0;
+          let element: HTMLElement | null = itemElement;
+
+          while (element && element !== sidebarRef.current) {
+            offsetTop += element.offsetTop;
+            element = element.offsetParent as HTMLElement | null;
+          }
+
+          if (sidebarRef.current) {
+            sidebarRef.current.scrollTo({ top: offsetTop - 20, behavior: 'smooth' });
+          }
+        }
+      }, 150);
     }
   }, [selected]);
 
@@ -300,7 +319,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
         )}
       </div>
       <div className={styles.layout}>
-      <aside data-testid={PATTERN_CATALOG_TEST_IDS.sidebar} className={styles.sidebar}>
+      <aside ref={sidebarRef} data-testid={PATTERN_CATALOG_TEST_IDS.sidebar} className={styles.sidebar}>
         <section className={styles.listSection}>
           {filteredGroups.length === 0 ? (
             <p className={styles.emptyState} role="status" aria-live="polite">
