@@ -7,7 +7,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import styles from "./page.module.css";
 import { CatalogGroupData, CatalogPreviewItem } from "./types";
-import { PATTERN_CATALOG_TEST_IDS } from "./test-ids";
+import { COMPLETE_CATALOG_TEST_IDS } from "./test-ids";
 import { getCategoryConfig } from "@/app/lib/category-config";
 import SearchBar from "@/app/components/SearchBar";
 import { PatternContent } from "@/lib/types";
@@ -345,7 +345,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
         )}
       </div>
       <div className={styles.layout}>
-      <aside ref={sidebarRef} data-testid={PATTERN_CATALOG_TEST_IDS.sidebar} className={styles.sidebar}>
+      <aside ref={sidebarRef} data-testid={COMPLETE_CATALOG_TEST_IDS.sidebar} className={styles.sidebar}>
         <section className={styles.listSection}>
           {filteredGroups.length === 0 ? (
             <p className={styles.emptyState} role="status" aria-live="polite">
@@ -422,7 +422,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
           )}
         </section>
       </aside>
-      <section data-testid={PATTERN_CATALOG_TEST_IDS.detail} className={styles.detail}>
+      <section data-testid={COMPLETE_CATALOG_TEST_IDS.detail} className={styles.detail}>
         {selected && selectedConfig ? (
           <article className={styles.detailContent} aria-live="polite">
             <div className={styles.detailHeader}>

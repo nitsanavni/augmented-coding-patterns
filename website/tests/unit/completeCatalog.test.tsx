@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import PatternCatalogPage from '@/app/pattern-catalog/page'
-import { PATTERN_CATALOG_TEST_IDS } from '@/app/pattern-catalog/test-ids'
+import { COMPLETE_CATALOG_TEST_IDS } from '@/app/pattern-catalog/test-ids'
 import { PATTERN_CATALOG_GROUPS } from '@/app/pattern-catalog/constants'
 import { getAllPatterns } from '@/lib/markdown'
 import { useRouter } from 'next/navigation'
@@ -45,8 +45,8 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const sidebar = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
-    const detail = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.detail)
+    const sidebar = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.sidebar)
+    const detail = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.detail)
 
     expect(sidebar).toBeInTheDocument()
     expect(detail).toBeInTheDocument()
@@ -63,7 +63,7 @@ describe('PatternCatalogPage', () => {
     const patternsButton = screen.getByRole('button', { name: /^Patterns$/i })
     const antiPatternsButton = screen.getByRole('button', { name: /^Anti-patterns$/i })
     const obstaclesButton = screen.getByRole('button', { name: /^Obstacles$/i })
-    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
+    const catalogRegion = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.sidebar)
 
     expect(typeFilterGroup).toBeInTheDocument()
     expect(allTypesButton).toHaveAttribute('aria-pressed', 'true')
@@ -97,7 +97,7 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
+    const catalogRegion = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.sidebar)
 
     PATTERN_CATALOG_GROUPS.forEach(({ category, label, headingPattern }) => {
       const items = getAllPatterns(category).sort((a, b) => a.title.localeCompare(b.title))
@@ -121,13 +121,13 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const detailPane = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.detail)
+    const detailPane = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.detail)
     expect(within(detailPane).getByText(/Pick a pattern to see its guidance/i)).toBeInTheDocument()
 
     const { category } = PATTERN_CATALOG_GROUPS[0]
     const items = getAllPatterns(category).sort((a, b) => a.title.localeCompare(b.title))
     const target = items[0]
-    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
+    const catalogRegion = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.sidebar)
     const link = within(catalogRegion).getByRole('link', { name: target.title })
 
     await user.click(link)
@@ -148,7 +148,7 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
+    const catalogRegion = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.sidebar)
     const patternsButton = screen.getByRole('button', { name: /^Patterns$/i })
     const antiPatternsButton = screen.getByRole('button', { name: /^Anti-patterns$/i })
 
@@ -172,7 +172,7 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
+    const catalogRegion = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.sidebar)
     const antiPatternsButton = screen.getByRole('button', { name: /^Anti-patterns$/i })
     const obstaclesButton = screen.getByRole('button', { name: /^Obstacles$/i })
 
@@ -201,7 +201,7 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
+    const catalogRegion = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.sidebar)
     const patternsButton = screen.getByRole('button', { name: /^Patterns$/i })
     const antiPatternsButton = screen.getByRole('button', { name: /^Anti-patterns$/i })
     const obstaclesButton = screen.getByRole('button', { name: /^Obstacles$/i })
@@ -220,7 +220,7 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
+    const catalogRegion = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.sidebar)
     const obstaclesToggle = screen.getByRole('button', { name: /^Obstacles$/i })
 
     await user.click(obstaclesToggle)
