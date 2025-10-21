@@ -121,10 +121,10 @@
   position: absolute;
   bottom: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(-8px);
-  background-color: var(--color-text-primary);
-  color: var(--color-background);
-  padding: var(--space-xs) var(--space-sm);
+  transform: translateX(-50%) translateY(-12px);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  padding: var(--space-2xs) var(--space-sm);
   border-radius: var(--border-radius-sm);
   font-size: var(--font-size-xs);
   white-space: nowrap;
@@ -132,12 +132,14 @@
   pointer-events: none;
   transition: opacity var(--transition-fast), transform var(--transition-fast);
   z-index: 1000;
-  font-weight: 500;
+  font-weight: 400;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .typeButton:hover::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-4px);
+  opacity: 0.95;
+  transform: translateX(-50%) translateY(-8px);
 }
 
 .typeButton:hover {
