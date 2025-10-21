@@ -6,6 +6,7 @@ export interface CatalogPreviewItem {
   emojiIndicator?: string;
   authorIds: string[];
   authorNames: string[];
+  authorGithubs: string[];
   summary?: string;
   content: string;
 }

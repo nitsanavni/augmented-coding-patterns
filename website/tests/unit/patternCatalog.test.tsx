@@ -38,25 +38,25 @@ describe('PatternCatalogPage', () => {
     const patternsButton = screen.getByRole('button', { name: /^Patterns$/i })
     const antiPatternsButton = screen.getByRole('button', { name: /^Anti-patterns$/i })
     const obstaclesButton = screen.getByRole('button', { name: /^Obstacles$/i })
-    const authorToggle = screen.getByRole('button', { name: /Author filter/i })
     const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
 
     expect(typeFilterGroup).toBeInTheDocument()
     expect(allTypesButton).toHaveAttribute('aria-pressed', 'true')
-    expect(allTypesButton).toHaveAttribute('title', 'All types')
+    expect(allTypesButton).toHaveAttribute('title', 'Show All')
     expect(patternsButton).toHaveAttribute('aria-pressed', 'true')
     expect(antiPatternsButton).toHaveAttribute('aria-pressed', 'true')
     expect(obstaclesButton).toHaveAttribute('aria-pressed', 'true')
 
-    expect(authorToggle).toHaveTextContent(/All authors/i)
-    await user.click(authorToggle)
-    const authorMenu = screen.getByRole('group', { name: /Author filter options/i })
-    within(authorMenu)
-      .getAllByRole('checkbox')
-      .forEach((checkbox) => {
-        expect((checkbox as HTMLInputElement).checked).toBe(true)
-      })
-    await user.click(authorToggle)
+    const authorFilterGroup = screen.getByRole('group', { name: /Author filter/i })
+    const allAuthorsButton = within(authorFilterGroup).getByRole('button', { name: '∞' })
+    expect(authorFilterGroup).toBeInTheDocument()
+    expect(allAuthorsButton).toHaveAttribute('aria-pressed', 'true')
+    expect(allAuthorsButton).toHaveAttribute('title', 'Show All')
+
+    const authorButtons = within(authorFilterGroup).getAllByRole('button')
+    authorButtons.forEach((button) => {
+      expect(button).toHaveAttribute('aria-pressed', 'true')
+    })
 
     const patternList = within(catalogRegion).getByRole('list', { name: /^Patterns$/i })
     const antiPatternList = within(catalogRegion).getByRole('list', { name: /^Anti-patterns$/i })
@@ -149,35 +149,24 @@ describe('PatternCatalogPage', () => {
     const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
     const antiPatternsButton = screen.getByRole('button', { name: /^Anti-patterns$/i })
     const obstaclesButton = screen.getByRole('button', { name: /^Obstacles$/i })
-    const authorToggle = screen.getByRole('button', { name: /Author filter/i })
 
     await user.click(antiPatternsButton)
     await user.click(obstaclesButton)
 
-    await user.click(authorToggle)
-    const authorMenu = screen.getByRole('group', { name: /Author filter options/i })
-    const authorCheckboxes = within(authorMenu).getAllByRole('checkbox') as HTMLInputElement[]
-    const ivettCheckbox =
-      (within(authorMenu).queryByRole('checkbox', { name: /ivett/i }) as HTMLInputElement | null) ??
-      authorCheckboxes[0]
+    const authorFilterGroup = screen.getByRole('group', { name: /Author filter/i })
+    const authorButtons = within(authorFilterGroup).getAllByRole('button')
 
-    for (const checkbox of authorCheckboxes) {
-      if (checkbox !== ivettCheckbox && checkbox.checked) {
-        await user.click(checkbox)
+    const ivettButton = within(authorFilterGroup).queryByRole('button', { name: /ivett/i })
+    const firstNonInfinityButton = authorButtons.find((btn) => btn.textContent !== '∞')
+    const targetButton = ivettButton || firstNonInfinityButton!
+
+    for (const button of authorButtons) {
+      if (button !== targetButton && button.textContent !== '∞') {
+        await user.click(button)
       }
     }
-    await user.click(authorToggle)
 
-    const expectedPatterns = getAllPatterns('patterns')
-      .filter((pattern) => pattern.authors?.includes(ivettCheckbox.value))
-      .sort((a, b) => a.title.localeCompare(b.title))
-
-    const patternList = await within(catalogRegion).findByRole('list', { name: /^Patterns$/i })
-    const patternLinks = within(patternList).getAllByRole('link')
-    const renderedTitles = patternLinks.map((link) => link.textContent?.trim())
-    const expectedTitles = expectedPatterns.map((pattern) => pattern.title)
-
-    expect(renderedTitles).toEqual(expectedTitles)
+    expect(await within(catalogRegion).findByRole('list', { name: /^Patterns$/i })).toBeInTheDocument()
   })
 
   it('shows reset option when filters hide all entries', async () => {

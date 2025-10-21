@@ -1,6 +1,7 @@
 'use client';
 
 import Link from "next/link";
+import Image from "next/image";
 import { MouseEvent, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -22,25 +23,38 @@ interface SelectedCatalogItem {
 interface AuthorOption {
   id: string;
   name: string;
+  github: string;
 }
 
 function extractAuthorOptions(groups: CatalogGroupData[]): AuthorOption[] {
-  const authorMap = new Map<string, string>();
+  const authorMap = new Map<string, { name: string; github: string }>();
 
   groups.forEach((group) => {
     group.items.forEach((item) => {
       item.authorIds.forEach((authorId, index) => {
         if (!authorMap.has(authorId)) {
-          const name = item.authorNames[index] ?? item.authorNames[0] ?? authorId;
-          authorMap.set(authorId, name);
+          const name = item.authorNames[index];
+          const github = item.authorGithubs[index];
+          if (name && github) {
+            authorMap.set(authorId, { name, github });
+          }
         }
       });
     });
   });
 
+  const authorOrder = ['lada_kesseler', 'ivett_ordog', 'nitsan_avni', 'llewellyn_falco'];
+
   return Array.from(authorMap.entries())
-    .map(([id, name]) => ({ id, name }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .map(([id, { name, github }]) => ({ id, name, github }))
+    .sort((a, b) => {
+      const indexA = authorOrder.indexOf(a.id);
+      const indexB = authorOrder.indexOf(b.id);
+      if (indexA === -1 && indexB === -1) return a.name.localeCompare(b.name);
+      if (indexA === -1) return 1;
+      if (indexB === -1) return -1;
+      return indexA - indexB;
+    });
 }
 
 export default function CatalogView({ groups }: CatalogViewProps) {
@@ -49,8 +63,6 @@ export default function CatalogView({ groups }: CatalogViewProps) {
     const options = extractAuthorOptions(groups);
     return options.map((option) => option.id);
   });
-  const [typeMenuOpen, setTypeMenuOpen] = useState(false);
-  const [authorMenuOpen, setAuthorMenuOpen] = useState(false);
 
   const [selected, setSelected] = useState<SelectedCatalogItem | null>(null);
   const selectedConfig = selected ? getCategoryConfig(selected.category) : null;
@@ -68,41 +80,9 @@ export default function CatalogView({ groups }: CatalogViewProps) {
   const hasActiveFilters = hasTypeFilter || hasAuthorFilter;
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>(() => ({}));
 
-  const typeSummary = useMemo(() => {
-    if (activeTypes.length === typeOptions.length) {
-      return "All types";
-    }
-
-    if (activeTypes.length === 0) {
-      return "None";
-    }
-
-    return typeOptions
-      .filter((option) => activeTypes.includes(option.category))
-      .map((option) => option.label)
-      .join(", ");
-  }, [activeTypes, typeOptions]);
-
-  const authorSummary = useMemo(() => {
-    if (authorOptions.length === 0 || activeAuthorIds.length === authorOptions.length) {
-      return "All authors";
-    }
-
-    if (activeAuthorIds.length === 0) {
-      return "None";
-    }
-
-    return authorOptions
-      .filter((option) => activeAuthorIds.includes(option.id))
-      .map((option) => option.name)
-      .join(", ");
-  }, [activeAuthorIds, authorOptions]);
-
   const resetFilters = () => {
     setActiveTypes(typeOptions.map(({ category }) => category));
     setActiveAuthorIds(authorOptions.map(({ id }) => id));
-    setTypeMenuOpen(false);
-    setAuthorMenuOpen(false);
   };
 
   const filteredGroups = useMemo(() => {
@@ -240,44 +220,44 @@ export default function CatalogView({ groups }: CatalogViewProps) {
           </div>
           {authorOptions.length > 0 && (
             <div className={styles.filterGroup}>
-              <button
-                type="button"
-                className={styles.filterToggle}
-                aria-expanded={authorMenuOpen}
-                aria-controls="pattern-catalog-author-menu"
-                onClick={() => {
-                  setAuthorMenuOpen((prev) => {
-                    const next = !prev;
-                    if (!prev) {
-                      setTypeMenuOpen(false);
+              <h3 className={styles.filterGroupLabel}>Author</h3>
+              <div className={styles.authorButtonGroup} role="group" aria-label="Author filter">
+                <button
+                  type="button"
+                  className={`${styles.authorButton} ${allAuthorsSelected ? styles.authorButtonActive : ""}`}
+                  onClick={() => {
+                    if (allAuthorsSelected) {
+                      setActiveAuthorIds([]);
+                    } else {
+                      setActiveAuthorIds(authorOptions.map(({ id }) => id));
                     }
-                    return next;
-                  });
-                }}
-              >
-                <span className={styles.filterToggleLabel}>Author filter</span>
-                <span className={styles.filterToggleSummary}>{authorSummary}</span>
-              </button>
-              {authorMenuOpen && (
-                <div
-                  id="pattern-catalog-author-menu"
-                  role="group"
-                  aria-label="Author filter options"
-                  className={styles.filterMenu}
+                  }}
+                  aria-pressed={allAuthorsSelected}
+                  title="Show All"
                 >
-                  {authorOptions.map((option) => (
-                    <label key={option.id} className={styles.filterMenuItem}>
-                      <input
-                        type="checkbox"
-                        value={option.id}
-                        checked={activeAuthorIds.includes(option.id)}
-                        onChange={() => toggleAuthor(option.id)}
-                      />
-                      <span className={styles.filterMenuItemLabel}>{option.name}</span>
-                    </label>
-                  ))}
-                </div>
-              )}
+                  ∞
+                </button>
+                {authorOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    className={`${styles.authorButton} ${activeAuthorIds.includes(option.id) ? styles.authorButtonActive : ""}`}
+                    onClick={() => toggleAuthor(option.id)}
+                    aria-pressed={activeAuthorIds.includes(option.id)}
+                    aria-label={option.name}
+                    title={option.name}
+                  >
+                    <Image
+                      src={`https://github.com/${option.github}.png`}
+                      alt=""
+                      width={40}
+                      height={40}
+                      className={styles.authorAvatar}
+                      unoptimized
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
           )}
           {hasActiveFilters && (

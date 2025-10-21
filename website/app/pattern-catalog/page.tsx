@@ -67,6 +67,11 @@ function resolveAuthorNames(authorIds: string[] | undefined): string[] {
     .filter((name): name is string => Boolean(name));
 }
 
+function resolveAuthorGithub(authorId: string): string | null {
+  const author = getAuthorById(authorId);
+  return author?.github ?? null;
+}
+
 function buildCatalogGroups(): CatalogGroupData[] {
   return PATTERN_CATALOG_GROUPS.map(({ category, label }) => {
     const config = getCategoryConfig(category);
@@ -80,6 +85,7 @@ function buildCatalogGroups(): CatalogGroupData[] {
             emojiIndicator: pattern.emojiIndicator,
             authorIds: pattern.authors ?? [],
             authorNames: resolveAuthorNames(pattern.authors),
+            authorGithubs: pattern.authors?.map(resolveAuthorGithub).filter((g): g is string => g !== null) ?? [],
             summary: extractSummary(pattern.content),
             content: pattern.content,
           }) satisfies CatalogPreviewItem
