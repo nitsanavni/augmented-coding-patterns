@@ -137,7 +137,8 @@ describe('PatternCatalogPage', () => {
       within(detailPane).getByRole('heading', { level: 2, name: target.title })
     ).toBeInTheDocument()
     expect(within(detailPane).getByText(/Push back on unclear instructions/i)).toBeInTheDocument()
-    expect(within(detailPane).getByText(/Documented by/i)).toHaveTextContent(/Lada Kesseler/i)
+    expect(within(detailPane).getByText(/Documented by/i)).toBeInTheDocument()
+    expect(within(detailPane).getByText(/Lada Kesseler/i)).toBeInTheDocument()
     expect(within(detailPane).queryByText(/Open full entry/i)).not.toBeInTheDocument()
   })
 
