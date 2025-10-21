@@ -197,57 +197,45 @@ export default function CatalogView({ groups }: CatalogViewProps) {
     <p className={styles.placeholderCopy}>Pick a pattern to see its guidance.</p>
   );
 
+  const allTypesSelected = activeTypes.length === typeOptions.length;
+
+  const toggleAllTypes = () => {
+    if (allTypesSelected) {
+      setActiveTypes([]);
+    } else {
+      setActiveTypes(typeOptions.map(({ category }) => category));
+    }
+  };
+
   return (
     <div className={styles.layout}>
       <aside data-testid={PATTERN_CATALOG_TEST_IDS.sidebar} className={styles.sidebar}>
         <div className={styles.filters}>
           <div className={styles.filterGroup}>
-            <button
-              type="button"
-              className={styles.filterToggle}
-              aria-expanded={typeMenuOpen}
-              aria-controls="pattern-catalog-type-menu"
-              onClick={() => {
-                setTypeMenuOpen((prev) => {
-                  const next = !prev;
-                  if (!prev) {
-                    setAuthorMenuOpen(false);
-                  }
-                  return next;
-                });
-              }}
-            >
-              <span className={styles.filterToggleLabel}>Type filter</span>
-              <span className={styles.filterToggleSummary}>{typeSummary}</span>
-            </button>
-            {typeMenuOpen && (
-              <div
-                id="pattern-catalog-type-menu"
-                role="group"
-                aria-label="Type filter options"
-                className={styles.filterMenu}
+            <div className={styles.typeButtonGroup} role="group" aria-label="Type filter">
+              <button
+                type="button"
+                className={`${styles.typeButton} ${allTypesSelected ? styles.typeButtonActive : ""}`}
+                onClick={toggleAllTypes}
+                aria-pressed={allTypesSelected}
+                title="All types"
               >
-                {typeOptions.map(({ category, label, icon, styleClass }) => (
-                    <label key={category} className={styles.filterMenuItem}>
-                      <input
-                        type="checkbox"
-                        value={category}
-                        checked={activeTypes.includes(category)}
-                        onChange={() => toggleType(category)}
-                      />
-                    <span className={styles.filterMenuItemLabel}>
-                      <span
-                        className={`${styles.filterOptionIcon} ${styles[styleClass]}`}
-                        aria-hidden="true"
-                      >
-                        {icon}
-                      </span>
-                      {label}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            )}
+                ∞
+              </button>
+              {typeOptions.map(({ category, label, icon }) => (
+                <button
+                  key={category}
+                  type="button"
+                  className={`${styles.typeButton} ${activeTypes.includes(category) ? styles.typeButtonActive : ""}`}
+                  onClick={() => toggleType(category)}
+                  aria-pressed={activeTypes.includes(category)}
+                  aria-label={label}
+                  title={label}
+                >
+                  {icon}
+                </button>
+              ))}
+            </div>
           </div>
           {authorOptions.length > 0 && (
             <div className={styles.filterGroup}>

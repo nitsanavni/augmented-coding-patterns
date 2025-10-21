@@ -33,20 +33,20 @@ describe('PatternCatalogPage', () => {
 
     render(page)
 
-    const typeToggle = screen.getByRole('button', { name: /Type filter/i })
+    const typeFilterGroup = screen.getByRole('group', { name: /Type filter/i })
+    const allTypesButton = within(typeFilterGroup).getByRole('button', { name: '∞' })
+    const patternsButton = screen.getByRole('button', { name: /^Patterns$/i })
+    const antiPatternsButton = screen.getByRole('button', { name: /^Anti-patterns$/i })
+    const obstaclesButton = screen.getByRole('button', { name: /^Obstacles$/i })
     const authorToggle = screen.getByRole('button', { name: /Author filter/i })
     const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
 
-    expect(typeToggle).toHaveTextContent(/All types/i)
-
-    await user.click(typeToggle)
-    const typeMenu = screen.getByRole('group', { name: /Type filter options/i })
-    within(typeMenu)
-      .getAllByRole('checkbox')
-      .forEach((checkbox) => {
-        expect((checkbox as HTMLInputElement).checked).toBe(true)
-      })
-    await user.click(typeToggle)
+    expect(typeFilterGroup).toBeInTheDocument()
+    expect(allTypesButton).toHaveAttribute('aria-pressed', 'true')
+    expect(allTypesButton).toHaveAttribute('title', 'All types')
+    expect(patternsButton).toHaveAttribute('aria-pressed', 'true')
+    expect(antiPatternsButton).toHaveAttribute('aria-pressed', 'true')
+    expect(obstaclesButton).toHaveAttribute('aria-pressed', 'true')
 
     expect(authorToggle).toHaveTextContent(/All authors/i)
     await user.click(authorToggle)
@@ -123,26 +123,17 @@ describe('PatternCatalogPage', () => {
     render(page)
 
     const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
-    const typeToggle = screen.getByRole('button', { name: /Type filter/i })
+    const patternsButton = screen.getByRole('button', { name: /^Patterns$/i })
+    const antiPatternsButton = screen.getByRole('button', { name: /^Anti-patterns$/i })
 
-    await user.click(typeToggle)
-    let typeMenu = screen.getByRole('group', { name: /Type filter options/i })
-    let patternsCheckbox = within(typeMenu).getByRole('checkbox', { name: /^Patterns$/i }) as HTMLInputElement
-    const antiPatternsCheckbox = within(typeMenu).getByRole('checkbox', { name: /^Anti-patterns$/i }) as HTMLInputElement
-
-    await user.click(patternsCheckbox)
-    await user.click(antiPatternsCheckbox)
-    await user.click(typeToggle)
+    await user.click(patternsButton)
+    await user.click(antiPatternsButton)
 
     expect(within(catalogRegion).queryByRole('list', { name: /^Patterns$/i })).toBeNull()
     expect(within(catalogRegion).queryByRole('list', { name: /^Anti-patterns$/i })).toBeNull()
     expect(within(catalogRegion).getByRole('list', { name: /^Obstacles$/i })).toBeInTheDocument()
 
-    await user.click(typeToggle)
-    typeMenu = screen.getByRole('group', { name: /Type filter options/i })
-    patternsCheckbox = within(typeMenu).getByRole('checkbox', { name: /^Patterns$/i }) as HTMLInputElement
-    await user.click(patternsCheckbox)
-    await user.click(typeToggle)
+    await user.click(patternsButton)
 
     expect(
       await within(catalogRegion).findByRole('list', { name: /^Patterns$/i })
@@ -156,16 +147,12 @@ describe('PatternCatalogPage', () => {
     render(page)
 
     const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
-    const typeToggle = screen.getByRole('button', { name: /Type filter/i })
+    const antiPatternsButton = screen.getByRole('button', { name: /^Anti-patterns$/i })
+    const obstaclesButton = screen.getByRole('button', { name: /^Obstacles$/i })
     const authorToggle = screen.getByRole('button', { name: /Author filter/i })
 
-    await user.click(typeToggle)
-    const typeMenu = screen.getByRole('group', { name: /Type filter options/i })
-    const antiPatternsCheckbox = within(typeMenu).getByRole('checkbox', { name: /^Anti-patterns$/i })
-    const obstaclesCheckbox = within(typeMenu).getByRole('checkbox', { name: /^Obstacles$/i })
-    await user.click(antiPatternsCheckbox)
-    await user.click(obstaclesCheckbox)
-    await user.click(typeToggle)
+    await user.click(antiPatternsButton)
+    await user.click(obstaclesButton)
 
     await user.click(authorToggle)
     const authorMenu = screen.getByRole('group', { name: /Author filter options/i })
@@ -200,24 +187,25 @@ describe('PatternCatalogPage', () => {
     render(page)
 
     const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
-    const typeToggle = screen.getByRole('button', { name: /Type filter/i })
+    const typeFilterGroup = screen.getByRole('group', { name: /Type filter/i })
+    const allTypesButton = within(typeFilterGroup).getByRole('button', { name: '∞' })
+    const patternsButton = screen.getByRole('button', { name: /^Patterns$/i })
+    const antiPatternsButton = screen.getByRole('button', { name: /^Anti-patterns$/i })
+    const obstaclesButton = screen.getByRole('button', { name: /^Obstacles$/i })
 
-    await user.click(typeToggle)
-    const typeMenu = screen.getByRole('group', { name: /Type filter options/i })
-    const typeCheckboxes = within(typeMenu).getAllByRole('checkbox') as HTMLInputElement[]
-
-    for (const checkbox of typeCheckboxes) {
-      if (checkbox.checked) {
-        await user.click(checkbox)
-      }
-    }
+    await user.click(patternsButton)
+    await user.click(antiPatternsButton)
+    await user.click(obstaclesButton)
 
     expect(screen.getByText(/No entries match these filters/i)).toBeInTheDocument()
 
     const resetButton = screen.getByRole('button', { name: /Reset filters/i })
     await user.click(resetButton)
 
-    expect(typeToggle).toHaveTextContent(/All types/i)
+    expect(allTypesButton).toHaveAttribute('aria-pressed', 'true')
+    expect(patternsButton).toHaveAttribute('aria-pressed', 'true')
+    expect(antiPatternsButton).toHaveAttribute('aria-pressed', 'true')
+    expect(obstaclesButton).toHaveAttribute('aria-pressed', 'true')
     expect(
       await within(catalogRegion).findByRole('list', { name: /^Patterns$/i })
     ).toBeInTheDocument()
