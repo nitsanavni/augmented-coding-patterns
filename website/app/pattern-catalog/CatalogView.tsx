@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MouseEvent, useEffect, useMemo, useState } from "react";
+import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import styles from "./page.module.css";
@@ -68,6 +68,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
 
   const [selected, setSelected] = useState<SelectedCatalogItem | null>(null);
   const selectedConfig = selected ? getCategoryConfig(selected.category) : null;
+  const selectedItemRefs = useRef<Map<string, HTMLLIElement>>(new Map());
 
   const handleSearchSelect = (pattern: PatternContent) => {
     const group = groups.find((g) => g.category === pattern.category);
@@ -159,6 +160,16 @@ export default function CatalogView({ groups }: CatalogViewProps) {
       setSelected(null);
     }
   }, [filteredGroups, selected]);
+
+  useEffect(() => {
+    if (selected) {
+      const itemKey = `${selected.category}-${selected.item.slug}`;
+      const itemElement = selectedItemRefs.current.get(itemKey);
+      if (itemElement && typeof itemElement.scrollIntoView === 'function') {
+        itemElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }, [selected]);
 
   const toggleType = (category: string) => {
     setActiveTypes((prev) => {
@@ -326,13 +337,22 @@ export default function CatalogView({ groups }: CatalogViewProps) {
                   </button>
                   {!isCollapsed && (
                     <ul className={styles.catalogList} aria-label={group.label}>
-                      {group.items.map((item) => (
-                        <li
-                          key={item.slug}
-                          className={`${styles.catalogListItem} ${
-                            isSelected(group.label, item) ? styles.catalogListItemActive : ""
-                          }`}
-                        >
+                      {group.items.map((item) => {
+                        const itemKey = `${group.category}-${item.slug}`;
+                        return (
+                          <li
+                            key={item.slug}
+                            ref={(el) => {
+                              if (el) {
+                                selectedItemRefs.current.set(itemKey, el);
+                              } else {
+                                selectedItemRefs.current.delete(itemKey);
+                              }
+                            }}
+                            className={`${styles.catalogListItem} ${
+                              isSelected(group.label, item) ? styles.catalogListItemActive : ""
+                            }`}
+                          >
                           <Link
                             href={`/${group.category}/${item.slug}`}
                             className={styles.catalogLink}
@@ -347,7 +367,8 @@ export default function CatalogView({ groups }: CatalogViewProps) {
                             <span className={styles.catalogTitle}>{item.title}</span>
                           </Link>
                         </li>
-                      ))}
+                        );
+                      })}
                     </ul>
                   )}
                 </div>
