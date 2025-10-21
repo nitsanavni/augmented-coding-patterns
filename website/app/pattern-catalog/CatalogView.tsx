@@ -447,9 +447,36 @@ export default function CatalogView({ groups }: CatalogViewProps) {
               </ReactMarkdown>
             </div>
             {selected.item.authorNames.length > 0 && (
-              <p className={styles.detailFooter}>
-                Documented by {selected.item.authorNames.join(", ")}
-              </p>
+              <div className={styles.authorsSection}>
+                <div className={styles.authorsLabel}>Documented by</div>
+                <div className={styles.authorsList}>
+                  {selected.item.authorIds.map((authorId, index) => {
+                    const name = selected.item.authorNames[index];
+                    const github = selected.item.authorGithubs[index];
+                    if (!name || !github) return null;
+
+                    return (
+                      <Link
+                        key={authorId}
+                        href={`https://github.com/${github}`}
+                        className={styles.authorLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Image
+                          src={`https://github.com/${github}.png`}
+                          alt={`${name}'s avatar`}
+                          width={32}
+                          height={32}
+                          className={styles.authorAvatar}
+                          unoptimized
+                        />
+                        <span className={styles.authorName}>{name}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
             )}
           </article>
         ) : (
