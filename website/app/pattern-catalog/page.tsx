@@ -106,8 +106,7 @@ export default function PatternCatalogPage() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Complete Catalog</h1>
-      <CatalogView groups={catalogGroups} />
+      <CatalogView title="Complete Catalog" groups={catalogGroups} />
     </div>
   );
 }

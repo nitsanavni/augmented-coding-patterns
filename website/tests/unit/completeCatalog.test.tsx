@@ -30,6 +30,10 @@ async function expectCatalogGroupOrder(expectedLabels: string[]) {
   }
 }
 
+function getStickyHeaderElement() {
+  return screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.stickyHeader)
+}
+
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }))
@@ -254,5 +258,16 @@ describe('PatternCatalogPage', () => {
     render(page)
 
     await expectCatalogGroupOrder(['Obstacles', 'Anti-patterns', 'Patterns'])
+  })
+
+  it('keeps the page header and search sticky on narrow viewports', async () => {
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    const stickyHeader = getStickyHeaderElement()
+
+    expect(stickyHeader).toBeInTheDocument()
+    expect(stickyHeader.className.split(' ')).toContain('mobileStickyHeader')
   })
 })

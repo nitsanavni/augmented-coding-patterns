@@ -14,6 +14,7 @@ import { PatternContent } from "@/lib/types";
 
 interface CatalogViewProps {
   groups: CatalogGroupData[];
+  title: string;
 }
 
 interface SelectedCatalogItem {
@@ -59,7 +60,7 @@ function extractAuthorOptions(groups: CatalogGroupData[]): AuthorOption[] {
     });
 }
 
-export default function CatalogView({ groups }: CatalogViewProps) {
+export default function CatalogView({ groups, title }: CatalogViewProps) {
   const [activeTypes, setActiveTypes] = useState<string[]>(() => groups.map((group) => group.category));
   const [activeAuthorIds, setActiveAuthorIds] = useState<string[]>(() => {
     const options = extractAuthorOptions(groups);
@@ -263,79 +264,85 @@ export default function CatalogView({ groups }: CatalogViewProps) {
 
   return (
     <>
-      <div className={styles.filterBar}>
-        <div className={styles.searchContainer}>
-          <SearchBar patterns={allPatterns} onSelect={handleSearchSelect} />
-        </div>
-        <div className={styles.filterGroup}>
-          <h3 className={styles.filterGroupLabel}>Type</h3>
-          <div className={styles.typeButtonGroup} role="group" aria-label="Type filter">
-            <button
-              type="button"
-              className={`${styles.typeButton} ${allTypesSelected ? styles.typeButtonActive : ""}`}
-              onClick={toggleAllTypes}
-              aria-pressed={allTypesSelected}
-              title="Show All"
-            >
-              ∞
-            </button>
-            {typeOptions.map(({ category, label, icon }) => (
-              <button
-                key={category}
-                type="button"
-                className={`${styles.typeButton} ${activeTypes.includes(category) ? styles.typeButtonActive : ""}`}
-                onClick={() => toggleType(category)}
-                aria-pressed={activeTypes.includes(category)}
-                aria-label={label}
-                title={label}
-              >
-                {icon}
-              </button>
-            ))}
+      <div
+        className={styles.mobileStickyHeader}
+        data-testid={COMPLETE_CATALOG_TEST_IDS.stickyHeader}
+      >
+        <h1 className={styles.title}>{title}</h1>
+        <div className={styles.filterBar}>
+          <div className={styles.searchContainer}>
+            <SearchBar patterns={allPatterns} onSelect={handleSearchSelect} />
           </div>
-        </div>
-        {authorOptions.length > 0 && (
           <div className={styles.filterGroup}>
-            <h3 className={styles.filterGroupLabel}>Author</h3>
-            <div className={styles.authorButtonGroup} role="group" aria-label="Author filter">
+            <h3 className={styles.filterGroupLabel}>Type</h3>
+            <div className={styles.typeButtonGroup} role="group" aria-label="Type filter">
               <button
                 type="button"
-                className={`${styles.authorButton} ${allAuthorsSelected ? styles.authorButtonActive : ""}`}
-                onClick={() => {
-                  if (allAuthorsSelected) {
-                    setActiveAuthorIds([]);
-                  } else {
-                    setActiveAuthorIds(authorOptions.map(({ id }) => id));
-                  }
-                }}
-                aria-pressed={allAuthorsSelected}
+                className={`${styles.typeButton} ${allTypesSelected ? styles.typeButtonActive : ""}`}
+                onClick={toggleAllTypes}
+                aria-pressed={allTypesSelected}
                 title="Show All"
               >
                 ∞
               </button>
-              {authorOptions.map((option) => (
+              {typeOptions.map(({ category, label, icon }) => (
                 <button
-                  key={option.id}
+                  key={category}
                   type="button"
-                  className={`${styles.authorButton} ${activeAuthorIds.includes(option.id) ? styles.authorButtonActive : ""}`}
-                  onClick={() => toggleAuthor(option.id)}
-                  aria-pressed={activeAuthorIds.includes(option.id)}
-                  aria-label={option.name}
-                  title={option.name}
+                  className={`${styles.typeButton} ${activeTypes.includes(category) ? styles.typeButtonActive : ""}`}
+                  onClick={() => toggleType(category)}
+                  aria-pressed={activeTypes.includes(category)}
+                  aria-label={label}
+                  title={label}
                 >
-                  <Image
-                    src={`https://github.com/${option.github}.png`}
-                    alt=""
-                    width={40}
-                    height={40}
-                    className={styles.authorAvatar}
-                    unoptimized
-                  />
+                  {icon}
                 </button>
               ))}
             </div>
           </div>
-        )}
+          {authorOptions.length > 0 && (
+            <div className={styles.filterGroup}>
+              <h3 className={styles.filterGroupLabel}>Author</h3>
+              <div className={styles.authorButtonGroup} role="group" aria-label="Author filter">
+                <button
+                  type="button"
+                  className={`${styles.authorButton} ${allAuthorsSelected ? styles.authorButtonActive : ""}`}
+                  onClick={() => {
+                    if (allAuthorsSelected) {
+                      setActiveAuthorIds([]);
+                    } else {
+                      setActiveAuthorIds(authorOptions.map(({ id }) => id));
+                    }
+                  }}
+                  aria-pressed={allAuthorsSelected}
+                  title="Show All"
+                >
+                  ∞
+                </button>
+                {authorOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    className={`${styles.authorButton} ${activeAuthorIds.includes(option.id) ? styles.authorButtonActive : ""}`}
+                    onClick={() => toggleAuthor(option.id)}
+                    aria-pressed={activeAuthorIds.includes(option.id)}
+                    aria-label={option.name}
+                    title={option.name}
+                  >
+                    <Image
+                      src={`https://github.com/${option.github}.png`}
+                      alt=""
+                      width={40}
+                      height={40}
+                      className={styles.authorAvatar}
+                      unoptimized
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       <div className={styles.layout}>
       <aside ref={sidebarRef} data-testid={COMPLETE_CATALOG_TEST_IDS.sidebar} className={styles.sidebar}>

@@ -15,7 +15,7 @@
   display: flex;
   gap: var(--space-xl);
   align-items: center;
-  margin-bottom: var(--space-2xl);
+  margin-bottom: 0;
   flex-wrap: wrap;
 }
 
@@ -29,6 +29,13 @@
   grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
   gap: var(--space-2xl);
   align-items: stretch;
+}
+
+.mobileStickyHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-2xl);
 }
 
 .sidebar {
@@ -778,6 +785,16 @@
 @media (max-width: 768px) {
   .container {
     padding: var(--space-xl) var(--space-lg);
+  }
+
+  .mobileStickyHeader {
+    position: sticky;
+    top: var(--space-lg);
+    background-color: var(--color-background);
+    z-index: 5;
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-xl);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   }
 
   .header {
