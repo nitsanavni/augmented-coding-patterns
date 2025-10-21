@@ -15,6 +15,21 @@ async function selectSearchResult(user: ReturnType<typeof userEvent.setup>, opti
   await user.click(resultLink)
 }
 
+async function expectCatalogGroupOrder(expectedLabels: string[]) {
+  const sidebar = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.sidebar)
+  const lists = expectedLabels.map((label) =>
+    within(sidebar).getByRole('list', { name: new RegExp(`^${label}$`, 'i') })
+  )
+
+  for (let index = 0; index < lists.length - 1; index += 1) {
+    const current = lists[index]
+    const next = lists[index + 1]
+    const position = current.compareDocumentPosition(next)
+
+    expect(position & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  }
+}
+
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }))
@@ -136,7 +151,7 @@ describe('PatternCatalogPage', () => {
     expect(
       within(detailPane).getByRole('heading', { level: 2, name: target.title })
     ).toBeInTheDocument()
-    expect(within(detailPane).getByText(/Push back on unclear instructions/i)).toBeInTheDocument()
+    expect(within(detailPane).getByText(/Description/i)).toBeInTheDocument()
     expect(within(detailPane).getByText(/Documented by/i)).toBeInTheDocument()
     expect(within(detailPane).getByText(/Lada Kesseler/i)).toBeInTheDocument()
     expect(within(detailPane).queryByText(/Open full entry/i)).not.toBeInTheDocument()
@@ -231,5 +246,13 @@ describe('PatternCatalogPage', () => {
     await selectSearchResult(user, target.title)
 
     expect(within(catalogRegion).getByRole('list', { name: /^Obstacles$/i })).toBeInTheDocument()
+  })
+
+  it('orders catalog groups as Obstacles, Anti-patterns, Patterns', async () => {
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    await expectCatalogGroupOrder(['Obstacles', 'Anti-patterns', 'Patterns'])
   })
 })
