@@ -185,15 +185,13 @@ describe('PatternCatalogPage', () => {
     expect(await within(catalogRegion).findByRole('list', { name: /^Patterns$/i })).toBeInTheDocument()
   })
 
-  it('shows reset option when filters hide all entries', async () => {
+  it('shows empty state when filters hide all entries', async () => {
     const user = userEvent.setup()
     const page = await PatternCatalogPage()
 
     render(page)
 
     const catalogRegion = screen.getByTestId(PATTERN_CATALOG_TEST_IDS.sidebar)
-    const typeFilterGroup = screen.getByRole('group', { name: /Type filter/i })
-    const allTypesButton = within(typeFilterGroup).getByRole('button', { name: '∞' })
     const patternsButton = screen.getByRole('button', { name: /^Patterns$/i })
     const antiPatternsButton = screen.getByRole('button', { name: /^Anti-patterns$/i })
     const obstaclesButton = screen.getByRole('button', { name: /^Obstacles$/i })
@@ -203,16 +201,6 @@ describe('PatternCatalogPage', () => {
     await user.click(obstaclesButton)
 
     expect(screen.getByText(/No entries match these filters/i)).toBeInTheDocument()
-
-    const resetButton = screen.getByRole('button', { name: /Reset filters/i })
-    await user.click(resetButton)
-
-    expect(allTypesButton).toHaveAttribute('aria-pressed', 'true')
-    expect(patternsButton).toHaveAttribute('aria-pressed', 'true')
-    expect(antiPatternsButton).toHaveAttribute('aria-pressed', 'true')
-    expect(obstaclesButton).toHaveAttribute('aria-pressed', 'true')
-    expect(
-      await within(catalogRegion).findByRole('list', { name: /^Patterns$/i })
-    ).toBeInTheDocument()
+    expect(within(catalogRegion).queryByRole('list')).not.toBeInTheDocument()
   })
 })

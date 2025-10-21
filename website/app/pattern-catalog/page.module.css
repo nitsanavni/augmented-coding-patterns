@@ -11,9 +11,19 @@
   text-align: center;
 }
 
+.filterBar {
+  display: flex;
+  gap: var(--space-xl);
+  align-items: center;
+  padding-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-2xl);
+  flex-wrap: wrap;
+}
+
 .searchContainer {
+  flex: 1;
   max-width: 600px;
-  margin-bottom: var(--space-xl);
 }
 
 .layout {
@@ -96,7 +106,7 @@
 
 .typeButtonGroup {
   display: flex;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
   flex-wrap: wrap;
 }
 
@@ -177,7 +187,7 @@
 
 .authorButtonGroup {
   display: flex;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
   flex-wrap: wrap;
 }
 

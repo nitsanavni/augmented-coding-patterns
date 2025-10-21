@@ -212,93 +212,83 @@ export default function CatalogView({ groups }: CatalogViewProps) {
     }
   };
 
-  const searchBar = (
-    <div className={styles.searchContainer}>
-      <SearchBar patterns={allPatterns} onSelect={handleSearchSelect} />
-    </div>
-  );
-
-  const filterControls = (
-    <div className={styles.filters}>
-      <div className={styles.filterGroup}>
-        <h3 className={styles.filterGroupLabel}>Type</h3>
-        <div className={styles.typeButtonGroup} role="group" aria-label="Type filter">
-          <button
-            type="button"
-            className={`${styles.typeButton} ${allTypesSelected ? styles.typeButtonActive : ""}`}
-            onClick={toggleAllTypes}
-            aria-pressed={allTypesSelected}
-            title="Show All"
-          >
-            ∞
-          </button>
-          {typeOptions.map(({ category, label, icon }) => (
-            <button
-              key={category}
-              type="button"
-              className={`${styles.typeButton} ${activeTypes.includes(category) ? styles.typeButtonActive : ""}`}
-              onClick={() => toggleType(category)}
-              aria-pressed={activeTypes.includes(category)}
-              aria-label={label}
-              title={label}
-            >
-              {icon}
-            </button>
-          ))}
+  return (
+    <>
+      <div className={styles.filterBar}>
+        <div className={styles.searchContainer}>
+          <SearchBar patterns={allPatterns} onSelect={handleSearchSelect} />
         </div>
-      </div>
-      {authorOptions.length > 0 && (
         <div className={styles.filterGroup}>
-          <h3 className={styles.filterGroupLabel}>Author</h3>
-          <div className={styles.authorButtonGroup} role="group" aria-label="Author filter">
+          <h3 className={styles.filterGroupLabel}>Type</h3>
+          <div className={styles.typeButtonGroup} role="group" aria-label="Type filter">
             <button
               type="button"
-              className={`${styles.authorButton} ${allAuthorsSelected ? styles.authorButtonActive : ""}`}
-              onClick={() => {
-                if (allAuthorsSelected) {
-                  setActiveAuthorIds([]);
-                } else {
-                  setActiveAuthorIds(authorOptions.map(({ id }) => id));
-                }
-              }}
-              aria-pressed={allAuthorsSelected}
+              className={`${styles.typeButton} ${allTypesSelected ? styles.typeButtonActive : ""}`}
+              onClick={toggleAllTypes}
+              aria-pressed={allTypesSelected}
               title="Show All"
             >
               ∞
             </button>
-            {authorOptions.map((option) => (
+            {typeOptions.map(({ category, label, icon }) => (
               <button
-                key={option.id}
+                key={category}
                 type="button"
-                className={`${styles.authorButton} ${activeAuthorIds.includes(option.id) ? styles.authorButtonActive : ""}`}
-                onClick={() => toggleAuthor(option.id)}
-                aria-pressed={activeAuthorIds.includes(option.id)}
-                aria-label={option.name}
-                title={option.name}
+                className={`${styles.typeButton} ${activeTypes.includes(category) ? styles.typeButtonActive : ""}`}
+                onClick={() => toggleType(category)}
+                aria-pressed={activeTypes.includes(category)}
+                aria-label={label}
+                title={label}
               >
-                <Image
-                  src={`https://github.com/${option.github}.png`}
-                  alt=""
-                  width={40}
-                  height={40}
-                  className={styles.authorAvatar}
-                  unoptimized
-                />
+                {icon}
               </button>
             ))}
           </div>
         </div>
-      )}
-      {hasActiveFilters && (
-        <button type="button" className={styles.resetButton} onClick={resetFilters}>
-          Reset filters
-        </button>
-      )}
-    </div>
-  );
-
-  return (
-    <div className={styles.layout}>
+        {authorOptions.length > 0 && (
+          <div className={styles.filterGroup}>
+            <h3 className={styles.filterGroupLabel}>Author</h3>
+            <div className={styles.authorButtonGroup} role="group" aria-label="Author filter">
+              <button
+                type="button"
+                className={`${styles.authorButton} ${allAuthorsSelected ? styles.authorButtonActive : ""}`}
+                onClick={() => {
+                  if (allAuthorsSelected) {
+                    setActiveAuthorIds([]);
+                  } else {
+                    setActiveAuthorIds(authorOptions.map(({ id }) => id));
+                  }
+                }}
+                aria-pressed={allAuthorsSelected}
+                title="Show All"
+              >
+                ∞
+              </button>
+              {authorOptions.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={`${styles.authorButton} ${activeAuthorIds.includes(option.id) ? styles.authorButtonActive : ""}`}
+                  onClick={() => toggleAuthor(option.id)}
+                  aria-pressed={activeAuthorIds.includes(option.id)}
+                  aria-label={option.name}
+                  title={option.name}
+                >
+                  <Image
+                    src={`https://github.com/${option.github}.png`}
+                    alt=""
+                    width={40}
+                    height={40}
+                    className={styles.authorAvatar}
+                    unoptimized
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      <div className={styles.layout}>
       <aside data-testid={PATTERN_CATALOG_TEST_IDS.sidebar} className={styles.sidebar}>
         <section className={styles.listSection}>
           {filteredGroups.length === 0 ? (
@@ -367,8 +357,6 @@ export default function CatalogView({ groups }: CatalogViewProps) {
         </section>
       </aside>
       <section data-testid={PATTERN_CATALOG_TEST_IDS.detail} className={styles.detail}>
-        {searchBar}
-        {filterControls}
         {selected && selectedConfig ? (
           <article className={styles.detailContent} aria-live="polite">
             <div className={styles.detailHeader}>
@@ -402,6 +390,7 @@ export default function CatalogView({ groups }: CatalogViewProps) {
           detailFallback
         )}
       </section>
-    </div>
+      </div>
+    </>
   );
 }
