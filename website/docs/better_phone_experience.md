@@ -37,7 +37,7 @@ Filter Overlay (invoked from button)
 ## TODO
 
 - [x] Audit existing mobile breakpoints to capture the current filter, list, and detail pain points (filters dominate header, list + detail stack awkwardly).
-- [ ] Shape the responsive layout: single-column flow, accordion category list, and filter overlay entry point beneath search.
+- [x] Shape the responsive layout: single-column flow, accordion category list, and filter overlay entry point beneath search.
 - [x] Implement the filter overlay with full wiring while keeping desktop layout intact.
-- [ ] Build the pattern detail bottom sheet with backdrop tap and explicit close control.
-- [ ] Run `./test.sh` and perform responsive spot checks to confirm the experience holds up. 
+- [x] Build the pattern detail bottom sheet with backdrop tap and explicit close control.
+- [x] Run `./test.sh` and perform responsive spot checks to confirm the experience holds up. 

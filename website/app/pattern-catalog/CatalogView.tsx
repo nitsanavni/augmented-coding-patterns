@@ -139,6 +139,7 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
 
   const allAuthorsSelected = activeAuthorIds.length === authorOptions.length || authorOptions.length === 0;
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>(() => ({}));
+  const previousIsMobileRef = useRef(isMobile);
 
   useEffect(() => {
     if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
@@ -208,14 +209,33 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
   }, [groups, activeTypes, activeAuthorIds, allAuthorsSelected]);
 
   useEffect(() => {
+    const previousIsMobile = previousIsMobileRef.current;
+
     setCollapsedGroups((prev) => {
       const next: Record<string, boolean> = {};
-      filteredGroups.forEach((group) => {
-        next[group.category] = prev[group.category] ?? false;
+      filteredGroups.forEach((group, index) => {
+        if (!isMobile) {
+          next[group.category] = false;
+          return;
+        }
+
+        if (!previousIsMobile) {
+          next[group.category] = index > 0;
+          return;
+        }
+
+        if (prev[group.category] !== undefined) {
+          next[group.category] = prev[group.category];
+          return;
+        }
+
+        next[group.category] = index > 0;
       });
       return next;
     });
-  }, [filteredGroups]);
+
+    previousIsMobileRef.current = isMobile;
+  }, [filteredGroups, isMobile]);
 
   useEffect(() => {
     if (!selected) {
@@ -253,7 +273,7 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
             element = element.offsetParent as HTMLElement | null;
           }
 
-          if (sidebarRef.current) {
+          if (sidebarRef.current && typeof sidebarRef.current.scrollTo === "function") {
             sidebarRef.current.scrollTo({ top: offsetTop - 20, behavior: 'smooth' });
           }
         }
@@ -384,6 +404,84 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
     <p className={styles.placeholderCopy}>Pick a pattern to see its guidance.</p>
   );
 
+  const renderDetailArticle = () => {
+    if (!selected || !selectedConfig) {
+      return null;
+    }
+
+    return (
+      <article className={styles.detailContent} aria-live="polite">
+        <div className={styles.detailHeader}>
+          <div className={styles.detailTitleRow}>
+            {selected.item.emojiIndicator && (
+              <span className={styles.detailEmoji} aria-hidden="true">
+                {selected.item.emojiIndicator}
+              </span>
+            )}
+            <h2 className={styles.detailTitle}>{selected.item.title}</h2>
+          </div>
+          <span className={`${styles.detailBadge} ${styles[selectedConfig.styleClass]}`}>
+            <span className={styles.detailBadgeIcon}>{selectedConfig.icon}</span>
+            {selectedConfig.label}
+          </span>
+        </div>
+        <div className={styles.detailBody}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {selected.item.content}
+          </ReactMarkdown>
+        </div>
+        {selected.item.authorNames.length > 0 && (
+          <div className={styles.authorsSection}>
+            <div className={styles.authorsLabel}>Documented by</div>
+            <div className={styles.authorsList}>
+              {selected.item.authorIds.map((authorId, index) => {
+                const name = selected.item.authorNames[index];
+                const github = selected.item.authorGithubs[index];
+                if (!name || !github) return null;
+
+                return (
+                  <Link
+                    key={authorId}
+                    href={`https://github.com/${github}`}
+                    className={styles.authorLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Image
+                      src={`https://github.com/${github}.png`}
+                      alt={`${name}'s avatar`}
+                      width={32}
+                      height={32}
+                      className={styles.authorAvatar}
+                      unoptimized
+                    />
+                    <span className={styles.authorName}>{name}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </article>
+    );
+  };
+
+  useEffect(() => {
+    if (!isMobile || !selected) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setSelected(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMobile, selected]);
+
   return (
     <>
       <div
@@ -443,6 +541,36 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
             <div className={styles.filterOverlayBody}>
               {typeFilterControls}
               {authorFilterControls}
+            </div>
+          </div>
+        </div>
+      )}
+      {isMobile && selected && selectedConfig && (
+        <div className={styles.detailOverlay}>
+          <button
+            type="button"
+            className={styles.detailOverlayBackdrop}
+            aria-label="Dismiss pattern detail"
+            onClick={() => setSelected(null)}
+          />
+          <div
+            className={styles.detailOverlayPanel}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Pattern detail"
+          >
+            <div className={styles.detailOverlayHeader}>
+              <button
+                type="button"
+                className={styles.detailOverlayClose}
+                onClick={() => setSelected(null)}
+                aria-label="Close pattern detail"
+              >
+                ×
+              </button>
+            </div>
+            <div className={styles.detailOverlayBody}>
+              {renderDetailArticle()}
             </div>
           </div>
         </div>
@@ -526,65 +654,7 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
         </section>
       </aside>
       <section data-testid={COMPLETE_CATALOG_TEST_IDS.detail} className={styles.detail}>
-        {selected && selectedConfig ? (
-          <article className={styles.detailContent} aria-live="polite">
-            <div className={styles.detailHeader}>
-              <div className={styles.detailTitleRow}>
-                {selected.item.emojiIndicator && (
-                  <span className={styles.detailEmoji} aria-hidden="true">
-                    {selected.item.emojiIndicator}
-                  </span>
-                )}
-                <h2 className={styles.detailTitle}>{selected.item.title}</h2>
-              </div>
-              <span
-                className={`${styles.detailBadge} ${styles[selectedConfig.styleClass]}`}
-              >
-                <span className={styles.detailBadgeIcon}>{selectedConfig.icon}</span>
-                {selectedConfig.label}
-              </span>
-            </div>
-            <div className={styles.detailBody}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {selected.item.content}
-              </ReactMarkdown>
-            </div>
-            {selected.item.authorNames.length > 0 && (
-              <div className={styles.authorsSection}>
-                <div className={styles.authorsLabel}>Documented by</div>
-                <div className={styles.authorsList}>
-                  {selected.item.authorIds.map((authorId, index) => {
-                    const name = selected.item.authorNames[index];
-                    const github = selected.item.authorGithubs[index];
-                    if (!name || !github) return null;
-
-                    return (
-                      <Link
-                        key={authorId}
-                        href={`https://github.com/${github}`}
-                        className={styles.authorLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Image
-                          src={`https://github.com/${github}.png`}
-                          alt={`${name}'s avatar`}
-                          width={32}
-                          height={32}
-                          className={styles.authorAvatar}
-                          unoptimized
-                        />
-                        <span className={styles.authorName}>{name}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </article>
-        ) : (
-          detailFallback
-        )}
+        {renderDetailArticle() ?? detailFallback}
       </section>
       </div>
     </>

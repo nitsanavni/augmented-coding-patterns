@@ -323,4 +323,38 @@ describe('PatternCatalogPage', () => {
 
     expect(screen.queryByRole('dialog', { name: /Filters/i })).not.toBeInTheDocument()
   })
+
+  it('collapses all but the first catalog group on narrow viewports by default', async () => {
+    setMobileViewport()
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    const catalogRegion = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.sidebar)
+    expect(within(catalogRegion).getByRole('list', { name: /^Obstacles$/i })).toBeInTheDocument()
+    expect(within(catalogRegion).queryByRole('list', { name: /^Anti-patterns$/i })).toBeNull()
+    expect(within(catalogRegion).queryByRole('list', { name: /^Patterns$/i })).toBeNull()
+  })
+
+  it('opens a pattern detail sheet on mobile and closes it with the dismiss control', async () => {
+    setMobileViewport()
+    const user = userEvent.setup()
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    const catalogRegion = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.sidebar)
+    const firstLink = within(catalogRegion).getAllByRole('link')[0]
+
+    await user.click(firstLink)
+
+    const detailDialog = await screen.findByRole('dialog', { name: /Pattern detail/i })
+    expect(detailDialog).toBeInTheDocument()
+    expect(within(detailDialog).getByRole('heading', { level: 2 })).toBeInTheDocument()
+
+    const closeButton = within(detailDialog).getByRole('button', { name: /Close pattern detail/i })
+    await user.click(closeButton)
+
+    expect(screen.queryByRole('dialog', { name: /Pattern detail/i })).not.toBeInTheDocument()
+  })
 })
