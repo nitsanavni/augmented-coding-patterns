@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import PatternCatalogPage from '@/app/pattern-catalog/page'
 import { COMPLETE_CATALOG_TEST_IDS } from '@/app/pattern-catalog/test-ids'
@@ -354,6 +354,32 @@ describe('PatternCatalogPage', () => {
 
     const closeButton = within(detailDialog).getByRole('button', { name: /Close pattern detail/i })
     await user.click(closeButton)
+
+    expect(screen.queryByRole('dialog', { name: /Pattern detail/i })).not.toBeInTheDocument()
+  })
+
+  it('closes the pattern detail sheet when swiping downward on mobile', async () => {
+    setMobileViewport()
+    const user = userEvent.setup()
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    const catalogRegion = screen.getByTestId(COMPLETE_CATALOG_TEST_IDS.sidebar)
+    const firstLink = within(catalogRegion).getAllByRole('link')[0]
+
+    await user.click(firstLink)
+    const detailDialog = await screen.findByRole('dialog', { name: /Pattern detail/i })
+
+    fireEvent.touchStart(detailDialog, {
+      changedTouches: [{ clientY: 200 }],
+    })
+    fireEvent.touchMove(detailDialog, {
+      changedTouches: [{ clientY: 280 }],
+    })
+    fireEvent.touchEnd(detailDialog, {
+      changedTouches: [{ clientY: 320 }],
+    })
 
     expect(screen.queryByRole('dialog', { name: /Pattern detail/i })).not.toBeInTheDocument()
   })

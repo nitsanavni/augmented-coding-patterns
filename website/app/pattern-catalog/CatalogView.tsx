@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
+import { type MouseEvent, type TouchEvent, useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import styles from "./page.module.css";
@@ -79,6 +79,8 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
   const selectedItemRefs = useRef<Map<string, HTMLLIElement>>(new Map());
   const sidebarRef = useRef<HTMLElement>(null);
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
+  const detailSwipeStartRef = useRef<number | null>(null);
+  const detailSwipeDeltaRef = useRef<number>(0);
 
   const handleSearchSelect = (pattern: PatternContent) => {
     const group = groups.find((g) => g.category === pattern.category);
@@ -482,6 +484,55 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isMobile, selected]);
 
+  const handleDetailTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    if (!isMobile) {
+      return;
+    }
+    const touch = event.touches[0] ?? event.changedTouches[0];
+    if (!touch) {
+      return;
+    }
+    detailSwipeStartRef.current = touch.clientY;
+    detailSwipeDeltaRef.current = 0;
+  };
+
+  const handleDetailTouchMove = (event: TouchEvent<HTMLDivElement>) => {
+    if (!isMobile) {
+      return;
+    }
+
+    if (detailSwipeStartRef.current === null) {
+      return;
+    }
+
+    const touch = event.touches[0] ?? event.changedTouches[0];
+    if (!touch) {
+      return;
+    }
+    detailSwipeDeltaRef.current = touch.clientY - detailSwipeStartRef.current;
+  };
+
+  const handleDetailTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+    if (!isMobile) {
+      return;
+    }
+
+    const start = detailSwipeStartRef.current;
+    if (start === null) {
+      detailSwipeDeltaRef.current = 0;
+      return;
+    }
+
+    const touch = event.changedTouches[0] ?? event.touches[0];
+    const delta = touch ? touch.clientY - start : detailSwipeDeltaRef.current;
+    detailSwipeStartRef.current = null;
+    detailSwipeDeltaRef.current = 0;
+
+    if (delta > 80) {
+      setSelected(null);
+    }
+  };
+
   return (
     <>
       <div
@@ -558,6 +609,9 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
             role="dialog"
             aria-modal="true"
             aria-label="Pattern detail"
+            onTouchStart={handleDetailTouchStart}
+            onTouchMove={handleDetailTouchMove}
+            onTouchEnd={handleDetailTouchEnd}
           >
             <div className={styles.detailOverlayHeader}>
               <button
