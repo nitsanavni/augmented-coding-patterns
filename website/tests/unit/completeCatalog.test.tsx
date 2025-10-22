@@ -6,6 +6,23 @@ import { PATTERN_CATALOG_GROUPS } from '@/app/pattern-catalog/constants'
 import { getAllPatterns } from '@/lib/markdown'
 import { useRouter } from 'next/navigation'
 
+function setMobileViewport() {
+  Object.defineProperty(window, 'innerWidth', { configurable: true, value: 500 })
+  window.matchMedia = jest.fn().mockImplementation((query: string) => {
+    const matches = /max-width:\s*768px/.test(query)
+    return {
+      matches,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    }
+  })
+}
+
 async function selectSearchResult(user: ReturnType<typeof userEvent.setup>, optionTitle: string) {
   const searchbox = screen.getByRole('search', { name: /Search patterns/i })
   await user.clear(searchbox)
@@ -269,5 +286,41 @@ describe('PatternCatalogPage', () => {
 
     expect(stickyHeader).toBeInTheDocument()
     expect(stickyHeader.className.split(' ')).toContain('mobileStickyHeader')
+  })
+
+  it('renders a Filters button on narrow viewports instead of inline filter groups', async () => {
+    setMobileViewport()
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    const filtersButton = screen.getByRole('button', { name: /Filters/i })
+    expect(filtersButton).toBeInTheDocument()
+    expect(screen.queryByRole('group', { name: /Type filter/i })).toBeNull()
+    expect(screen.queryByRole('group', { name: /Author filter/i })).toBeNull()
+  })
+  it('opens a filters overlay on mobile showing type and author groups with close controls', async () => {
+    setMobileViewport()
+    const user = userEvent.setup()
+    const page = await PatternCatalogPage()
+
+    render(page)
+
+    const filtersButton = screen.getByRole('button', { name: /Filters/i })
+    await user.click(filtersButton)
+
+    const dialog = screen.getByRole('dialog', { name: /Filters/i })
+    expect(dialog).toBeInTheDocument()
+    expect(within(dialog).getByRole('group', { name: /Type filter/i })).toBeInTheDocument()
+
+    const authorGroup = within(dialog).queryByRole('group', { name: /Author filter/i })
+    if (authorGroup) {
+      expect(authorGroup).toBeInTheDocument()
+    }
+
+    const closeButton = within(dialog).getByRole('button', { name: /Close filters/i })
+    await user.click(closeButton)
+
+    expect(screen.queryByRole('dialog', { name: /Filters/i })).not.toBeInTheDocument()
   })
 })

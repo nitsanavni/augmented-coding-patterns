@@ -24,6 +24,104 @@
   max-width: 600px;
 }
 
+.filterToggleButton {
+  align-self: stretch;
+  border: 1px solid var(--color-border-dark);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border-radius: var(--border-radius);
+  padding: 0 var(--space-lg);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  transition: all var(--transition-base);
+}
+
+.filterToggleButton:hover,
+.filterToggleButton:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-text-primary);
+  outline: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.filterOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  overflow-y: auto;
+}
+
+.filterOverlayBackdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(16, 24, 40, 0.4);
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.filterOverlayDialog {
+  position: relative;
+  width: min(520px, 100%);
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 16px 48px rgba(15, 23, 42, 0.18);
+  padding: var(--space-xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-height: none;
+}
+
+.filterOverlayHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+}
+
+.filterOverlayTitle {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.filterOverlayClose {
+  border: none;
+  background: none;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-2xl);
+  line-height: 1;
+  cursor: pointer;
+  padding: var(--space-2xs);
+  border-radius: var(--border-radius);
+}
+
+.filterOverlayClose:hover,
+.filterOverlayClose:focus-visible {
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-hover);
+  outline: none;
+}
+
+.filterOverlayBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  overflow: visible;
+}
+
 .layout {
   display: grid;
   grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);

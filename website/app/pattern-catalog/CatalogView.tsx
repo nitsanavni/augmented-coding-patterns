@@ -61,6 +61,13 @@ function extractAuthorOptions(groups: CatalogGroupData[]): AuthorOption[] {
 }
 
 export default function CatalogView({ groups, title }: CatalogViewProps) {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return false;
+    }
+
+    return window.matchMedia("(max-width: 768px)").matches;
+  });
   const [activeTypes, setActiveTypes] = useState<string[]>(() => groups.map((group) => group.category));
   const [activeAuthorIds, setActiveAuthorIds] = useState<string[]>(() => {
     const options = extractAuthorOptions(groups);
@@ -71,6 +78,7 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
   const selectedConfig = selected ? getCategoryConfig(selected.category) : null;
   const selectedItemRefs = useRef<Map<string, HTMLLIElement>>(new Map());
   const sidebarRef = useRef<HTMLElement>(null);
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
 
   const handleSearchSelect = (pattern: PatternContent) => {
     const group = groups.find((g) => g.category === pattern.category);
@@ -131,6 +139,49 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
 
   const allAuthorsSelected = activeAuthorIds.length === authorOptions.length || authorOptions.length === 0;
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>(() => ({}));
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const handleChange = (event: MediaQueryListEvent | MediaQueryList) => {
+      setIsMobile(event.matches);
+    };
+
+    handleChange(mediaQuery);
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
+
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setIsFilterMenuOpen(false);
+    }
+  }, [isMobile]);
+
+  useEffect(() => {
+    if (!isFilterMenuOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setIsFilterMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isFilterMenuOpen]);
 
   const filteredGroups = useMemo(() => {
     return groups
@@ -248,12 +299,7 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
     return selected?.groupLabel === groupLabel && selected.item.slug === item.slug;
   };
 
-  const detailFallback = (
-    <p className={styles.placeholderCopy}>Pick a pattern to see its guidance.</p>
-  );
-
   const allTypesSelected = activeTypes.length === typeOptions.length;
-
   const toggleAllTypes = () => {
     if (allTypesSelected) {
       setActiveTypes([]);
@@ -261,6 +307,82 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
       setActiveTypes(typeOptions.map(({ category }) => category));
     }
   };
+  const typeFilterControls = (
+    <div className={styles.filterGroup}>
+      <h3 className={styles.filterGroupLabel}>Type</h3>
+      <div className={styles.typeButtonGroup} role="group" aria-label="Type filter">
+        <button
+          type="button"
+          className={`${styles.typeButton} ${allTypesSelected ? styles.typeButtonActive : ""}`}
+          onClick={toggleAllTypes}
+          aria-pressed={allTypesSelected}
+          title="Show All"
+        >
+          ∞
+        </button>
+        {typeOptions.map(({ category, label, icon }) => (
+          <button
+            key={category}
+            type="button"
+            className={`${styles.typeButton} ${activeTypes.includes(category) ? styles.typeButtonActive : ""}`}
+            onClick={() => toggleType(category)}
+            aria-pressed={activeTypes.includes(category)}
+            aria-label={label}
+            title={label}
+          >
+            {icon}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+  const authorFilterControls =
+    authorOptions.length > 0 ? (
+      <div className={styles.filterGroup}>
+        <h3 className={styles.filterGroupLabel}>Author</h3>
+        <div className={styles.authorButtonGroup} role="group" aria-label="Author filter">
+          <button
+            type="button"
+            className={`${styles.authorButton} ${allAuthorsSelected ? styles.authorButtonActive : ""}`}
+            onClick={() => {
+              if (allAuthorsSelected) {
+                setActiveAuthorIds([]);
+              } else {
+                setActiveAuthorIds(authorOptions.map(({ id }) => id));
+              }
+            }}
+            aria-pressed={allAuthorsSelected}
+            title="Show All"
+          >
+            ∞
+          </button>
+          {authorOptions.map((option) => (
+            <button
+              key={option.id}
+              type="button"
+              className={`${styles.authorButton} ${activeAuthorIds.includes(option.id) ? styles.authorButtonActive : ""}`}
+              onClick={() => toggleAuthor(option.id)}
+              aria-pressed={activeAuthorIds.includes(option.id)}
+              aria-label={option.name}
+              title={option.name}
+            >
+              <Image
+                src={`https://github.com/${option.github}.png`}
+                alt=""
+                width={40}
+                height={40}
+                className={styles.authorAvatar}
+                unoptimized
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+    ) : null;
+
+  const detailFallback = (
+    <p className={styles.placeholderCopy}>Pick a pattern to see its guidance.</p>
+  );
 
   return (
     <>
@@ -273,77 +395,58 @@ export default function CatalogView({ groups, title }: CatalogViewProps) {
           <div className={styles.searchContainer}>
             <SearchBar patterns={allPatterns} onSelect={handleSearchSelect} />
           </div>
-          <div className={styles.filterGroup}>
-            <h3 className={styles.filterGroupLabel}>Type</h3>
-            <div className={styles.typeButtonGroup} role="group" aria-label="Type filter">
-              <button
-                type="button"
-                className={`${styles.typeButton} ${allTypesSelected ? styles.typeButtonActive : ""}`}
-                onClick={toggleAllTypes}
-                aria-pressed={allTypesSelected}
-                title="Show All"
-              >
-                ∞
-              </button>
-              {typeOptions.map(({ category, label, icon }) => (
-                <button
-                  key={category}
-                  type="button"
-                  className={`${styles.typeButton} ${activeTypes.includes(category) ? styles.typeButtonActive : ""}`}
-                  onClick={() => toggleType(category)}
-                  aria-pressed={activeTypes.includes(category)}
-                  aria-label={label}
-                  title={label}
-                >
-                  {icon}
-                </button>
-              ))}
-            </div>
-          </div>
-          {authorOptions.length > 0 && (
-            <div className={styles.filterGroup}>
-              <h3 className={styles.filterGroupLabel}>Author</h3>
-              <div className={styles.authorButtonGroup} role="group" aria-label="Author filter">
-                <button
-                  type="button"
-                  className={`${styles.authorButton} ${allAuthorsSelected ? styles.authorButtonActive : ""}`}
-                  onClick={() => {
-                    if (allAuthorsSelected) {
-                      setActiveAuthorIds([]);
-                    } else {
-                      setActiveAuthorIds(authorOptions.map(({ id }) => id));
-                    }
-                  }}
-                  aria-pressed={allAuthorsSelected}
-                  title="Show All"
-                >
-                  ∞
-                </button>
-                {authorOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    type="button"
-                    className={`${styles.authorButton} ${activeAuthorIds.includes(option.id) ? styles.authorButtonActive : ""}`}
-                    onClick={() => toggleAuthor(option.id)}
-                    aria-pressed={activeAuthorIds.includes(option.id)}
-                    aria-label={option.name}
-                    title={option.name}
-                  >
-                    <Image
-                      src={`https://github.com/${option.github}.png`}
-                      alt=""
-                      width={40}
-                      height={40}
-                      className={styles.authorAvatar}
-                      unoptimized
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
+          {isMobile ? (
+            <button
+              type="button"
+              className={styles.filterToggleButton}
+              onClick={() => setIsFilterMenuOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={isFilterMenuOpen}
+            >
+              Filters
+            </button>
+          ) : (
+            <>
+              {typeFilterControls}
+              {authorFilterControls}
+            </>
           )}
         </div>
       </div>
+      {isMobile && isFilterMenuOpen && (
+        <div className={styles.filterOverlay}>
+          <button
+            type="button"
+            className={styles.filterOverlayBackdrop}
+            aria-label="Dismiss filters"
+            onClick={() => setIsFilterMenuOpen(false)}
+          />
+          <div
+            className={styles.filterOverlayDialog}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="filterOverlayTitle"
+          >
+            <div className={styles.filterOverlayHeader}>
+              <h2 id="filterOverlayTitle" className={styles.filterOverlayTitle}>
+                Filters
+              </h2>
+              <button
+                type="button"
+                className={styles.filterOverlayClose}
+                onClick={() => setIsFilterMenuOpen(false)}
+                aria-label="Close filters"
+              >
+                ×
+              </button>
+            </div>
+            <div className={styles.filterOverlayBody}>
+              {typeFilterControls}
+              {authorFilterControls}
+            </div>
+          </div>
+        </div>
+      )}
       <div className={styles.layout}>
       <aside ref={sidebarRef} data-testid={COMPLETE_CATALOG_TEST_IDS.sidebar} className={styles.sidebar}>
         <section className={styles.listSection}>
